@@ -1,26 +1,158 @@
 @import "tailwindcss";
 
 :root {
+  /* Cores do Brasil */
+  --brasil-azul: #002776;
+  --brasil-azul-light: #1a4a9e;
+  --brasil-azul-dark: #001a4d;
+  --brasil-amarelo: #FFD700;
+  --brasil-amarelo-light: #FFE44D;
+  --brasil-amarelo-dark: #CCA300;
+  --brasil-verde: #009739;
+  --brasil-verde-light: #00B347;
+  --brasil-verde-dark: #006B28;
+
+  /* Cores neutras */
+  --neutral-50: #fafafa;
+  --neutral-100: #f5f5f5;
+  --neutral-200: #e5e5e5;
+  --neutral-300: #d4d4d4;
+  --neutral-400: #a3a3a3;
+  --neutral-500: #737373;
+  --neutral-600: #525252;
+  --neutral-700: #404040;
+  --neutral-800: #262626;
+  --neutral-900: #171717;
+  --neutral-950: #0a0a0a;
+
+  /* Tema claro */
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --card-bg: #ffffff;
+  --card-border: #e5e5e5;
+  --muted: #737373;
+  --muted-foreground: #525252;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --card-bg: #171717;
+    --card-border: #262626;
+    --muted: #525252;
+    --muted-foreground: #a3a3a3;
   }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-brasil-azul: var(--brasil-azul);
+  --color-brasil-azul-light: var(--brasil-azul-light);
+  --color-brasil-azul-dark: var(--brasil-azul-dark);
+  --color-brasil-amarelo: var(--brasil-amarelo);
+  --color-brasil-amarelo-light: var(--brasil-amarelo-light);
+  --color-brasil-amarelo-dark: var(--brasil-amarelo-dark);
+  --color-brasil-verde: var(--brasil-verde);
+  --color-brasil-verde-light: var(--brasil-verde-light);
+  --color-brasil-verde-dark: var(--brasil-verde-dark);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Animações globais */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(0, 39, 118, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(0, 39, 118, 0.5);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Delay classes para animações escalonadas */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+
+/* Gradientes do Brasil */
+.bg-brasil-gradient {
+  background: linear-gradient(135deg, var(--brasil-verde) 0%, var(--brasil-azul) 50%, var(--brasil-amarelo) 100%);
+}
+
+.bg-brasil-gradient-subtle {
+  background: linear-gradient(135deg, 
+    rgba(0, 151, 57, 0.1) 0%, 
+    rgba(0, 39, 118, 0.1) 50%, 
+    rgba(255, 215, 0, 0.1) 100%
+  );
+}
+
+.text-brasil-gradient {
+  background: linear-gradient(135deg, var(--brasil-verde) 0%, var(--brasil-azul) 50%, var(--brasil-amarelo) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Score ring animation */
+@keyframes score-fill {
+  from {
+    stroke-dashoffset: 440;
+  }
+}
+
+.score-ring {
+  animation: score-fill 1.5s ease-out forwards;
 }
