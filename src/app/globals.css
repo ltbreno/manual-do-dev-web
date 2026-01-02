@@ -1,16 +1,22 @@
 @import "tailwindcss";
 
 :root {
+  /* Cores da Identidade Visual - Manual do Brasileiro */
+  --brand-verde: #6DC24D;
+  --brand-verde-light: #8AD06E;
+  --brand-verde-dark: #5AAA3E;
+  --brand-bege: #F0F3C7;
+  --brand-bege-light: #F5F7D9;
+  --brand-bege-dark: #E5E9A8;
+  --brand-verde-escuro: #26473D;
+  --brand-verde-escuro-light: #345A4E;
+  --brand-verde-escuro-dark: #1A332C;
+
   /* Cores do Brasil */
+  --brasil-verde: #009C3B;
+  --brasil-amarelo: #FFDF00;
   --brasil-azul: #002776;
-  --brasil-azul-light: #1a4a9e;
-  --brasil-azul-dark: #001a4d;
-  --brasil-amarelo: #FFD700;
-  --brasil-amarelo-light: #FFE44D;
-  --brasil-amarelo-dark: #CCA300;
-  --brasil-verde: #009739;
-  --brasil-verde-light: #00B347;
-  --brasil-verde-dark: #006B28;
+  --brasil-amarelo-dark: #E6C200;
 
   /* Cores neutras */
   --neutral-50: #fafafa;
@@ -80,10 +86,10 @@ body {
 
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(0, 39, 118, 0.3);
+    box-shadow: 0 0 20px rgba(109, 194, 77, 0.3);
   }
   50% {
-    box-shadow: 0 0 40px rgba(0, 39, 118, 0.5);
+    box-shadow: 0 0 40px rgba(109, 194, 77, 0.5);
   }
 }
 
@@ -106,21 +112,20 @@ body {
 .delay-400 { animation-delay: 400ms; }
 .delay-500 { animation-delay: 500ms; }
 
-/* Gradientes do Brasil */
-.bg-brasil-gradient {
-  background: linear-gradient(135deg, #009739 0%, #002776 50%, #FFD700 100%);
+/* Gradientes da marca */
+.bg-brand-gradient {
+  background: linear-gradient(135deg, #6DC24D 0%, #26473D 100%);
 }
 
-.bg-brasil-gradient-subtle {
+.bg-brand-gradient-subtle {
   background: linear-gradient(135deg, 
-    rgba(0, 151, 57, 0.1) 0%, 
-    rgba(0, 39, 118, 0.1) 50%, 
-    rgba(255, 215, 0, 0.1) 100%
+    rgba(109, 194, 77, 0.1) 0%, 
+    rgba(38, 71, 61, 0.1) 100%
   );
 }
 
-.text-brasil-gradient {
-  background: linear-gradient(135deg, #009739 0%, #002776 50%, #FFD700 100%);
+.text-brand-gradient {
+  background: linear-gradient(135deg, #6DC24D 0%, #26473D 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

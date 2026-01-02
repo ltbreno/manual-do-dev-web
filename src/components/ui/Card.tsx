@@ -25,8 +25,8 @@ export default function Card({
         bg-[var(--card-bg)] 
         border border-[var(--card-border)]
         rounded-2xl
-        ${hover ? "cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-[var(--brasil-azul)]/30" : ""}
-        ${gradient ? "before:absolute before:inset-0 before:bg-brasil-gradient-subtle before:opacity-50" : ""}
+        ${hover ? "cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-[var(--brand-verde)]/30" : ""}
+        ${gradient ? "before:absolute before:inset-0 before:bg-brand-gradient-subtle before:opacity-50" : ""}
         ${className}
       `}
     >

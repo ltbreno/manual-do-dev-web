@@ -108,17 +108,17 @@ export default function RaioXPage() {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    
+
     // Simular processamento
     await new Promise((resolve) => setTimeout(resolve, 1500));
-    
+
     // Calcular resultado
     const result = calculateRaioXResult(formData);
-    
+
     // Salvar no sessionStorage para a página de resultado
     sessionStorage.setItem("raioXResult", JSON.stringify(result));
     sessionStorage.setItem("raioXFormData", JSON.stringify(formData));
-    
+
     // Navegar para resultado
     router.push("/raio-x/resultado");
   };
@@ -168,7 +168,7 @@ export default function RaioXPage() {
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-bold text-[var(--foreground)] mb-2">
-              Raio-X de <span className="text-[var(--brasil-azul)]">Imigração</span>
+              Raio-X de <span className="text-[var(--brand-verde-escuro)]">Imigração</span>
             </h1>
             <p className="text-[var(--muted-foreground)]">
               Preencha o formulário para descobrir seu potencial de imigração

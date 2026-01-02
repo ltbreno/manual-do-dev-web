@@ -12,9 +12,9 @@ export default function Footer() {
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-3 mb-4">
               <div className="relative w-10 h-10">
-                <div className="absolute inset-0 bg-[var(--brasil-verde)] rounded-lg transform rotate-45" />
-                <div className="absolute inset-1 bg-[var(--brasil-amarelo)] rounded-lg transform rotate-45" />
-                <div className="absolute inset-2 bg-[var(--brasil-azul)] rounded-lg transform rotate-45 flex items-center justify-center">
+                <div className="absolute inset-0 bg-[var(--brand-verde)] rounded-lg transform rotate-45" />
+                <div className="absolute inset-1 bg-[var(--brand-bege)] rounded-lg transform rotate-45" />
+                <div className="absolute inset-2 bg-[var(--brand-verde-escuro)] rounded-lg transform rotate-45 flex items-center justify-center">
                   <span className="text-white font-bold text-xs transform -rotate-45">
                     MB
                   </span>
@@ -22,7 +22,7 @@ export default function Footer() {
               </div>
               <span className="font-bold text-lg">
                 Manual do{" "}
-                <span className="text-[var(--brasil-verde)]">Brasileiro</span>
+                <span className="text-[var(--brand-verde)]">Brasileiro</span>
               </span>
             </Link>
             <p className="text-[var(--neutral-400)] text-sm leading-relaxed">
@@ -38,7 +38,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/raio-x"
-                  className="text-[var(--neutral-400)] hover:text-[var(--brasil-amarelo)] transition-colors text-sm"
+                  className="text-[var(--neutral-400)] hover:text-[var(--brand-verde)] transition-colors text-sm"
                 >
                   Raio-X de Imigração
                 </Link>
@@ -46,7 +46,7 @@ export default function Footer() {
               <li>
                 <span className="text-[var(--neutral-500)] text-sm">
                   Comunidade{" "}
-                  <span className="text-[var(--brasil-amarelo)]">
+                  <span className="text-[var(--brand-verde)]">
                     (em breve)
                   </span>
                 </span>
@@ -54,7 +54,7 @@ export default function Footer() {
               <li>
                 <span className="text-[var(--neutral-500)] text-sm">
                   Marketplace{" "}
-                  <span className="text-[var(--brasil-amarelo)]">
+                  <span className="text-[var(--brand-verde)]">
                     (em breve)
                   </span>
                 </span>
@@ -62,7 +62,7 @@ export default function Footer() {
               <li>
                 <span className="text-[var(--neutral-500)] text-sm">
                   Mentoria{" "}
-                  <span className="text-[var(--brasil-amarelo)]">
+                  <span className="text-[var(--brand-verde)]">
                     (em breve)
                   </span>
                 </span>
@@ -109,7 +109,7 @@ export default function Footer() {
               <li>
                 <a
                   href="mailto:contato@manualdobrasileiro.com"
-                  className="text-[var(--neutral-400)] hover:text-[var(--brasil-amarelo)] transition-colors text-sm"
+                  className="text-[var(--neutral-400)] hover:text-[var(--brand-verde)] transition-colors text-sm"
                 >
                   contato@manualdobrasileiro.com
                 </a>
@@ -117,7 +117,7 @@ export default function Footer() {
               <li className="flex gap-4 pt-2">
                 <a
                   href="#"
-                  className="text-[var(--neutral-400)] hover:text-[var(--brasil-amarelo)] transition-colors"
+                  className="text-[var(--neutral-400)] hover:text-[var(--brand-verde)] transition-colors"
                   aria-label="Instagram"
                 >
                   <svg
@@ -130,7 +130,7 @@ export default function Footer() {
                 </a>
                 <a
                   href="#"
-                  className="text-[var(--neutral-400)] hover:text-[var(--brasil-amarelo)] transition-colors"
+                  className="text-[var(--neutral-400)] hover:text-[var(--brand-verde)] transition-colors"
                   aria-label="LinkedIn"
                 >
                   <svg
@@ -143,7 +143,7 @@ export default function Footer() {
                 </a>
                 <a
                   href="#"
-                  className="text-[var(--neutral-400)] hover:text-[var(--brasil-amarelo)] transition-colors"
+                  className="text-[var(--neutral-400)] hover:text-[var(--brand-verde)] transition-colors"
                   aria-label="YouTube"
                 >
                   <svg

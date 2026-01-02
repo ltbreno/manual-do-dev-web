@@ -14,9 +14,9 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
             <div className="relative w-10 h-10 md:w-12 md:h-12">
-              <div className="absolute inset-0 bg-[var(--brasil-verde)] rounded-lg transform rotate-45" />
-              <div className="absolute inset-1 bg-[var(--brasil-amarelo)] rounded-lg transform rotate-45" />
-              <div className="absolute inset-2 bg-[var(--brasil-azul)] rounded-lg transform rotate-45 flex items-center justify-center">
+              <div className="absolute inset-0 bg-[var(--brand-verde)] rounded-lg transform rotate-45" />
+              <div className="absolute inset-1 bg-[var(--brand-bege)] rounded-lg transform rotate-45" />
+              <div className="absolute inset-2 bg-[var(--brand-verde-escuro)] rounded-lg transform rotate-45 flex items-center justify-center">
                 <span className="text-white font-bold text-xs md:text-sm transform -rotate-45">
                   MB
                 </span>
@@ -25,7 +25,7 @@ export default function Header() {
             <div className="hidden sm:block">
               <span className="font-bold text-lg md:text-xl text-[var(--foreground)]">
                 Manual do{" "}
-                <span className="text-[var(--brasil-verde)]">Brasileiro</span>
+                <span className="text-[var(--brand-verde)]">Brasileiro</span>
               </span>
             </div>
           </Link>
@@ -34,19 +34,19 @@ export default function Header() {
           <nav className="hidden md:flex items-center gap-8">
             <Link
               href="/#features"
-              className="text-[var(--muted-foreground)] hover:text-[var(--brasil-azul)] transition-colors font-medium"
+              className="text-[var(--muted-foreground)] hover:text-[var(--brand-verde-escuro)] transition-colors font-medium"
             >
               Recursos
             </Link>
             <Link
               href="/#como-funciona"
-              className="text-[var(--muted-foreground)] hover:text-[var(--brasil-azul)] transition-colors font-medium"
+              className="text-[var(--muted-foreground)] hover:text-[var(--brand-verde-escuro)] transition-colors font-medium"
             >
               Como Funciona
             </Link>
             <Link
               href="/raio-x"
-              className="text-[var(--muted-foreground)] hover:text-[var(--brasil-azul)] transition-colors font-medium"
+              className="text-[var(--muted-foreground)] hover:text-[var(--brand-verde-escuro)] transition-colors font-medium"
             >
               Raio-X
             </Link>

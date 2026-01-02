@@ -22,8 +22,8 @@ export function ScoreCircle({ score, size = "lg", label }: ScoreCircleProps) {
 
   // Cor baseada no score
   const getScoreColor = (score: number) => {
-    if (score >= 70) return "var(--brasil-verde)";
-    if (score >= 40) return "var(--brasil-amarelo)";
+    if (score >= 70) return "var(--brand-verde)";
+    if (score >= 40) return "var(--brand-bege)";
     return "#ef4444"; // red
   };
 
@@ -90,14 +90,14 @@ export function VisaCard({ visa, rank }: VisaCardProps) {
       case "high":
         return {
           text: "Alta",
-          bg: "bg-[var(--brasil-verde)]/10",
-          color: "text-[var(--brasil-verde)]",
+          bg: "bg-[var(--brand-verde)]/10",
+          color: "text-[var(--brand-verde)]",
         };
       case "medium":
         return {
           text: "Média",
-          bg: "bg-[var(--brasil-amarelo)]/10",
-          color: "text-[var(--brasil-amarelo-dark)]",
+          bg: "bg-[var(--brand-bege)]/10",
+          color: "text-[var(--brand-bege-dark)]",
         };
       default:
         return {
@@ -115,12 +115,12 @@ export function VisaCard({ visa, rank }: VisaCardProps) {
     <div
       className={`relative p-6 rounded-2xl border-2 transition-all ${
         isTop
-          ? "border-[var(--brasil-verde)] bg-[var(--brasil-verde)]/5"
+          ? "border-[var(--brand-verde)] bg-[var(--brand-verde)]/5"
           : "border-[var(--card-border)] bg-[var(--card-bg)]"
       }`}
     >
       {isTop && (
-        <div className="absolute -top-3 left-4 px-3 py-1 bg-[var(--brasil-verde)] text-white text-xs font-bold rounded-full">
+        <div className="absolute -top-3 left-4 px-3 py-1 bg-[var(--brand-verde)] text-white text-xs font-bold rounded-full">
           🏆 Melhor Opção
         </div>
       )}
@@ -128,7 +128,7 @@ export function VisaCard({ visa, rank }: VisaCardProps) {
       <div className="flex items-start justify-between gap-4">
         <div className="flex-grow">
           <div className="flex items-center gap-3 mb-2">
-            <span className="text-2xl font-bold text-[var(--brasil-azul)]">
+            <span className="text-2xl font-bold text-[var(--brand-verde-escuro)]">
               {visa.visaCode}
             </span>
             <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${badge.bg} ${badge.color}`}>
@@ -143,7 +143,7 @@ export function VisaCard({ visa, rank }: VisaCardProps) {
       {/* Strengths */}
       {visa.strengths.length > 0 && (
         <div className="mt-4">
-          <h4 className="text-sm font-semibold text-[var(--brasil-verde)] mb-2 flex items-center gap-1">
+          <h4 className="text-sm font-semibold text-[var(--brand-verde)] mb-2 flex items-center gap-1">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
@@ -152,7 +152,7 @@ export function VisaCard({ visa, rank }: VisaCardProps) {
           <ul className="space-y-1">
             {visa.strengths.slice(0, 3).map((strength, i) => (
               <li key={i} className="text-sm text-[var(--foreground)] flex items-start gap-2">
-                <span className="text-[var(--brasil-verde)]">•</span>
+                <span className="text-[var(--brand-verde)]">•</span>
                 {strength}
               </li>
             ))}
@@ -163,7 +163,7 @@ export function VisaCard({ visa, rank }: VisaCardProps) {
       {/* Improvements */}
       {visa.improvements.length > 0 && (
         <div className="mt-4">
-          <h4 className="text-sm font-semibold text-[var(--brasil-amarelo-dark)] mb-2 flex items-center gap-1">
+          <h4 className="text-sm font-semibold text-[var(--brand-bege-dark)] mb-2 flex items-center gap-1">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
             </svg>
@@ -172,7 +172,7 @@ export function VisaCard({ visa, rank }: VisaCardProps) {
           <ul className="space-y-1">
             {visa.improvements.slice(0, 2).map((improvement, i) => (
               <li key={i} className="text-sm text-[var(--foreground)] flex items-start gap-2">
-                <span className="text-[var(--brasil-amarelo)]">•</span>
+                <span className="text-[var(--brand-bege)]">•</span>
                 {improvement}
               </li>
             ))}
@@ -183,7 +183,7 @@ export function VisaCard({ visa, rank }: VisaCardProps) {
       {/* Requirements */}
       {isTop && visa.requirements.length > 0 && (
         <div className="mt-4 pt-4 border-t border-[var(--card-border)]">
-          <h4 className="text-sm font-semibold text-[var(--brasil-azul)] mb-2 flex items-center gap-1">
+          <h4 className="text-sm font-semibold text-[var(--brand-verde-escuro)] mb-2 flex items-center gap-1">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
@@ -192,7 +192,7 @@ export function VisaCard({ visa, rank }: VisaCardProps) {
           <ul className="space-y-1">
             {visa.requirements.map((req, i) => (
               <li key={i} className="text-sm text-[var(--muted-foreground)] flex items-start gap-2">
-                <span className="text-[var(--brasil-azul)]">→</span>
+                <span className="text-[var(--brand-verde-escuro)]">→</span>
                 {req}
               </li>
             ))}

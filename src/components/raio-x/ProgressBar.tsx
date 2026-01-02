@@ -18,7 +18,7 @@ export default function ProgressBar({
       {/* Progress Bar */}
       <div className="relative h-2 bg-[var(--neutral-200)] dark:bg-[var(--neutral-700)] rounded-full overflow-hidden mb-4">
         <div
-          className="absolute h-full bg-gradient-to-r from-[var(--brasil-verde)] via-[var(--brasil-azul)] to-[var(--brasil-amarelo)] transition-all duration-500 ease-out"
+          className="absolute h-full bg-gradient-to-r from-[var(--brand-verde)] to-[var(--brand-verde-escuro)] transition-all duration-500 ease-out"
           style={{ width: `${progress}%` }}
         />
       </div>
@@ -29,15 +29,15 @@ export default function ProgressBar({
           <div
             key={index}
             className={`flex flex-col items-center ${
-              index <= currentStep ? "text-[var(--brasil-azul)]" : "text-[var(--muted)]"
+              index <= currentStep ? "text-[var(--brand-verde-escuro)]" : "text-[var(--muted)]"
             }`}
           >
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold mb-2 transition-all duration-300 ${
                 index < currentStep
-                  ? "bg-[var(--brasil-verde)] text-white"
+                  ? "bg-[var(--brand-verde)] text-white"
                   : index === currentStep
-                  ? "bg-[var(--brasil-azul)] text-white ring-4 ring-[var(--brasil-azul)]/20"
+                  ? "bg-[var(--brand-verde-escuro)] text-white ring-4 ring-[var(--brand-verde-escuro)]/20"
                   : "bg-[var(--neutral-200)] dark:bg-[var(--neutral-700)] text-[var(--muted)]"
               }`}
             >
@@ -68,7 +68,7 @@ export default function ProgressBar({
       <div className="md:hidden text-center">
         <span className="text-sm font-medium text-[var(--muted-foreground)]">
           Etapa {currentStep + 1} de {totalSteps}:{" "}
-          <span className="text-[var(--brasil-azul)] font-semibold">
+          <span className="text-[var(--brand-verde-escuro)] font-semibold">
             {stepLabels[currentStep]}
           </span>
         </span>

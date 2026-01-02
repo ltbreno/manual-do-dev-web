@@ -15,13 +15,13 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-[var(--brasil-azul)] text-white hover:bg-[var(--brasil-azul-light)] shadow-lg shadow-[var(--brasil-azul)]/20",
+    "bg-[var(--brand-verde-escuro)] text-white hover:bg-[var(--brand-verde-escuro-light)] shadow-lg shadow-[var(--brand-verde-escuro)]/20",
   secondary:
-    "bg-[var(--brasil-verde)] text-white hover:bg-[var(--brasil-verde-light)] shadow-lg shadow-[var(--brasil-verde)]/20",
+    "bg-[var(--brand-verde)] text-white hover:bg-[var(--brand-verde-light)] shadow-lg shadow-[var(--brand-verde)]/20",
   outline:
-    "border-2 border-[var(--brasil-azul)] text-[var(--brasil-azul)] hover:bg-[var(--brasil-azul)] hover:text-white",
+    "border-2 border-[var(--brand-verde-escuro)] text-[var(--brand-verde-escuro)] hover:bg-[var(--brand-verde-escuro)] hover:text-white",
   ghost:
-    "text-[var(--brasil-azul)] hover:bg-[var(--brasil-azul)]/10",
+    "text-[var(--brand-verde-escuro)] hover:bg-[var(--brand-verde-escuro)]/10",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
@@ -55,7 +55,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           transition-all duration-300 ease-out
           transform hover:scale-105 active:scale-95
           disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
-          focus:outline-none focus:ring-2 focus:ring-[var(--brasil-amarelo)] focus:ring-offset-2
+          focus:outline-none focus:ring-2 focus:ring-[var(--brand-verde)] focus:ring-offset-2
           ${variantStyles[variant]}
           ${sizeStyles[size]}
           ${className}

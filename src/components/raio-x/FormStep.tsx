@@ -87,7 +87,7 @@ export function TextInput({
       placeholder={placeholder}
       min={min}
       max={max}
-      className="w-full px-4 py-3 rounded-xl border border-[var(--card-border)] bg-[var(--background)] text-[var(--foreground)] placeholder:text-[var(--muted)] focus:outline-none focus:ring-2 focus:ring-[var(--brasil-azul)] focus:border-transparent transition-all"
+      className="w-full px-4 py-3 rounded-xl border border-[var(--card-border)] bg-[var(--background)] text-[var(--foreground)] placeholder:text-[var(--muted)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-verde-escuro)] focus:border-transparent transition-all"
     />
   );
 }
@@ -115,7 +115,7 @@ export function SelectInput({
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className="w-full px-4 py-3 rounded-xl border border-[var(--card-border)] bg-[var(--background)] text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--brasil-azul)] focus:border-transparent transition-all appearance-none cursor-pointer"
+      className="w-full px-4 py-3 rounded-xl border border-[var(--card-border)] bg-[var(--background)] text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-verde-escuro)] focus:border-transparent transition-all appearance-none cursor-pointer"
       style={{
         backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23737373'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
         backgroundRepeat: "no-repeat",
@@ -168,15 +168,15 @@ export function RadioGroup({
           key={option.value}
           className={`flex items-start gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
             value === option.value
-              ? "border-[var(--brasil-azul)] bg-[var(--brasil-azul)]/5"
-              : "border-[var(--card-border)] hover:border-[var(--brasil-azul)]/50"
+              ? "border-[var(--brand-verde-escuro)] bg-[var(--brand-verde-escuro)]/5"
+              : "border-[var(--card-border)] hover:border-[var(--brand-verde-escuro)]/50"
           }`}
         >
           <input
             type="radio"
             checked={value === option.value}
             onChange={() => onChange(option.value)}
-            className="mt-1 w-4 h-4 text-[var(--brasil-azul)] border-[var(--card-border)] focus:ring-[var(--brasil-azul)]"
+            className="mt-1 w-4 h-4 text-[var(--brand-verde-escuro)] border-[var(--card-border)] focus:ring-[var(--brand-verde-escuro)]"
           />
           <div>
             <span className="font-medium text-[var(--foreground)]">
@@ -214,7 +214,7 @@ export function Checkbox({
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        className="mt-1 w-5 h-5 rounded text-[var(--brasil-azul)] border-[var(--card-border)] focus:ring-[var(--brasil-azul)]"
+        className="mt-1 w-5 h-5 rounded text-[var(--brand-verde-escuro)] border-[var(--card-border)] focus:ring-[var(--brand-verde-escuro)]"
       />
       <div>
         <span className="font-medium text-[var(--foreground)]">{label}</span>
@@ -256,7 +256,7 @@ export function NumberStepper({
         type="button"
         onClick={decrement}
         disabled={value <= min}
-        className="w-10 h-10 rounded-full bg-[var(--neutral-100)] dark:bg-[var(--neutral-800)] text-[var(--foreground)] font-bold flex items-center justify-center hover:bg-[var(--brasil-azul)] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+        className="w-10 h-10 rounded-full bg-[var(--neutral-100)] dark:bg-[var(--neutral-800)] text-[var(--foreground)] font-bold flex items-center justify-center hover:bg-[var(--brand-verde-escuro)] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
       >
         −
       </button>
@@ -272,7 +272,7 @@ export function NumberStepper({
         type="button"
         onClick={increment}
         disabled={value >= max}
-        className="w-10 h-10 rounded-full bg-[var(--neutral-100)] dark:bg-[var(--neutral-800)] text-[var(--foreground)] font-bold flex items-center justify-center hover:bg-[var(--brasil-azul)] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+        className="w-10 h-10 rounded-full bg-[var(--neutral-100)] dark:bg-[var(--neutral-800)] text-[var(--foreground)] font-bold flex items-center justify-center hover:bg-[var(--brand-verde-escuro)] hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
       >
         +
       </button>
