@@ -32,6 +32,10 @@
   --card-border: #e5e5e5;
   --muted: #737373;
   --muted-foreground: #525252;
+  
+  /* Font variables */
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -45,26 +49,10 @@
   }
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-brasil-azul: var(--brasil-azul);
-  --color-brasil-azul-light: var(--brasil-azul-light);
-  --color-brasil-azul-dark: var(--brasil-azul-dark);
-  --color-brasil-amarelo: var(--brasil-amarelo);
-  --color-brasil-amarelo-light: var(--brasil-amarelo-light);
-  --color-brasil-amarelo-dark: var(--brasil-amarelo-dark);
-  --color-brasil-verde: var(--brasil-verde);
-  --color-brasil-verde-light: var(--brasil-verde-light);
-  --color-brasil-verde-dark: var(--brasil-verde-dark);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* Animações globais */
@@ -120,7 +108,7 @@ body {
 
 /* Gradientes do Brasil */
 .bg-brasil-gradient {
-  background: linear-gradient(135deg, var(--brasil-verde) 0%, var(--brasil-azul) 50%, var(--brasil-amarelo) 100%);
+  background: linear-gradient(135deg, #009739 0%, #002776 50%, #FFD700 100%);
 }
 
 .bg-brasil-gradient-subtle {
@@ -132,10 +120,11 @@ body {
 }
 
 .text-brasil-gradient {
-  background: linear-gradient(135deg, var(--brasil-verde) 0%, var(--brasil-azul) 50%, var(--brasil-amarelo) 100%);
+  background: linear-gradient(135deg, #009739 0%, #002776 50%, #FFD700 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  color: transparent;
 }
 
 /* Glass effect */

@@ -31,12 +31,20 @@ export default function Home() {
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
             <div className="text-center">
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--brasil-verde)]/10 border border-[var(--brasil-verde)]/20 rounded-full mb-8 animate-fade-in">
-                <span className="w-2 h-2 rounded-full bg-[var(--brasil-verde)] animate-pulse" />
-                <span className="text-sm font-medium text-[var(--brasil-verde)]">
-                  Diagnóstico de Imigração Gratuito
-                </span>
+              {/* Badges */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8 animate-fade-in">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--brasil-verde)]/10 border border-[var(--brasil-verde)]/20 rounded-full">
+                  <span className="w-2 h-2 rounded-full bg-[var(--brasil-verde)] animate-pulse" />
+                  <span className="text-sm font-medium text-[var(--brasil-verde)]">
+                    Diagnóstico de Imigração Gratuito
+                  </span>
+                </div>
+                <Link href="/raio-x" className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--brasil-amarelo)]/20 border border-[var(--brasil-amarelo)]/30 rounded-full hover:bg-[var(--brasil-amarelo)]/30 transition-colors">
+                  <span className="text-lg">✈️</span>
+                  <span className="text-sm font-medium text-[var(--brasil-amarelo-dark)]">
+                    Turista? Descubra se você tem perfil para imigrar!
+                  </span>
+                </Link>
               </div>
 
               {/* Main Title */}
@@ -345,6 +353,134 @@ export default function Home() {
                   </CardContent>
                 </Card>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Tourist Section */}
+        <section className="py-20 md:py-32 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[var(--brasil-amarelo)]/10 via-transparent to-[var(--brasil-verde)]/10" />
+          
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              {/* Content */}
+              <div>
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--brasil-amarelo)]/20 rounded-full mb-6">
+                  <span className="text-2xl">✈️</span>
+                  <span className="text-sm font-semibold text-[var(--brasil-amarelo-dark)]">
+                    Para Turistas
+                  </span>
+                </div>
+                
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--foreground)] mb-6">
+                  Está nos EUA como{" "}
+                  <span className="text-[var(--brasil-amarelo-dark)]">turista</span>?
+                </h2>
+                
+                <p className="text-lg text-[var(--muted-foreground)] mb-6">
+                  Muitos brasileiros visitam os Estados Unidos e se apaixonam pelo país. 
+                  Se você está pensando em transformar sua visita em uma mudança permanente, 
+                  o primeiro passo é descobrir se você tem perfil imigratório.
+                </p>
+                
+                <ul className="space-y-4 mb-8">
+                  <li className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-[var(--brasil-verde)]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <svg className="w-4 h-4 text-[var(--brasil-verde)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <span className="text-[var(--foreground)]">
+                      <strong>Descubra suas opções</strong> antes de contratar um advogado
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-[var(--brasil-verde)]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <svg className="w-4 h-4 text-[var(--brasil-verde)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <span className="text-[var(--foreground)]">
+                      <strong>Entenda seu score</strong> para diferentes tipos de visto
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-[var(--brasil-verde)]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <svg className="w-4 h-4 text-[var(--brasil-verde)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <span className="text-[var(--foreground)]">
+                      <strong>Receba um plano</strong> personalizado de próximos passos
+                    </span>
+                  </li>
+                </ul>
+                
+                <Link href="/raio-x">
+                  <Button 
+                    size="lg"
+                    className="bg-[var(--brasil-amarelo)] text-[var(--brasil-azul-dark)] hover:bg-[var(--brasil-amarelo-light)]"
+                    rightIcon={
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                      </svg>
+                    }
+                  >
+                    Fazer Teste de Perfil Imigratório
+                  </Button>
+                </Link>
+              </div>
+              
+              {/* Visual Card */}
+              <div className="relative">
+                <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-3xl p-8 shadow-2xl">
+                  <div className="text-center mb-6">
+                    <div className="text-6xl mb-4">🇧🇷 → 🇺🇸</div>
+                    <h3 className="text-xl font-bold text-[var(--foreground)]">
+                      Teste de Perfil Imigratório
+                    </h3>
+                    <p className="text-[var(--muted-foreground)] text-sm">
+                      Gratuito • 5 minutos • Resultado imediato
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4 p-4 bg-[var(--neutral-50)] dark:bg-[var(--neutral-800)] rounded-xl">
+                      <div className="w-10 h-10 rounded-full bg-[var(--brasil-azul)] flex items-center justify-center text-white font-bold">
+                        1
+                      </div>
+                      <div>
+                        <p className="font-medium text-[var(--foreground)]">Preencha o formulário</p>
+                        <p className="text-sm text-[var(--muted)]">Sobre você e seus objetivos</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-4 p-4 bg-[var(--neutral-50)] dark:bg-[var(--neutral-800)] rounded-xl">
+                      <div className="w-10 h-10 rounded-full bg-[var(--brasil-verde)] flex items-center justify-center text-white font-bold">
+                        2
+                      </div>
+                      <div>
+                        <p className="font-medium text-[var(--foreground)]">Receba seu score</p>
+                        <p className="text-sm text-[var(--muted)]">Compatibilidade por tipo de visto</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-4 p-4 bg-[var(--neutral-50)] dark:bg-[var(--neutral-800)] rounded-xl">
+                      <div className="w-10 h-10 rounded-full bg-[var(--brasil-amarelo)] flex items-center justify-center text-[var(--brasil-azul-dark)] font-bold">
+                        3
+                      </div>
+                      <div>
+                        <p className="font-medium text-[var(--foreground)]">Veja seu plano</p>
+                        <p className="text-sm text-[var(--muted)]">Próximos passos personalizados</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Decorative Elements */}
+                <div className="absolute -top-4 -right-4 w-24 h-24 bg-[var(--brasil-verde)]/20 rounded-full blur-2xl" />
+                <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-[var(--brasil-amarelo)]/20 rounded-full blur-2xl" />
+              </div>
             </div>
           </div>
         </section>
