@@ -8,38 +8,38 @@ import Button from "@/components/ui/Button";
 import ProgressBar from "@/components/raio-x/ProgressBar";
 import FormStep, {
   FormField,
-  TextInput,
-  SelectInput,
   RadioGroup,
-  Checkbox,
-  NumberStepper,
 } from "@/components/raio-x/FormStep";
 import {
   RaioXFormData,
-  MARITAL_STATUS_LABELS,
-  EDUCATION_LEVEL_LABELS,
-  EDUCATION_AREA_LABELS,
-  ENGLISH_LEVEL_LABELS,
-  INVESTMENT_RANGE_LABELS,
-  TIMELINE_LABELS,
-  VISA_PREFERENCE_LABELS,
-  MaritalStatus,
-  EducationLevel,
-  EducationArea,
-  EnglishLevel,
-  InvestmentRange,
-  Timeline,
-  VisaPreference,
+  REVENUE_PREDICTABILITY_LABELS,
+  PROFIT_MARGIN_LABELS,
+  OWNER_DEPENDENCE_LABELS,
+  SALES_CYCLE_LABELS,
+  METRICS_CLARITY_LABELS,
+  CLIENT_CONCENTRATION_LABELS,
+  TEAM_MATURITY_LABELS,
+  CASH_FLOW_LABELS,
+  RevenuePredictability,
+  ProfitMargin,
+  OwnerDependence,
+  SalesCycle,
+  MetricsClarity,
+  ClientConcentration,
+  TeamMaturity,
+  CashFlow,
 } from "@/types/raio-x";
 import { getDefaultFormData, calculateRaioXResult } from "@/lib/mock-score-engine";
 
 const STEP_LABELS = [
-  "Pessoal",
-  "Educação",
-  "Profissional",
-  "Idiomas",
-  "Financeiro",
-  "Objetivos",
+  "Receita",
+  "Lucratividade",
+  "Operação",
+  "Vendas",
+  "Métricas",
+  "Clientes",
+  "Time",
+  "Finanças",
 ];
 
 export default function RaioXPage() {
@@ -50,45 +50,10 @@ export default function RaioXPage() {
 
   const totalSteps = STEP_LABELS.length;
 
-  const updatePersonal = (field: keyof RaioXFormData["personal"], value: unknown) => {
+  const updateBusiness = (field: keyof RaioXFormData["business"], value: unknown) => {
     setFormData((prev) => ({
       ...prev,
-      personal: { ...prev.personal, [field]: value },
-    }));
-  };
-
-  const updateEducation = (field: keyof RaioXFormData["education"], value: unknown) => {
-    setFormData((prev) => ({
-      ...prev,
-      education: { ...prev.education, [field]: value },
-    }));
-  };
-
-  const updateProfessional = (field: keyof RaioXFormData["professional"], value: unknown) => {
-    setFormData((prev) => ({
-      ...prev,
-      professional: { ...prev.professional, [field]: value },
-    }));
-  };
-
-  const updateLanguages = (field: keyof RaioXFormData["languages"], value: unknown) => {
-    setFormData((prev) => ({
-      ...prev,
-      languages: { ...prev.languages, [field]: value },
-    }));
-  };
-
-  const updateFinancial = (field: keyof RaioXFormData["financial"], value: unknown) => {
-    setFormData((prev) => ({
-      ...prev,
-      financial: { ...prev.financial, [field]: value },
-    }));
-  };
-
-  const updateObjectives = (field: keyof RaioXFormData["objectives"], value: unknown) => {
-    setFormData((prev) => ({
-      ...prev,
-      objectives: { ...prev.objectives, [field]: value },
+      business: { ...prev.business, [field]: value },
     }));
   };
 
@@ -109,52 +74,80 @@ export default function RaioXPage() {
   const handleSubmit = async () => {
     setIsSubmitting(true);
 
-    // Simular processamento
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      // 1. Calcular score base (métricas técnicas)
+      const result = calculateRaioXResult(formData);
 
-    // Calcular resultado
-    const result = calculateRaioXResult(formData);
+      // 2. Chamar API da Manus AI para análise real
+      const response = await fetch("/api/raio-x/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          formData,
+          overallScore: result.overallScore,
+        }),
+      });
 
-    // Salvar no sessionStorage para a página de resultado
-    sessionStorage.setItem("raioXResult", JSON.stringify(result));
-    sessionStorage.setItem("raioXFormData", JSON.stringify(formData));
+      if (!response.ok) throw new Error("Erro na análise da IA");
 
-    // Navegar para resultado
-    router.push("/raio-x/resultado");
+      const { aiAnalysis } = await response.json();
+      
+      // 3. Atualizar resultado com a análise real
+      const finalResult = {
+        ...result,
+        aiAnalysis,
+      };
+
+      // Salvar no sessionStorage para a página de resultado
+      sessionStorage.setItem("raioXResult", JSON.stringify(finalResult));
+      sessionStorage.setItem("raioXFormData", JSON.stringify(formData));
+
+      // Navegar para resultado
+      router.push("/raio-x/resultado");
+    } catch (error) {
+      console.error("Erro ao gerar diagnóstico:", error);
+      alert("Houve um erro ao gerar sua análise com a Manus AI. Por favor, tente novamente.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  // Converter labels para opções de select/radio
-  const maritalStatusOptions = Object.entries(MARITAL_STATUS_LABELS).map(([value, label]) => ({
+  const revenueOptions = Object.entries(REVENUE_PREDICTABILITY_LABELS).map(([value, label]) => ({
     value,
     label,
   }));
 
-  const educationLevelOptions = Object.entries(EDUCATION_LEVEL_LABELS).map(([value, label]) => ({
+  const profitOptions = Object.entries(PROFIT_MARGIN_LABELS).map(([value, label]) => ({
     value,
     label,
   }));
 
-  const educationAreaOptions = Object.entries(EDUCATION_AREA_LABELS).map(([value, label]) => ({
+  const dependenceOptions = Object.entries(OWNER_DEPENDENCE_LABELS).map(([value, label]) => ({
     value,
     label,
   }));
 
-  const englishLevelOptions = Object.entries(ENGLISH_LEVEL_LABELS).map(([value, label]) => ({
+  const salesOptions = Object.entries(SALES_CYCLE_LABELS).map(([value, label]) => ({
     value,
     label,
   }));
 
-  const investmentRangeOptions = Object.entries(INVESTMENT_RANGE_LABELS).map(([value, label]) => ({
+  const metricsOptions = Object.entries(METRICS_CLARITY_LABELS).map(([value, label]) => ({
     value,
     label,
   }));
 
-  const timelineOptions = Object.entries(TIMELINE_LABELS).map(([value, label]) => ({
+  const clientOptions = Object.entries(CLIENT_CONCENTRATION_LABELS).map(([value, label]) => ({
     value,
     label,
   }));
 
-  const visaPreferenceOptions = Object.entries(VISA_PREFERENCE_LABELS).map(([value, label]) => ({
+  const teamOptions = Object.entries(TEAM_MATURITY_LABELS).map(([value, label]) => ({
+    value,
+    label,
+  }));
+
+  const cashOptions = Object.entries(CASH_FLOW_LABELS).map(([value, label]) => ({
     value,
     label,
   }));
@@ -168,10 +161,10 @@ export default function RaioXPage() {
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-bold text-[var(--foreground)] mb-2">
-              Raio-X de <span className="text-[var(--brand-verde-escuro)]">Imigração</span>
+              Raio-X de <span className="text-[var(--brand-verde-escuro)]">Negócios</span>
             </h1>
-            <p className="text-[var(--muted-foreground)]">
-              Preencha o formulário para descobrir seu potencial de imigração
+            <p className="text-[var(--muted-foreground)] text-lg">
+              Descubra o nível de maturidade e potencial da sua empresa com análise da <span className="font-bold text-[var(--foreground)]">Manus AI</span>
             </p>
           </div>
 
@@ -186,333 +179,130 @@ export default function RaioXPage() {
 
           {/* Form Card */}
           <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl p-6 md:p-8 shadow-lg">
-            {/* Step 1 - Dados Pessoais */}
+            {/* Step 1 - Receita */}
             <FormStep
-              title="Dados Pessoais"
-              description="Informações básicas sobre você"
+              title="Previsibilidade de Receita"
+              description="Como está a saúde do seu faturamento?"
               isActive={currentStep === 0}
             >
-              <FormField label="Qual sua idade?" required>
-                <TextInput
-                  type="number"
-                  value={formData.personal.age.toString()}
-                  onChange={(v) => updatePersonal("age", parseInt(v) || 0)}
-                  placeholder="Ex: 30"
-                  min={18}
-                  max={99}
-                />
-              </FormField>
-
-              <FormField label="Estado civil" required>
+              <FormField label="Como você descreve a previsibilidade da sua receita hoje?" required>
                 <RadioGroup
-                  value={formData.personal.maritalStatus}
-                  onChange={(v) => updatePersonal("maritalStatus", v as MaritalStatus)}
-                  options={maritalStatusOptions}
-                  columns={2}
-                />
-              </FormField>
-
-              <FormField
-                label="Quantos dependentes você tem?"
-                hint="Filhos, cônjuge ou outros dependentes que iriam com você"
-              >
-                <NumberStepper
-                  value={formData.personal.dependents}
-                  onChange={(v) => updatePersonal("dependents", v)}
-                  min={0}
-                  max={10}
-                  label="dependente(s)"
-                />
-              </FormField>
-
-              <FormField label="Onde você mora atualmente?">
-                <TextInput
-                  value={formData.personal.currentCountry}
-                  onChange={(v) => updatePersonal("currentCountry", v)}
-                  placeholder="Ex: Brasil"
-                />
-              </FormField>
-            </FormStep>
-
-            {/* Step 2 - Educação */}
-            <FormStep
-              title="Formação Acadêmica"
-              description="Suas qualificações educacionais"
-              isActive={currentStep === 1}
-            >
-              <FormField label="Qual seu maior nível de formação?" required>
-                <SelectInput
-                  value={formData.education.level}
-                  onChange={(v) => updateEducation("level", v as EducationLevel)}
-                  options={educationLevelOptions}
-                  placeholder="Selecione seu nível de formação"
-                />
-              </FormField>
-
-              <FormField label="Área de formação" required>
-                <RadioGroup
-                  value={formData.education.area}
-                  onChange={(v) => updateEducation("area", v as EducationArea)}
-                  options={educationAreaOptions}
-                  columns={2}
-                />
-              </FormField>
-
-              <FormField
-                label="País da instituição"
-                hint="Onde você concluiu sua formação principal"
-              >
-                <TextInput
-                  value={formData.education.institutionCountry}
-                  onChange={(v) => updateEducation("institutionCountry", v)}
-                  placeholder="Ex: Brasil"
-                />
-              </FormField>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <FormField
-                  label="Publicações acadêmicas"
-                  hint="Artigos, papers, livros"
-                >
-                  <NumberStepper
-                    value={formData.education.publications}
-                    onChange={(v) => updateEducation("publications", v)}
-                    min={0}
-                    max={100}
-                    label="publicação(ões)"
-                  />
-                </FormField>
-
-                <FormField
-                  label="Patentes"
-                  hint="Patentes registradas"
-                >
-                  <NumberStepper
-                    value={formData.education.patents}
-                    onChange={(v) => updateEducation("patents", v)}
-                    min={0}
-                    max={50}
-                    label="patente(s)"
-                  />
-                </FormField>
-              </div>
-            </FormStep>
-
-            {/* Step 3 - Experiência Profissional */}
-            <FormStep
-              title="Experiência Profissional"
-              description="Sua trajetória de carreira"
-              isActive={currentStep === 2}
-            >
-              <FormField label="Anos de experiência profissional" required>
-                <NumberStepper
-                  value={formData.professional.yearsExperience}
-                  onChange={(v) => updateProfessional("yearsExperience", v)}
-                  min={0}
-                  max={50}
-                  label="ano(s)"
-                />
-              </FormField>
-
-              <FormField label="Cargo atual">
-                <TextInput
-                  value={formData.professional.currentRole}
-                  onChange={(v) => updateProfessional("currentRole", v)}
-                  placeholder="Ex: Engenheiro de Software Sênior"
-                />
-              </FormField>
-
-              <FormField label="Setor/Indústria">
-                <TextInput
-                  value={formData.professional.industry}
-                  onChange={(v) => updateProfessional("industry", v)}
-                  placeholder="Ex: Tecnologia, Saúde, Finanças"
-                />
-              </FormField>
-
-              <FormField label="Você ocupa cargo de gestão/liderança?">
-                <Checkbox
-                  checked={formData.professional.isManager}
-                  onChange={(v) => updateProfessional("isManager", v)}
-                  label="Sim, sou gestor/líder de equipe"
-                  description="Gerente, diretor, coordenador ou similar"
-                />
-              </FormField>
-
-              {formData.professional.isManager && (
-                <FormField label="Tamanho da equipe que você lidera">
-                  <NumberStepper
-                    value={formData.professional.teamSize}
-                    onChange={(v) => updateProfessional("teamSize", v)}
-                    min={1}
-                    max={500}
-                    label="pessoa(s)"
-                  />
-                </FormField>
-              )}
-
-              <FormField label="Experiência internacional">
-                <Checkbox
-                  checked={formData.professional.hasInternationalExp}
-                  onChange={(v) => updateProfessional("hasInternationalExp", v)}
-                  label="Tenho experiência internacional"
-                  description="Trabalhou ou estudou fora do Brasil"
-                />
-              </FormField>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <FormField label="Prêmios e reconhecimentos">
-                  <NumberStepper
-                    value={formData.professional.awards}
-                    onChange={(v) => updateProfessional("awards", v)}
-                    min={0}
-                    max={50}
-                    label="prêmio(s)"
-                  />
-                </FormField>
-
-                <FormField label="Palestras/Apresentações">
-                  <NumberStepper
-                    value={formData.professional.speakingEngagements}
-                    onChange={(v) => updateProfessional("speakingEngagements", v)}
-                    min={0}
-                    max={100}
-                    label="palestra(s)"
-                  />
-                </FormField>
-              </div>
-            </FormStep>
-
-            {/* Step 4 - Idiomas */}
-            <FormStep
-              title="Idiomas"
-              description="Suas habilidades linguísticas"
-              isActive={currentStep === 3}
-            >
-              <FormField label="Nível de Inglês" required>
-                <RadioGroup
-                  value={formData.languages.englishLevel}
-                  onChange={(v) => updateLanguages("englishLevel", v as EnglishLevel)}
-                  options={englishLevelOptions}
-                  columns={2}
-                />
-              </FormField>
-
-              <FormField label="Nível de Espanhol">
-                <SelectInput
-                  value={formData.languages.spanishLevel}
-                  onChange={(v) => updateLanguages("spanishLevel", v as EnglishLevel)}
-                  options={englishLevelOptions}
-                  placeholder="Selecione seu nível"
-                />
-              </FormField>
-
-              <FormField
-                label="Outros idiomas"
-                hint="Separe por vírgula"
-              >
-                <TextInput
-                  value={formData.languages.otherLanguages.join(", ")}
-                  onChange={(v) =>
-                    updateLanguages(
-                      "otherLanguages",
-                      v.split(",").map((s) => s.trim()).filter(Boolean)
-                    )
-                  }
-                  placeholder="Ex: Francês, Alemão, Mandarim"
-                />
-              </FormField>
-            </FormStep>
-
-            {/* Step 5 - Situação Financeira */}
-            <FormStep
-              title="Situação Financeira"
-              description="Recursos disponíveis para o processo"
-              isActive={currentStep === 4}
-            >
-              <FormField
-                label="Capital disponível para investimento"
-                required
-                hint="Considere recursos próprios e de cônjuge"
-              >
-                <RadioGroup
-                  value={formData.financial.investmentRange}
-                  onChange={(v) => updateFinancial("investmentRange", v as InvestmentRange)}
-                  options={investmentRangeOptions}
-                  columns={2}
-                />
-              </FormField>
-
-              <FormField label="Você já tem negócio nos EUA?">
-                <Checkbox
-                  checked={formData.financial.hasUSBusiness}
-                  onChange={(v) => updateFinancial("hasUSBusiness", v)}
-                  label="Sim, tenho negócio estabelecido nos EUA"
-                  description="Empresa própria ou sociedade"
-                />
-              </FormField>
-
-              <FormField label="Você tem oferta de emprego nos EUA?">
-                <Checkbox
-                  checked={formData.financial.hasUSJobOffer}
-                  onChange={(v) => updateFinancial("hasUSJobOffer", v)}
-                  label="Sim, tenho oferta de emprego"
-                  description="Oferta formal de empresa americana"
-                />
-              </FormField>
-
-              {formData.financial.hasUSJobOffer && (
-                <FormField label="Nome da empresa patrocinadora">
-                  <TextInput
-                    value={formData.financial.sponsorCompany}
-                    onChange={(v) => updateFinancial("sponsorCompany", v)}
-                    placeholder="Ex: Google, Amazon, startup XYZ"
-                  />
-                </FormField>
-              )}
-            </FormStep>
-
-            {/* Step 6 - Objetivos */}
-            <FormStep
-              title="Seus Objetivos"
-              description="O que você busca nos EUA"
-              isActive={currentStep === 5}
-            >
-              <FormField
-                label="Qual tipo de visto te interessa mais?"
-                hint="Se não souber, selecione 'Quero descobrir'"
-              >
-                <RadioGroup
-                  value={formData.objectives.visaPreference}
-                  onChange={(v) => updateObjectives("visaPreference", v as VisaPreference)}
-                  options={visaPreferenceOptions}
+                  value={formData.business.revenuePredictability}
+                  onChange={(v) => updateBusiness("revenuePredictability", v as RevenuePredictability)}
+                  options={revenueOptions}
                   columns={1}
                 />
               </FormField>
+            </FormStep>
 
-              <FormField label="Qual seu prazo desejado?">
+            {/* Step 2 - Lucratividade */}
+            <FormStep
+              title="Margem de Lucro"
+              description="O quanto sobra no final do mês?"
+              isActive={currentStep === 1}
+            >
+              <FormField label="Qual é a sua margem de lucro líquido média nos últimos 12 meses?" required>
                 <RadioGroup
-                  value={formData.objectives.timeline}
-                  onChange={(v) => updateObjectives("timeline", v as Timeline)}
-                  options={timelineOptions}
-                  columns={2}
+                  value={formData.business.profitMargin}
+                  onChange={(v) => updateBusiness("profitMargin", v as ProfitMargin)}
+                  options={profitOptions}
+                  columns={1}
                 />
               </FormField>
+            </FormStep>
 
-              <FormField label="Qual seu principal objetivo nos EUA?">
-                <TextInput
-                  value={formData.objectives.primaryGoal}
-                  onChange={(v) => updateObjectives("primaryGoal", v)}
-                  placeholder="Ex: Crescer na carreira, abrir negócio, qualidade de vida"
+            {/* Step 3 - Operação */}
+            <FormStep
+              title="Dependência do Dono"
+              description="A empresa sobrevive sem você?"
+              isActive={currentStep === 2}
+            >
+              <FormField label="Seu produto/serviço principal depende de você para ser entregue?" required>
+                <RadioGroup
+                  value={formData.business.ownerDependence}
+                  onChange={(v) => updateBusiness("ownerDependence", v as OwnerDependence)}
+                  options={dependenceOptions}
+                  columns={1}
                 />
               </FormField>
+            </FormStep>
 
-              <FormField label="Disposição para estudar">
-                <Checkbox
-                  checked={formData.objectives.willingToStudy}
-                  onChange={(v) => updateObjectives("willingToStudy", v)}
-                  label="Estou disposto(a) a fazer cursos/certificações"
-                  description="Para melhorar meu perfil de imigração"
+            {/* Step 4 - Vendas */}
+            <FormStep
+              title="Ciclo de Vendas"
+              description="Quanto tempo leva para fechar um negócio?"
+              isActive={currentStep === 3}
+            >
+              <FormField label="Como é o seu Ciclo de Vendas (tempo entre primeiro contato e fechamento)?" required>
+                <RadioGroup
+                  value={formData.business.salesCycle}
+                  onChange={(v) => updateBusiness("salesCycle", v as SalesCycle)}
+                  options={salesOptions}
+                  columns={1}
+                />
+              </FormField>
+            </FormStep>
+
+            {/* Step 5 - Métricas */}
+            <FormStep
+              title="Métricas de Crescimento"
+              description="Você domina seus números?"
+              isActive={currentStep === 4}
+            >
+              <FormField label="Você tem clareza do seu CAC (Custo de Aquisição) e LTV (Lifetime Value)?" required>
+                <RadioGroup
+                  value={formData.business.metricsClarity}
+                  onChange={(v) => updateBusiness("metricsClarity", v as MetricsClarity)}
+                  options={metricsOptions}
+                  columns={1}
+                />
+              </FormField>
+            </FormStep>
+
+            {/* Step 6 - Clientes */}
+            <FormStep
+              title="Concentração de Clientes"
+              description="Qual o risco da sua carteira?"
+              isActive={currentStep === 5}
+            >
+              <FormField label="Como está distribuída sua receita entre os clientes?" required>
+                <RadioGroup
+                  value={formData.business.clientConcentration}
+                  onChange={(v) => updateBusiness("clientConcentration", v as ClientConcentration)}
+                  options={clientOptions}
+                  columns={1}
+                />
+              </FormField>
+            </FormStep>
+
+            {/* Step 7 - Time */}
+            <FormStep
+              title="Maturidade do Time"
+              description="Quem toca o negócio no dia a dia?"
+              isActive={currentStep === 6}
+            >
+              <FormField label="Qual o nível de autonomia da sua equipe?" required>
+                <RadioGroup
+                  value={formData.business.teamMaturity}
+                  onChange={(v) => updateBusiness("teamMaturity", v as TeamMaturity)}
+                  options={teamOptions}
+                  columns={1}
+                />
+              </FormField>
+            </FormStep>
+
+            {/* Step 8 - Finanças */}
+            <FormStep
+              title="Saúde Financeira"
+              description="Quanto tempo sua empresa sobrevive sem novas vendas?"
+              isActive={currentStep === 7}
+            >
+              <FormField label="Qual a situação do seu fluxo de caixa e reserva?" required>
+                <RadioGroup
+                  value={formData.business.cashFlow}
+                  onChange={(v) => updateBusiness("cashFlow", v as CashFlow)}
+                  options={cashOptions}
+                  columns={1}
                 />
               </FormField>
             </FormStep>
@@ -586,7 +376,7 @@ export default function RaioXPage() {
                     ) : undefined
                   }
                 >
-                  {isSubmitting ? "Analisando..." : "Ver Meu Resultado"}
+                  {isSubmitting ? "Analisando com Manus AI..." : "Gerar Diagnóstico da IA"}
                 </Button>
               )}
             </div>
@@ -595,7 +385,7 @@ export default function RaioXPage() {
           {/* Trust Indicators */}
           <div className="mt-8 text-center">
             <p className="text-sm text-[var(--muted)]">
-              🔒 Seus dados são confidenciais e não serão compartilhados
+              🔒 Seus dados empresariais são confidenciais e protegidos por IA
             </p>
           </div>
         </div>
@@ -605,4 +395,5 @@ export default function RaioXPage() {
     </div>
   );
 }
+
 

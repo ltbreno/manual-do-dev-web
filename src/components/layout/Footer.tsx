@@ -26,8 +26,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-[var(--neutral-400)] text-sm leading-relaxed">
-              O sistema operacional indispensável para a vida do brasileiro nos
-              Estados Unidos.
+              O sistema operacional indispensável para o sucesso do empreendedor brasileiro.
             </p>
           </div>
 
@@ -40,12 +39,12 @@ export default function Footer() {
                   href="/raio-x"
                   className="text-[var(--neutral-400)] hover:text-[var(--brand-verde)] transition-colors text-sm"
                 >
-                  Raio-X de Imigração
+                  Raio-X de Negócios
                 </Link>
               </li>
               <li>
                 <span className="text-[var(--neutral-500)] text-sm">
-                  Comunidade{" "}
+                  Comunidade Mastermind{" "}
                   <span className="text-[var(--brand-verde)]">
                     (em breve)
                   </span>
@@ -53,15 +52,7 @@ export default function Footer() {
               </li>
               <li>
                 <span className="text-[var(--neutral-500)] text-sm">
-                  Marketplace{" "}
-                  <span className="text-[var(--brand-verde)]">
-                    (em breve)
-                  </span>
-                </span>
-              </li>
-              <li>
-                <span className="text-[var(--neutral-500)] text-sm">
-                  Mentoria{" "}
+                  Equipe de Consultoria{" "}
                   <span className="text-[var(--brand-verde)]">
                     (em breve)
                   </span>
@@ -70,33 +61,33 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Links - Tipos de Visto */}
+          {/* Links - Maturidade */}
           <div>
-            <h4 className="font-semibold text-white mb-4">Tipos de Visto</h4>
+            <h4 className="font-semibold text-white mb-4">Maturidade</h4>
             <ul className="space-y-3">
               <li>
                 <span className="text-[var(--neutral-400)] text-sm">
-                  EB-1 Habilidade Extraordinária
+                  Previsibilidade de Receita
                 </span>
               </li>
               <li>
                 <span className="text-[var(--neutral-400)] text-sm">
-                  EB-2 NIW Interesse Nacional
+                  Margem de Lucro
                 </span>
               </li>
               <li>
                 <span className="text-[var(--neutral-400)] text-sm">
-                  O-1 Habilidade Extraordinária
+                  Independência do Dono
                 </span>
               </li>
               <li>
                 <span className="text-[var(--neutral-400)] text-sm">
-                  L-1 Transferência
+                  Custo de Aquisição (CAC)
                 </span>
               </li>
               <li>
                 <span className="text-[var(--neutral-400)] text-sm">
-                  E-2 Investidor
+                  Potencial de Escala
                 </span>
               </li>
             </ul>

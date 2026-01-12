@@ -36,13 +36,13 @@ export default function Home() {
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--brand-verde)]/10 border border-[var(--brand-verde)]/20 rounded-full">
                   <span className="w-2 h-2 rounded-full bg-[var(--brand-verde)] animate-pulse" />
                   <span className="text-sm font-medium text-[var(--brand-verde)]">
-                    Diagnóstico de Imigração Gratuito
+                    Diagnóstico de Negócios com Manus AI
                   </span>
                 </div>
                 <Link href="/raio-x" className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--brand-bege)]/20 border border-[var(--brand-bege)]/30 rounded-full hover:bg-[var(--brand-bege)]/30 transition-colors">
-                  <span className="text-lg">✈️</span>
+                  <span className="text-lg">🚀</span>
                   <span className="text-sm font-medium text-[var(--brand-bege-dark)]">
-                    Turista? Descubra se você tem perfil para imigrar!
+                    Quer escalar seu negócio? Descubra sua maturidade!
                   </span>
                 </Link>
               </div>
@@ -51,13 +51,13 @@ export default function Home() {
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 animate-slide-up">
                 <span className="text-[var(--foreground)]">O Sistema Operacional</span>
                 <br />
-                <span className="text-brand-gradient">do Brasileiro nos EUA</span>
-          </h1>
+                <span className="text-brand-gradient">do Empreendedor de Sucesso</span>
+              </h1>
 
               {/* Subtitle */}
               <p className="max-w-2xl mx-auto text-lg sm:text-xl text-[var(--muted-foreground)] mb-10 animate-slide-up delay-100">
-                Sua jornada para os Estados Unidos começa aqui. Descubra seu potencial de
-                imigração com nosso diagnóstico inteligente e gratuito.
+                Sua jornada de escala começa aqui. Descubra o nível de maturidade da sua empresa
+                com nosso diagnóstico inteligente potencializado pela <span className="font-bold text-[var(--foreground)]">Manus AI</span>.
               </p>
 
               {/* CTA Buttons */}
@@ -68,7 +68,7 @@ export default function Home() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>
                   }>
-                    Fazer Meu Raio-X Gratuito
+                    Fazer Diagnóstico Gratuito
                   </Button>
                 </Link>
                 <Link href="/#como-funciona">
@@ -81,15 +81,15 @@ export default function Home() {
               {/* Stats */}
               <div className="mt-16 grid grid-cols-3 gap-8 max-w-2xl mx-auto animate-slide-up delay-300">
                 <div className="text-center">
-                  <div className="text-3xl sm:text-4xl font-bold text-[var(--brand-verde-escuro)]">6+</div>
-                  <div className="text-sm text-[var(--muted-foreground)] mt-1">Tipos de Visto</div>
+                  <div className="text-3xl sm:text-4xl font-bold text-[var(--brand-verde-escuro)]">5</div>
+                  <div className="text-sm text-[var(--muted-foreground)] mt-1">Dimensões Críticas</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl sm:text-4xl font-bold text-[var(--brand-verde)]">100%</div>
-                  <div className="text-sm text-[var(--muted-foreground)] mt-1">Gratuito</div>
+                  <div className="text-3xl sm:text-4xl font-bold text-[var(--brand-verde)]">AI</div>
+                  <div className="text-sm text-[var(--muted-foreground)] mt-1">Análise Manus AI</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl sm:text-4xl font-bold text-[var(--brand-bege)]">5min</div>
+                  <div className="text-3xl sm:text-4xl font-bold text-[var(--brand-bege)]">3min</div>
                   <div className="text-sm text-[var(--muted-foreground)] mt-1">Para Resultado</div>
                 </div>
               </div>
@@ -119,11 +119,11 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--foreground)] mb-4">
-                Tudo que você precisa,{" "}
+                Tudo que seu negócio precisa,{" "}
                 <span className="text-brand-gradient">em um só lugar</span>
               </h2>
               <p className="text-lg text-[var(--muted-foreground)] max-w-2xl mx-auto">
-                Um ecossistema completo para transformar seu sonho americano em realidade.
+                Um ecossistema completo para transformar sua operação em uma máquina de escala.
               </p>
             </div>
 
@@ -137,17 +137,17 @@ export default function Home() {
                     </svg>
                   </div>
                   <h3 className="text-xl font-bold text-[var(--foreground)] mb-3">
-                    Raio-X de Imigração
+                    Raio-X de Negócios
                   </h3>
                   <p className="text-[var(--muted-foreground)] mb-6">
-                    Diagnóstico inteligente que analisa seu perfil e indica os melhores
-                    caminhos de visto para você. Resultado em 5 minutos.
+                    Diagnóstico inteligente que analisa sua previsibilidade, margem e processos.
+                    Relatório estratégico gerado por IA em minutos.
                   </p>
                   <Link
                     href="/raio-x"
                     className="inline-flex items-center gap-2 text-[var(--brand-verde-escuro)] font-semibold group-hover:gap-3 transition-all"
                   >
-                    Começar agora
+                    Começar diagnóstico
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
@@ -167,11 +167,11 @@ export default function Home() {
                     </svg>
                   </div>
                   <h3 className="text-xl font-bold text-[var(--foreground)] mb-3">
-                    Comunidade & Mentoria
+                    Comunidade Mastermind
                   </h3>
                   <p className="text-[var(--muted-foreground)] mb-6">
-                    Conecte-se com brasileiros que já passaram pelo processo. Mentoria
-                    de carreira e networking exclusivo.
+                    Conecte-se com outros empreendedores de alto nível. Mentoria
+                    e networking focado em resultados reais.
                   </p>
                   <span className="inline-flex items-center gap-2 text-[var(--muted)] font-semibold">
                     Disponível em breve
@@ -191,11 +191,11 @@ export default function Home() {
                     </svg>
                   </div>
                   <h3 className="text-xl font-bold text-[var(--foreground)] mb-3">
-                    Marketplace Verificado
+                    Ecossistema Verificado
                   </h3>
                   <p className="text-[var(--muted-foreground)] mb-6">
-                    Advogados, contadores e prestadores de serviço com selo de qualidade
-                    e avaliações reais da comunidade.
+                    Prestadores de serviço especializados (CFOs, Sales Experts, Devs) 
+                    com curadoria e selo de qualidade.
                   </p>
                   <span className="inline-flex items-center gap-2 text-[var(--muted)] font-semibold">
                     Disponível em breve
@@ -212,10 +212,10 @@ export default function Home() {
             <div className="text-center mb-16">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--foreground)] mb-4">
                 Como funciona o{" "}
-                <span className="text-[var(--brand-verde-escuro)]">Raio-X</span>
+                <span className="text-[var(--brand-verde-escuro)]">Diagnóstico IA</span>
               </h2>
               <p className="text-lg text-[var(--muted-foreground)] max-w-2xl mx-auto">
-                Em poucos minutos, você terá clareza sobre suas opções de imigração.
+                Em poucos minutos, você terá um relatório estratégico completo para sua empresa.
               </p>
             </div>
 
@@ -226,11 +226,11 @@ export default function Home() {
                   1
                 </div>
                 <h3 className="text-xl font-bold text-[var(--foreground)] mb-3">
-                  Preencha o Formulário
+                  Check-up Operacional
                 </h3>
                 <p className="text-[var(--muted-foreground)]">
-                  Responda perguntas sobre sua educação, experiência profissional,
-                  idiomas e objetivos em 5 minutos.
+                  Responda sobre 5 pilares fundamentais: Receita, Lucro, Operação, 
+                  Vendas e Métricas de Crescimento.
                 </p>
                 {/* Connector */}
                 <div className="hidden md:block absolute top-8 left-[60%] w-[80%] h-0.5 bg-gradient-to-r from-[var(--brand-verde-escuro)] to-[var(--brand-verde)]" />
@@ -242,11 +242,11 @@ export default function Home() {
                   2
                 </div>
                 <h3 className="text-xl font-bold text-[var(--foreground)] mb-3">
-                  Análise Inteligente
+                  Processamento Manus AI
                 </h3>
                 <p className="text-[var(--muted-foreground)]">
-                  Nosso sistema analisa seu perfil e compara com os requisitos
-                  de cada tipo de visto disponível.
+                  Nossa inteligência analisa seus dados cruzando com benchmarks
+                  de mercado e modelos de escala.
                 </p>
                 {/* Connector */}
                 <div className="hidden md:block absolute top-8 left-[60%] w-[80%] h-0.5 bg-gradient-to-r from-[var(--brand-verde)] to-[var(--brand-bege)]" />
@@ -258,11 +258,11 @@ export default function Home() {
                   3
                 </div>
                 <h3 className="text-xl font-bold text-[var(--foreground)] mb-3">
-                  Receba seu Diagnóstico
+                  Plano Estratégico
                 </h3>
                 <p className="text-[var(--muted-foreground)]">
-                  Veja seu score, compatibilidade por visto e um plano de ação
-                  personalizado com próximos passos.
+                  Receba seu score de maturidade e um plano de ação detalhado 
+                  para destravar seu próximo nível de faturamento.
                 </p>
               </div>
             </div>
@@ -270,83 +270,83 @@ export default function Home() {
             <div className="text-center mt-12">
               <Link href="/raio-x">
                 <Button size="lg">
-                  Começar Meu Diagnóstico
+                  Começar Diagnóstico Agora
                 </Button>
               </Link>
             </div>
           </div>
         </section>
 
-        {/* Visa Types Section */}
+        {/* Business Dimensions Section */}
         <section className="py-20 md:py-32 bg-[var(--neutral-50)] dark:bg-[var(--neutral-900)]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--foreground)] mb-4">
-                Tipos de Visto que{" "}
+                As 5 Dimensões que{" "}
                 <span className="text-brand-gradient">Analisamos</span>
               </h2>
               <p className="text-lg text-[var(--muted-foreground)] max-w-2xl mx-auto">
-                Cobrimos os principais caminhos de imigração para profissionais brasileiros.
+                Focamos no que realmente importa para a saúde e valor de um negócio.
           </p>
         </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
               {[
                 {
-                  code: "EB-1",
-                  name: "Habilidade Extraordinária",
-                  description: "Para profissionais com reconhecimento internacional em sua área.",
+                  code: "REC",
+                  name: "Previsibilidade de Receita",
+                  description: "Análise do modelo de faturamento e estabilidade do fluxo de caixa.",
                   color: "var(--brand-verde-escuro)",
                 },
                 {
-                  code: "EB-2 NIW",
-                  name: "Interesse Nacional",
-                  description: "Para quem pode contribuir significativamente para os EUA.",
+                  code: "MAR",
+                  name: "Margem e Lucro",
+                  description: "Eficiência financeira e sobra líquida real da operação.",
                   color: "var(--brand-verde)",
                 },
                 {
-                  code: "EB-3",
-                  name: "Trabalhador Qualificado",
-                  description: "Para profissionais com oferta de emprego de empresa americana.",
+                  code: "IND",
+                  name: "Independência do Dono",
+                  description: "Avaliação do grau de dependência da empresa em relação ao fundador.",
                   color: "var(--brand-bege)",
                 },
                 {
-                  code: "O-1",
-                  name: "Habilidade Extraordinária",
-                  description: "Visto temporário para talentos excepcionais em diversas áreas.",
+                  code: "CIC",
+                  name: "Ciclo de Vendas",
+                  description: "Velocidade de conversão e eficiência do funil comercial.",
                   color: "var(--brand-verde-escuro)",
                 },
                 {
-                  code: "L-1",
-                  name: "Transferência Intracompany",
-                  description: "Para executivos transferidos dentro de uma mesma empresa.",
+                  code: "MET",
+                  name: "Métricas (CAC/LTV)",
+                  description: "Clareza sobre os custos de aquisição e valor vitalício do cliente.",
                   color: "var(--brand-verde)",
                 },
                 {
-                  code: "E-2",
-                  name: "Investidor",
-                  description: "Para empreendedores que investem em negócio nos EUA.",
+                  code: "ESC",
+                  name: "Potencial de Escala",
+                  description: "O quanto o negócio está pronto para crescer dez vezes mais.",
                   color: "var(--brand-bege)",
                 },
-              ].map((visa, index) => (
+              ].map((dim, index) => (
                 <Card key={index} hover className="group">
                   <CardContent className="p-6">
                     <div className="flex items-start gap-4">
                       <div
                         className="w-12 h-12 rounded-xl flex items-center justify-center font-bold text-white shrink-0"
-                        style={{ backgroundColor: visa.color }}
+                        style={{ backgroundColor: dim.color }}
                       >
-                        {visa.code.split(" ")[0]}
+                        {dim.code}
                       </div>
                       <div>
                         <h3 className="font-bold text-[var(--foreground)]">
-                          {visa.code}
+                          {dim.name}
                         </h3>
                         <p className="text-sm text-[var(--brand-verde-escuro)] font-medium mb-1">
-                          {visa.name}
+                          Pilar Estratégico
                         </p>
                         <p className="text-sm text-[var(--muted-foreground)]">
-                          {visa.description}
+                          {dim.description}
                         </p>
                       </div>
                     </div>
@@ -357,7 +357,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Tourist Section */}
+        {/* Exit Strategy Section */}
         <section className="py-20 md:py-32 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-bege)]/10 via-transparent to-[var(--brand-verde)]/10" />
           
@@ -365,22 +365,22 @@ export default function Home() {
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               {/* Content */}
               <div>
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--brand-bege)]/20 rounded-full mb-6">
-                  <span className="text-2xl">✈️</span>
-                  <span className="text-sm font-semibold text-[var(--brand-bege-dark)]">
-                    Para Turistas
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--brand-verde-escuro)]/10 rounded-full mb-6">
+                  <span className="text-2xl">💰</span>
+                  <span className="text-sm font-semibold text-[var(--brand-verde-escuro)]">
+                    Exit & Valuaton
                   </span>
                 </div>
                 
                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--foreground)] mb-6">
-                  Está nos EUA como{" "}
-                  <span className="text-[var(--brand-bege-dark)]">turista</span>?
+                  Sua empresa é um ativo ou um{" "}
+                  <span className="text-[var(--brand-verde)]">fardo</span>?
                 </h2>
                 
                 <p className="text-lg text-[var(--muted-foreground)] mb-6">
-                  Muitos brasileiros visitam os Estados Unidos e se apaixonam pelo país. 
-                  Se você está pensando em transformar sua visita em uma mudança permanente, 
-                  o primeiro passo é descobrir se você tem perfil imigratório.
+                  Muitos empreendedores constroem negócios que não podem ser vendidos ou escalados. 
+                  Com o Diagnóstico Manus AI, você descobre exatamente o que está impedindo sua 
+                  empresa de valer mais no mercado.
                 </p>
                 
                 <ul className="space-y-4 mb-8">
@@ -391,7 +391,7 @@ export default function Home() {
                       </svg>
                     </div>
                     <span className="text-[var(--foreground)]">
-                      <strong>Descubra suas opções</strong> antes de contratar um advogado
+                      <strong>Identifique gargalos</strong> que matam sua margem de lucro
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
@@ -401,7 +401,7 @@ export default function Home() {
                       </svg>
                     </div>
                     <span className="text-[var(--foreground)]">
-                      <strong>Entenda seu score</strong> para diferentes tipos de visto
+                      <strong>Prepare-se para o Exit</strong> tornando o negócio independente de você
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
@@ -411,7 +411,7 @@ export default function Home() {
                       </svg>
                     </div>
                     <span className="text-[var(--foreground)]">
-                      <strong>Receba um plano</strong> personalizado de próximos passos
+                      <strong>Benchmarking real</strong> com empresas brasileiras de sucesso
                     </span>
                   </li>
                 </ul>
@@ -419,14 +419,14 @@ export default function Home() {
                 <Link href="/raio-x">
                   <Button 
                     size="lg"
-                    className="bg-[var(--brand-bege)] text-[var(--brand-verde-escuro-dark)] hover:bg-[var(--brand-bege-light)]"
+                    className="bg-[var(--brand-verde-escuro)] text-white hover:bg-[var(--brand-verde-escuro-dark)]"
                     rightIcon={
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                       </svg>
                     }
                   >
-                    Fazer Teste de Perfil Imigratório
+                    Avaliar Perfil Empresarial
                   </Button>
                 </Link>
               </div>
@@ -435,12 +435,12 @@ export default function Home() {
               <div className="relative">
                 <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-3xl p-8 shadow-2xl">
                   <div className="text-center mb-6">
-                    <div className="text-6xl mb-4">🇧🇷 → 🇺🇸</div>
+                    <div className="text-6xl mb-4">📈</div>
                     <h3 className="text-xl font-bold text-[var(--foreground)]">
-                      Teste de Perfil Imigratório
+                      Diagnóstico de Escala (Manus AI)
                     </h3>
                     <p className="text-[var(--muted-foreground)] text-sm">
-                      Gratuito • 5 minutos • Resultado imediato
+                      Gratuito • 3 minutos • Relatório Estratégico IA
                     </p>
                   </div>
                   
@@ -450,8 +450,8 @@ export default function Home() {
                         1
                       </div>
                       <div>
-                        <p className="font-medium text-[var(--foreground)]">Preencha o formulário</p>
-                        <p className="text-sm text-[var(--muted)]">Sobre você e seus objetivos</p>
+                        <p className="font-medium text-[var(--foreground)]">Dados Financeiros/Ops</p>
+                        <p className="text-sm text-[var(--muted)]">Informações seguras e criptografadas</p>
                       </div>
                     </div>
                     
@@ -460,8 +460,8 @@ export default function Home() {
                         2
                       </div>
                       <div>
-                        <p className="font-medium text-[var(--foreground)]">Receba seu score</p>
-                        <p className="text-sm text-[var(--muted)]">Compatibilidade por tipo de visto</p>
+                        <p className="font-medium text-[var(--foreground)]">Análise Agentic AI</p>
+                        <p className="text-sm text-[var(--muted)]">Processamento profundo pela Manus AI</p>
                       </div>
                     </div>
                     
@@ -470,8 +470,8 @@ export default function Home() {
                         3
                       </div>
                       <div>
-                        <p className="font-medium text-[var(--foreground)]">Veja seu plano</p>
-                        <p className="text-sm text-[var(--muted)]">Próximos passos personalizados</p>
+                        <p className="font-medium text-[var(--foreground)]">Estratégia de Escala</p>
+                        <p className="text-sm text-[var(--muted)]">Próximos passos para crescimento real</p>
                       </div>
                     </div>
                   </div>
@@ -496,11 +496,11 @@ export default function Home() {
 
           <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6">
-              Pronto para descobrir seu potencial?
+              Sua empresa está pronta para o próximo nível?
             </h2>
             <p className="text-xl text-white/80 mb-10 max-w-2xl mx-auto">
-              Faça seu Raio-X de Imigração agora e descubra qual é o melhor
-              caminho para você nos Estados Unidos.
+              Faça seu Raio-X de Negócios agora e descubra como a <span className="text-white font-bold">Manus AI</span> 
+              pode acelerar sua jornada rumo à escala.
             </p>
             <Link href="/raio-x">
               <Button
@@ -512,7 +512,7 @@ export default function Home() {
                   </svg>
                 }
               >
-                Fazer Meu Raio-X Gratuito
+                Gere seu Diagnóstico Gratuito
               </Button>
             </Link>
         </div>

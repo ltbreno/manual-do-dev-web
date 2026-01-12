@@ -48,7 +48,7 @@ export default function Header() {
               href="/raio-x"
               className="text-[var(--muted-foreground)] hover:text-[var(--brand-verde-escuro)] transition-colors font-medium"
             >
-              Raio-X
+              Diagnóstico IA
             </Link>
           </nav>
 
@@ -56,7 +56,7 @@ export default function Header() {
           <div className="hidden md:block">
             <Link href="/raio-x">
               <Button size="sm">
-                Começar Diagnóstico
+                Gerar Relatório IA
               </Button>
             </Link>
           </div>
