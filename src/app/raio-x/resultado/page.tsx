@@ -165,11 +165,11 @@ export default function ResultadoPage() {
 
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Seu Diagnóstico de{" "}
-              <span className="text-green-600">Maturidade Empresarial</span>
+              <span className="text-green-600">Viabilidade de Visto</span>
             </h1>
 
             <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-              Veja onde sua empresa está e como chegar ao próximo nível com a estratégia da Manus AI.
+              Descubra quais caminhos de imigração e vistos (EUA/Europa) estão mais alinhados com o momento atual do seu negócio e carreira.
             </p>
           </section>
 
@@ -196,10 +196,10 @@ export default function ResultadoPage() {
               </div>
 
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                Nível de Maturidade: {
-                  result.overallScore >= 80 ? "Escalável" :
-                  result.overallScore >= 60 ? "Operacional Sólido" :
-                  result.overallScore >= 40 ? "Em Consolidação" : "Incipiente"
+                Potencial Internacional: {
+                  result.overallScore >= 80 ? "Alta Viabilidade" :
+                  result.overallScore >= 60 ? "Viável com Ajustes" :
+                  result.overallScore >= 40 ? "Em Preparação" : "Inicial"
                 }
               </h2>
             </div>
@@ -219,7 +219,7 @@ export default function ResultadoPage() {
                   <span className="text-white font-bold">AI</span>
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold">Relatório Estratégico (Manus AI)</h3>
+                  <h3 className="text-xl font-bold">Diagnóstico de Imigração (Manus AI)</h3>
                   <p className="text-green-400 text-sm">Powered by Advanced Agentic Intelligence</p>
                 </div>
               </div>
@@ -317,9 +317,9 @@ export default function ResultadoPage() {
 
           {/* Call to Action */}
           <section className="bg-gradient-to-r from-green-600 to-green-700 rounded-2xl p-8 text-center text-white shadow-lg">
-            <h3 className="text-2xl font-bold mb-3">Escalar sua empresa ou focar no lucro?</h3>
+            <h3 className="text-2xl font-bold mb-3">Quer acelerar seu processo de Visto?</h3>
             <p className="text-white/90 mb-6 max-w-xl mx-auto">
-              Nossos especialistas podem ajudar você a implementar as estratégias geradas pela Manus AI para acelerar seu crescimento.
+              Nossos especialistas em vistos e imigração podem ajudar você a estruturar o plano perfeito baseado neste diagnóstico.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button className="bg-yellow-400 text-green-900 px-6 py-3 rounded-lg hover:bg-yellow-300 transition-colors font-semibold shadow-md">

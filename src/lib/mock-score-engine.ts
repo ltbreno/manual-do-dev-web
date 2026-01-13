@@ -241,5 +241,11 @@ export function getDefaultFormData(): RaioXFormData {
       teamMaturity: "middle_management",
       cashFlow: "comfortable",
     },
+    contact: {
+      name: "",
+      email: "",
+      whatsapp: "",
+      company: "",
+    },
   };
 }

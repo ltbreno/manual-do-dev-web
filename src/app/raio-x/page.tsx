@@ -9,6 +9,7 @@ import ProgressBar from "@/components/raio-x/ProgressBar";
 import FormStep, {
   FormField,
   RadioGroup,
+  TextInput,
 } from "@/components/raio-x/FormStep";
 import {
   RaioXFormData,
@@ -40,6 +41,7 @@ const STEP_LABELS = [
   "Clientes",
   "Time",
   "Finanças",
+  "Seus Dados",
 ];
 
 export default function RaioXPage() {
@@ -54,6 +56,13 @@ export default function RaioXPage() {
     setFormData((prev) => ({
       ...prev,
       business: { ...prev.business, [field]: value },
+    }));
+  };
+
+  const updateContact = (field: keyof RaioXFormData["contact"], value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      contact: { ...prev.contact, [field]: value },
     }));
   };
 
@@ -303,6 +312,46 @@ export default function RaioXPage() {
                   onChange={(v) => updateBusiness("cashFlow", v as CashFlow)}
                   options={cashOptions}
                   columns={1}
+                />
+              </FormField>
+            </FormStep>
+
+            {/* Step 9 - Seus Dados */}
+            <FormStep
+              title="Receber Análise"
+              description="Para onde devemos enviar seu Raio-X detalhado?"
+              isActive={currentStep === 8}
+            >
+              <FormField label="Nome Completo" required>
+                <TextInput
+                  value={formData.contact.name}
+                  onChange={(v) => updateContact("name", v)}
+                  placeholder="Seu nome"
+                />
+              </FormField>
+              
+              <FormField label="Email Corporativo" required>
+                <TextInput
+                  value={formData.contact.email}
+                  onChange={(v) => updateContact("email", v)}
+                  placeholder="seu@email.com.br"
+                  type="email"
+                />
+              </FormField>
+
+              <FormField label="WhatsApp" required>
+                <TextInput
+                  value={formData.contact.whatsapp}
+                  onChange={(v) => updateContact("whatsapp", v)}
+                  placeholder="(11) 99999-9999"
+                />
+              </FormField>
+
+              <FormField label="Nome da Empresa">
+                <TextInput
+                  value={formData.contact.company}
+                  onChange={(v) => updateContact("company", v)}
+                  placeholder="Sua Empresa Ltda"
                 />
               </FormField>
             </FormStep>

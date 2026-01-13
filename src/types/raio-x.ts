@@ -68,6 +68,12 @@ export interface RaioXFormData {
     teamMaturity: TeamMaturity;
     cashFlow: CashFlow;
   };
+  contact: {
+    name: string;
+    email: string;
+    whatsapp: string;
+    company: string;
+  };
 }
 
 // ... existing interfaces ...
