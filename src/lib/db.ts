@@ -29,13 +29,15 @@ export async function ensureLeadsTableExists() {
         score INTEGER,
         ai_analysis TEXT,
         classification TEXT,
-        legal_risk TEXT
+        legal_risk TEXT,
+        uploaded_files JSONB
       );
     `);
     // Ensure columns exist if table was already created
     await client.query(`
       ALTER TABLE leads ADD COLUMN IF NOT EXISTS classification TEXT;
       ALTER TABLE leads ADD COLUMN IF NOT EXISTS legal_risk TEXT;
+      ALTER TABLE leads ADD COLUMN IF NOT EXISTS uploaded_files JSONB;
     `);
   } catch (error) {
     console.error("Error creating leads table:", error);

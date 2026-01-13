@@ -14,7 +14,15 @@ interface Lead {
   ai_analysis: string;
   classification?: string;
   legal_risk?: string;
-  business_data?: Record<string, any>;
+  uploaded_files?: { name: string; type: string }[];
+  business_data?: {
+    investmentBudget?: string;
+    contactPreference?: string;
+    contact?: {
+      linkedin?: string;
+    };
+    [key: string]: unknown;
+  };
 }
 
 interface LeadsDashboardClientProps {
@@ -41,6 +49,7 @@ const Bar = ({ label, value, color, total }: { label: string, value: number, col
 export default function LeadsDashboardClient({ initialLeads }: LeadsDashboardClientProps) {
   const [filterName, setFilterName] = useState("");
   const [filterMinScore, setFilterMinScore] = useState("");
+  const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
 
   const filteredLeads = useMemo(() => {
     return initialLeads.filter((lead) => {
@@ -191,67 +200,15 @@ export default function LeadsDashboardClient({ initialLeads }: LeadsDashboardCli
                         </span>
                       </td>
                       <td className="p-4">
-                        <details className="group">
-                          <summary className="cursor-pointer text-sm text-green-700 hover:text-green-900 hover:underline list-none font-bold flex items-center gap-1">
-                            <span>Exibir Dossiê</span>
-                            <svg className="w-4 h-4 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                          </summary>
-                          <div className="mt-4 text-sm text-gray-900 bg-white p-6 rounded-2xl border-2 border-gray-100 max-w-2xl shadow-xl overflow-hidden">
-                            <div className="bg-gray-900 text-white -mx-6 -mt-6 p-4 mb-6 flex justify-between items-center">
-                               <h3 className="font-bold text-lg">Dossiê de Triagem Jurídica</h3>
-                               <span className={`px-3 py-1 rounded-full text-xs font-black uppercase ${
-                                  lead.classification === 'Hot' ? 'bg-red-500' :
-                                  lead.classification === 'Warm' ? 'bg-orange-500' : 'bg-blue-500'
-                               }`}>
-                                  LEAD {lead.classification || 'COLD'}
-                               </span>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-x-8 gap-y-4 mb-6">
-                               <div>
-                                  <h4 className="text-[10px] uppercase tracking-tighter text-gray-400 font-bold mb-0.5">Visibilidade Vistos</h4>
-                                  <p className="font-black text-gray-900 text-base">
-                                     {lead.score >= 80 ? 'EB-1 / O-1 / NIW (Alta)' : 
-                                      lead.score >= 50 ? 'NIW / EB-2 (Moderada)' : 'Ajustes Necessários'}
-                                  </p>
-                               </div>
-                               <div>
-                                  <h4 className="text-[10px] uppercase tracking-tighter text-gray-400 font-bold mb-0.5">Risco Jurídico</h4>
-                                  <p className={`font-black text-base ${
-                                     lead.legal_risk === 'Low' ? 'text-green-600' :
-                                     lead.legal_risk === 'Medium' ? 'text-orange-600' : 'text-red-600'
-                                  }`}>
-                                     {lead.legal_risk === 'Low' ? 'BAIXO' : 
-                                      lead.legal_risk === 'Medium' ? 'MÉDIO (Atenção)' : 'ALTO ⚠️'}
-                                  </p>
-                               </div>
-                               <div>
-                                  <h4 className="text-[10px] uppercase tracking-tighter text-gray-400 font-bold mb-0.5">Capacidade Financeira</h4>
-                                  <p className="font-bold text-gray-900">
-                                     {lead.business_data?.investmentBudget === 'over_15k' ? 'ALTA (> $15k)' : 
-                                      lead.business_data?.investmentBudget === '10k_15k' ? 'MÉDIA ($10k-15k)' : 'BAIXA / NÃO INF.'}
-                                  </p>
-                               </div>
-                               <div>
-                                  <h4 className="text-[10px] uppercase tracking-tighter text-gray-400 font-bold mb-0.5">Contato Direto</h4>
-                                  <p className="font-bold text-green-700">{lead.whatsapp || 'N/A'}</p>
-                               </div>
-                               <div className="col-span-2 pt-4 border-t border-gray-100">
-                                  <h4 className="text-[10px] uppercase tracking-tighter text-gray-400 font-bold mb-1">Documentos / LinkedIn</h4>
-                                  <a href={lead.business_data?.contact?.linkedin} target="_blank" className="font-bold text-blue-700 underline break-all text-xs">
-                                     {lead.business_data?.contact?.linkedin || 'Nenhum documento anexado'}
-                                  </a>
-                               </div>
-                            </div>
-                            
-                            <div className="bg-gray-50 -mx-6 -mb-6 p-6 border-t border-gray-200">
-                               <h4 className="text-[10px] uppercase tracking-tighter text-gray-500 font-black mb-3">Observações Estratégicas (Inteligência Manus AI)</h4>
-                               <div className="prose prose-sm max-w-none prose-p:text-gray-900 prose-p:font-medium whitespace-pre-wrap leading-relaxed">
-                                  {lead.ai_analysis || "Análise pendente."}
-                               </div>
-                            </div>
-                          </div>
-                        </details>
+                        <button 
+                          onClick={() => setSelectedLead(lead)}
+                          className="text-sm text-green-700 hover:text-green-900 hover:underline font-bold flex items-center gap-1 group"
+                        >
+                          <span>Abrir Dossiê</span>
+                          <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                          </svg>
+                        </button>
                       </td>
                     </tr>
                   ))
@@ -261,6 +218,152 @@ export default function LeadsDashboardClient({ initialLeads }: LeadsDashboardCli
           </div>
         </div>
       </div>
+
+      {/* Modal do Dossiê */}
+      {selectedLead && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div 
+            className="bg-white w-full max-w-2xl max-h-[90vh] rounded-3xl shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header do Modal */}
+            <div className="bg-gray-900 text-white p-6 flex justify-between items-center sticky top-0 z-10">
+              <div>
+                <h3 className="font-bold text-xl">Dossiê de Triagem Jurídica</h3>
+                <p className="text-gray-400 text-xs mt-1 uppercase tracking-widest font-bold">Inteligência Manus AI</p>
+              </div>
+              <div className="flex items-center gap-4">
+                <span className={`px-3 py-1 rounded-full text-xs font-black uppercase ${
+                  selectedLead.classification === 'Hot' ? 'bg-red-500' :
+                  selectedLead.classification === 'Warm' ? 'bg-orange-500' : 'bg-blue-500'
+                }`}>
+                  LEAD {selectedLead.classification || 'COLD'}
+                </span>
+                <button 
+                  onClick={() => setSelectedLead(null)}
+                  className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Conteúdo do Modal */}
+            <div className="overflow-y-auto p-8">
+              <div className="grid grid-cols-2 gap-x-8 gap-y-6 mb-8 pb-8 border-b border-gray-100">
+                <div>
+                  <h4 className="text-[10px] uppercase tracking-tighter text-gray-400 font-bold mb-1">Candidato</h4>
+                  <p className="font-black text-gray-900 text-lg leading-tight">{selectedLead.name || "N/A"}</p>
+                  <p className="text-sm text-gray-500">{selectedLead.email}</p>
+                </div>
+                <div>
+                  <h4 className="text-[10px] uppercase tracking-tighter text-gray-400 font-bold mb-1">Contato Direto</h4>
+                  <p className="font-bold text-green-700 text-lg">{selectedLead.whatsapp || 'N/A'}</p>
+                  <p className="text-sm text-gray-500">Preferência: {selectedLead.business_data?.contactPreference || 'N/A'}</p>
+                </div>
+                <div>
+                  <h4 className="text-[10px] uppercase tracking-tighter text-gray-400 font-bold mb-1">Visibilidade de Visto</h4>
+                  <p className="font-black text-gray-900 text-lg">
+                    {selectedLead.score >= 80 ? 'EB-1 / O-1 / NIW (Alta)' : 
+                     selectedLead.score >= 50 ? 'NIW / EB-2 (Moderada)' : 'Ajustes Necessários'}
+                  </p>
+                  <span className="text-[10px] font-bold text-gray-400 uppercase">Score: {selectedLead.score}/100</span>
+                </div>
+                <div>
+                  <h4 className="text-[10px] uppercase tracking-tighter text-gray-400 font-bold mb-1">Risco Jurídico</h4>
+                  <p className={`font-black text-lg ${
+                    selectedLead.legal_risk === 'Low' ? 'text-green-600' :
+                    selectedLead.legal_risk === 'Medium' ? 'text-orange-600' : 'text-red-600'
+                  }`}>
+                    {selectedLead.legal_risk === 'Low' ? 'BAIXO' : 
+                     selectedLead.legal_risk === 'Medium' ? 'MÉDIO (Atenção)' : 'ALTO ⚠️'}
+                  </p>
+                </div>
+                <div>
+                  <h4 className="text-[10px] uppercase tracking-tighter text-gray-400 font-bold mb-1">Capacidade Financeira</h4>
+                  <p className="font-bold text-gray-900 text-lg">
+                    {selectedLead.business_data?.investmentBudget === 'over_15k' ? 'ALTA (> $15k)' : 
+                     selectedLead.business_data?.investmentBudget === '10k_15k' ? 'MÉDIA ($10k-15k)' : 'BAIXA / NÃO INF.'}
+                  </p>
+                </div>
+                <div>
+                  <h4 className="text-[10px] uppercase tracking-tighter text-gray-400 font-bold mb-1">Empresa / Ocupação</h4>
+                  <p className="font-bold text-gray-900 text-lg">{selectedLead.company || 'N/A'}</p>
+                </div>
+              </div>
+
+              <div className="mb-8">
+                <h4 className="text-[10px] uppercase tracking-tighter text-gray-400 font-bold mb-3">Documentos e Provas</h4>
+                <div className="space-y-3">
+                  {selectedLead.business_data?.contact?.linkedin && (
+                    <a href={selectedLead.business_data?.contact?.linkedin} target="_blank" className="flex items-center gap-3 p-3 bg-blue-50 border border-blue-100 rounded-xl group transition-colors hover:bg-blue-100">
+                      <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-bold text-blue-900 uppercase tracking-tighter">Perfil LinkedIn</p>
+                        <p className="text-sm text-blue-700 truncate">{selectedLead.business_data?.contact?.linkedin}</p>
+                      </div>
+                    </a>
+                  )}
+                  {selectedLead.uploaded_files && selectedLead.uploaded_files.length > 0 && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {selectedLead.uploaded_files.map((file, idx) => (
+                        <div key={idx} className="flex items-center gap-3 p-3 bg-gray-50 border border-gray-100 rounded-xl">
+                          <div className="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0 text-gray-500">
+                             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                             </svg>
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">Documento Anexo</p>
+                            <p className="text-sm text-gray-700 font-bold truncate">{file.name}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {!selectedLead.business_data?.contact?.linkedin && (!selectedLead.uploaded_files || selectedLead.uploaded_files.length === 0) && (
+                    <div className="p-4 bg-gray-50 border border-dashed border-gray-200 rounded-xl text-center">
+                      <p className="text-sm text-gray-500 italic">Nenhum documento ou link fornecido.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                <h4 className="text-[10px] uppercase tracking-tighter text-gray-500 font-black mb-4 flex items-center gap-2">
+                   <span className="w-2 h-2 bg-green-600 rounded-full animate-pulse"></span>
+                   Parecer Estratégico (Manus AI)
+                </h4>
+                <div className="text-[15px] text-gray-900 font-medium whitespace-pre-wrap leading-relaxed">
+                   {selectedLead.ai_analysis || "Análise pendente. Solicite o re-processamento se necessário."}
+                </div>
+              </div>
+            </div>
+
+            {/* Footer do Modal */}
+            <div className="p-6 border-t border-gray-100 bg-white sticky bottom-0 flex justify-end gap-3">
+              <button 
+                onClick={() => setSelectedLead(null)}
+                className="px-6 py-2.5 text-sm font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition-colors"
+              >
+                Fechar
+              </button>
+              <button 
+                onClick={() => window.print()}
+                className="px-6 py-2.5 text-sm font-bold bg-[var(--brand-verde-escuro)] text-white rounded-xl shadow-lg shadow-green-900/20 hover:brightness-110 transition-all"
+              >
+                Imprimir Dossiê
+              </button>
+            </div>
+          </div>
+          {/* Overlay click to close */}
+          <div className="absolute inset-0 -z-10" onClick={() => setSelectedLead(null)}></div>
+        </div>
+      )}
     </div>
   );
 }

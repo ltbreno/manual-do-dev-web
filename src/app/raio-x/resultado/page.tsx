@@ -229,45 +229,7 @@ export default function ResultadoPage() {
             </div>
           </section>
 
-          {/* Análise da IA - Manus AI */}
-          <section className="mb-12">
-            <div className="bg-gray-900 rounded-2xl p-8 text-white shadow-xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-6 opacity-10">
-                <svg className="w-32 h-32" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                </svg>
-              </div>
-              
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold">AI</span>
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold">Diagnóstico de Imigração (Manus AI)</h3>
-                  <p className="text-green-400 text-sm">Powered by Advanced Agentic Intelligence</p>
-                </div>
-              </div>
 
-              <div className="prose prose-invert max-w-none">
-                <div className="whitespace-pre-wrap text-gray-300 leading-relaxed font-light">
-                  {result.aiAnalysis.split('\n').map((line, i) => {
-                    if (line.startsWith('###')) {
-                      return <h4 key={i} className="text-green-400 font-bold mt-6 mb-2">{line.replace('### ', '')}</h4>;
-                    }
-                    if (line.startsWith('**')) {
-                      const [label, content] = line.split(':');
-                      return (
-                        <div key={i} className="bg-white/5 p-4 rounded-lg mt-4 border-l-4 border-green-500">
-                          <span className="font-bold text-green-400">{label.replace('**', '')}:</span> {content}
-                        </div>
-                      );
-                    }
-                    return <p key={i} className="mb-2">{line}</p>;
-                  })}
-                </div>
-              </div>
-            </div>
-          </section>
 
           {/* Métricas Detalhadas */}
           <section className="mb-12">

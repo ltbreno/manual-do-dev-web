@@ -1,6 +1,16 @@
 import { NextResponse } from "next/server";
 import pool, { ensureLeadsTableExists } from "@/lib/db";
 
+interface ManusAIMessage {
+  content?: string | unknown | unknown[];
+  text?: string;
+}
+
+interface ManusAITaskResponse {
+  status: string;
+  output?: (ManusAIMessage | string)[];
+}
+
 export async function POST(req: Request) {
   try {
     const { formData, overallScore, classification, legalRisk } = await req.json();
@@ -86,13 +96,39 @@ export async function POST(req: Request) {
 
       if (!pollResponse.ok) break;
 
-      const pollData = await pollResponse.json();
+      const pollData: ManusAITaskResponse = await pollResponse.json();
       status = pollData.status;
 
       if (status === "completed") {
         const messages = pollData.output || [];
+        // Skip the first message (the prompt) and join the rest
         aiAnalysis = messages
-          .map((m: { content?: string }) => m.content || "")
+          .slice(1) // Remove o prompt original da resposta
+          .map((m: ManusAIMessage | string) => {
+            if (typeof m === "string") return m;
+            
+            // 1. Try to extract from 'content'
+            if (m.content) {
+              if (typeof m.content === "string") return m.content;
+              if (Array.isArray(m.content)) {
+                return (m.content as any[])
+                  .map((part: any) => 
+                    typeof part === "string" ? part : (part.text || part.content || JSON.stringify(part))
+                  )
+                  .join("");
+              }
+              if (typeof m.content === "object") {
+                const anyContent = m.content as any;
+                return anyContent.text || anyContent.content || JSON.stringify(m.content);
+              }
+            }
+
+            // 2. Try to extract from 'text'
+            if (m.text && typeof m.text === "string") return m.text;
+
+            // 3. Fallback to full object stringification
+            return JSON.stringify(m);
+          })
           .join("\n\n");
       } else if (status === "error") {
         throw new Error("Manus AI task failed");
@@ -107,8 +143,8 @@ export async function POST(req: Request) {
       const client = await pool.connect();
       try {
         await client.query(
-          `INSERT INTO leads (name, email, whatsapp, company, business_data, score, ai_analysis, classification, legal_risk) 
-           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+          `INSERT INTO leads (name, email, whatsapp, company, business_data, score, ai_analysis, classification, legal_risk, uploaded_files) 
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
           [
             formData.contact.name,
             formData.contact.email,
@@ -118,7 +154,8 @@ export async function POST(req: Request) {
             overallScore,
             aiAnalysis,
             classification,
-            legalRisk
+            legalRisk,
+            JSON.stringify(formData.uploadedFiles || [])
           ]
         );
       } finally {
