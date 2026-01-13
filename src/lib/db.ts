@@ -27,8 +27,15 @@ export async function ensureLeadsTableExists() {
         company TEXT,
         business_data JSONB,
         score INTEGER,
-        ai_analysis TEXT
+        ai_analysis TEXT,
+        classification TEXT,
+        legal_risk TEXT
       );
+    `);
+    // Ensure columns exist if table was already created
+    await client.query(`
+      ALTER TABLE leads ADD COLUMN IF NOT EXISTS classification TEXT;
+      ALTER TABLE leads ADD COLUMN IF NOT EXISTS legal_risk TEXT;
     `);
   } catch (error) {
     console.error("Error creating leads table:", error);

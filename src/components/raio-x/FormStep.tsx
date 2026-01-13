@@ -226,6 +226,72 @@ export function Checkbox({
   );
 }
 
+// Checkbox Group
+interface CheckboxOption {
+  value: string;
+  label: string;
+  description?: string;
+}
+
+interface CheckboxGroupProps {
+  values: string[];
+  onChange: (values: string[]) => void;
+  options: CheckboxOption[];
+  columns?: 1 | 2;
+}
+
+export function CheckboxGroup({
+  values,
+  onChange,
+  options,
+  columns = 1,
+}: CheckboxGroupProps) {
+  const handleChange = (value: string, checked: boolean) => {
+    if (checked) {
+      onChange([...values, value]);
+    } else {
+      onChange(values.filter((v) => v !== value));
+    }
+  };
+
+  const gridCols = {
+    1: "grid-cols-1",
+    2: "grid-cols-1 sm:grid-cols-2",
+  };
+
+  return (
+    <div className={`grid ${gridCols[columns]} gap-3`}>
+      {options.map((option) => (
+        <label
+          key={option.value}
+          className={`flex items-start gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
+            values.includes(option.value)
+              ? "border-[var(--brand-verde-escuro)] bg-[var(--brand-verde-escuro)]/5"
+              : "border-[var(--card-border)] hover:border-[var(--brand-verde-escuro)]/50"
+          }`}
+        >
+          <input
+            type="checkbox"
+            checked={values.includes(option.value)}
+            onChange={(e) => handleChange(option.value, e.target.checked)}
+            className="mt-1 w-4 h-4 text-[var(--brand-verde-escuro)] border-[var(--card-border)] focus:ring-[var(--brand-verde-escuro)]"
+          />
+          <div>
+            <span className="font-medium text-[var(--foreground)]">
+              {option.label}
+            </span>
+            {option.description && (
+              <p className="text-sm text-[var(--muted)] mt-1">
+                {option.description}
+              </p>
+            )}
+          </div>
+        </label>
+      ))}
+    </div>
+  );
+}
+
 // Number Stepper
 interface NumberStepperProps {
   value: number;

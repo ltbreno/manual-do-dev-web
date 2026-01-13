@@ -1,88 +1,214 @@
 // Tipos para o formulário de Tipos de Visto EUA
 
+// BLOCO 1 - OBJETIVO REAL
 export type VisaPurpose =
   | "tourism"
   | "business"
   | "study"
   | "work"
-  | "investment_immigration";
+  | "immigration";
 
-export type StayDuration =
-  | "short_visit"
-  | "medium_stay"
-  | "long_stay"
-  | "permanent_residence";
+export type Intent =
+  | "permanent"
+  | "temporary_work"
+  | "evaluate";
 
-export type FinancialSupport =
-  | "self_funded"
-  | "family_support"
-  | "employer_sponsor"
-  | "scholarship_sponsor";
+// BLOCO 2 - PRAZO E PRIORIDADE
+export type Timeline =
+  | "immediate" // 0-3 meses
+  | "short"     // 3-6 meses
+  | "medium"    // 6-12 meses
+  | "long"      // 12-24 meses
+  | "undefined";
 
-export type Qualifications =
-  | "no_higher_education"
-  | "bachelor_degree"
-  | "advanced_degree" // Masters/PhD
-  | "specialized_skills" // Arts, Science, Athletics
-  | "investment_capital"; // High net worth
+export type ConsultedLawyer =
+  | "yes_second_opinion"
+  | "no_first_time"
+  | "yes_no_progress";
 
-export type EnglishProficiency = "none" | "basic" | "intermediate" | "fluent";
+// BLOCO 3 - HISTÓRICO IMIGRATÓRIO
+export type ImmigrationIssue =
+  | "none"
+  | "denial"
+  | "overstay"
+  | "entry_denied"
+  | "deportation"
+  | "other";
 
-// Formulário completo
+// BLOCO 4 - PERFIL PROFISSIONAL
+export type EducationLevel =
+  | "high_school"
+  | "bachelors"
+  | "grad_school";
+
+export type ExperienceYears =
+  | "under_5"
+  | "5_10"
+  | "10_15"
+  | "over_15";
+
+// BLOCO 5 - PROVAS OBJETIVAS
+export type Achievement =
+  | "prizes"
+  | "media"
+  | "leadership"
+  | "impact_projects"
+  | "publications"
+  | "judging"
+  | "high_salary"
+  | "none";
+
+export type ImpactClaim =
+  | "clear_impact"
+  | "potential_impact"
+  | "unsure";
+
+// BLOCO 6 - CAPACIDADE FINANCEIRA
+export type FundingSource =
+  | "self"
+  | "company"
+  | "family"
+  | "investor";
+
+export type InvestmentBudget =
+  | "under_5k"
+  | "5k_10k"
+  | "10k_15k"
+  | "over_15k";
+
+// BLOCO 8 - CONVERSÃO
+export type WillingToConsult =
+  | "yes_asap"
+  | "yes_later"
+  | "no";
+
+export type ContactPreference =
+  | "name"
+  | "email"
+  | "whatsapp";
+
+// Formulário Completo
 export interface RaioXFormData {
-  business: {
-    // Keeping 'business' key for compatibility or renaming? better rename but might break other things. Let's keep structure but change content
-    visaPurpose: VisaPurpose;
-    stayDuration: StayDuration;
-    financialSupport: FinancialSupport;
-    qualifications: Qualifications;
-    englishProficiency: EnglishProficiency;
-  };
+  // BLOCO 1
+  visaPurpose: VisaPurpose | "";
+  intent: Intent | "";
+  
+  // BLOCO 2
+  timeline: Timeline | "";
+  consultedLawyer: ConsultedLawyer | "";
+
+  // BLOCO 3
+  immigrationIssues: ImmigrationIssue[];
+  immigrationIssueDetails?: string;
+
+  // BLOCO 4
+  educationLevel: EducationLevel | "";
+  fieldOfWork: string;
+  experienceYears: ExperienceYears | "";
+
+  // BLOCO 5
+  achievements: Achievement[];
+  impactClaim: ImpactClaim | "";
+
+  // BLOCO 6
+  fundingSource: FundingSource | "";
+  investmentBudget: InvestmentBudget | "";
+
+  // BLOCO 7 - Documentos (Simplificado para metadados por enquanto)
+  wantsToUpload: boolean;
+  uploadedFiles?: { name: string; type: string }[];
+
+  // BLOCO 8 & Contato
+  willingToConsult: WillingToConsult | "";
+  contactPreference: ContactPreference | "";
   contact: {
     name: string;
     email: string;
     whatsapp: string;
-    company: string; // Maybe rename to "currentJob" or "background" but "company" is fine for form
+    linkedin?: string;
   };
 }
 
-// Labels para exibição
+// Labels para exibição (Mapeamento)
 export const VISA_PURPOSE_LABELS: Record<VisaPurpose, string> = {
-  tourism: "Turismo e Lazer (Disney, Nova York, etc)",
-  business: "Negócios (Reuniões, Conferências - sem remuneração nos EUA)",
-  study: "Estudos (Universidade, Inglês, Curso Profissionalizante)",
-  work: "Trabalho (Emprego com empresa americana)",
-  investment_immigration: "Investimento ou Imigração (Greencard)",
+  tourism: "Turismo / visitas ocasionais",
+  business: "Negócios temporários (reuniões, eventos)",
+  study: "Estudos (idiomas, universidade)",
+  work: "Trabalho temporário com empresa americana",
+  immigration: "Imigração permanente (Green Card)",
 };
 
-export const STAY_DURATION_LABELS: Record<StayDuration, string> = {
-  short_visit: "Curta Duração (Férias / até 3 meses)",
-  medium_stay: "Média Duração (Intercâmbio / até 1 ano)",
-  long_stay: "Longa Duração (Trabalho / Vários anos)",
-  permanent_residence: "Residência Permanente (Morar para sempre)",
+export const INTENT_LABELS: Record<Intent, string> = {
+  permanent: "Morar permanentemente nos EUA",
+  temporary_work: "Trabalhar por alguns anos e depois decidir",
+  evaluate: "Apenas avaliar possibilidades futuras",
 };
 
-export const FINANCIAL_SUPPORT_LABELS: Record<FinancialSupport, string> = {
-  self_funded: "Recursos Próprios (Tenho o dinheiro guardado)",
-  family_support: "Suporte Familiar (Pais ou parentes pagam)",
-  employer_sponsor: "Empregador (Empresa paga ou patrocina)",
-  scholarship_sponsor: "Bolsa de Estudos / Outro Patrocínio",
+export const TIMELINE_LABELS: Record<Timeline, string> = {
+  immediate: "Imediatamente (0–3 meses)",
+  short: "Curto prazo (3–6 meses)",
+  medium: "Médio prazo (6–12 meses)",
+  long: "Longo prazo (12–24 meses)",
+  undefined: "Ainda não tenho prazo definido",
 };
 
-export const QUALIFICATIONS_LABELS: Record<Qualifications, string> = {
-  no_higher_education: "Ensino Médio ou Técnico",
-  bachelor_degree: "Ensino Superior Completo (Bacharelado)",
-  advanced_degree: "Pós-Graduação (Mestrado/Doutorado)",
-  specialized_skills: "Habilidades Extraordinárias (Artes, Esportes, Ciências)",
-  investment_capital:
-    "Capital de Investimento (Tenho recursos para investir no país)",
+export const CONSULTED_LAWYER_LABELS: Record<ConsultedLawyer, string> = {
+  yes_second_opinion: "Sim, e quero uma segunda opinião",
+  no_first_time: "Não, esta é minha primeira análise",
+  yes_no_progress: "Já conversei, mas não avancei",
 };
 
-export const ENGLISH_PROFICIENCY_LABELS: Record<EnglishProficiency, string> = {
-  none: "Nenhum (Não falo nada)",
-  basic: "Básico (Entendo o básico para viajar)",
-  intermediate: "Intermediário (Consigo conversar e estudar)",
-  fluent: "Fluente (Comunicação profissional)",
+export const IMMIGRATION_ISSUE_LABELS: Record<ImmigrationIssue, string> = {
+  none: "Nunca",
+  denial: "Visto negado",
+  overstay: "Overstay (ficou além do permitido)",
+  entry_denied: "Entrada negada na fronteira",
+  deportation: "Processo de remoção/deportação",
+  other: "Outro",
+};
+
+export const EDUCATION_LEVEL_LABELS: Record<EducationLevel, string> = {
+  high_school: "Ensino médio / técnico",
+  bachelors: "Ensino superior (bacharelado)",
+  grad_school: "Pós-graduação (MBA, mestrado ou doutorado)",
+};
+
+export const EXPERIENCE_YEARS_LABELS: Record<ExperienceYears, string> = {
+  under_5: "Menos de 5 anos",
+  "5_10": "5–10 anos",
+  "10_15": "10–15 anos",
+  over_15: "Mais de 15 anos",
+};
+
+export const ACHIEVEMENT_LABELS: Record<Achievement, string> = {
+  prizes: "Prêmios ou reconhecimentos relevantes",
+  media: "Reportagens ou matérias sobre você",
+  leadership: "Cargo de liderança ou papel crítico",
+  impact_projects: "Projetos de impacto comprovado",
+  publications: "Publicações acadêmicas ou patentes",
+  judging: "Julgamento do trabalho de outros",
+  high_salary: "Remuneração acima da média",
+  none: "Nenhum dos itens acima",
+};
+
+export const IMPACT_CLAIM_LABELS: Record<ImpactClaim, string> = {
+  clear_impact: "Sim, de forma clara e mensurável",
+  potential_impact: "Sim, mas ainda não sei como demonstrar",
+  unsure: "Não tenho certeza",
+};
+
+export const FUNDING_SOURCE_LABELS: Record<FundingSource, string> = {
+  self: "Recursos próprios",
+  company: "Empresa / patrocinador",
+  family: "Família",
+  investor: "Investidor / sócio",
+};
+
+export const INVESTMENT_BUDGET_LABELS: Record<InvestmentBudget, string> = {
+  under_5k: "Até US$ 5.000",
+  "5k_10k": "US$ 5.000 – US$ 10.000",
+  "10k_15k": "US$ 10.000 – US$ 15.000",
+  over_15k: "Acima de US$ 15.000",
 };
 
 // Resultado do Score
@@ -101,6 +227,9 @@ export interface RaioXResult {
   profileStrengths: string[];
   recommendations: string[];
   nextSteps: string[];
+  // Novos campos para o dossiê do advogado
+  leadClassification?: "Hot" | "Warm" | "Cold";
+  legalRisk?: "High" | "Medium" | "Low";
 }
 
 export interface VisaScore {

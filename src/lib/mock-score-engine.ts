@@ -2,176 +2,172 @@ import {
   RaioXFormData,
   RaioXResult,
   BusinessScore,
-  VISA_PURPOSE_LABELS,
-  STAY_DURATION_LABELS,
-  FINANCIAL_SUPPORT_LABELS,
-  QUALIFICATIONS_LABELS,
-  ENGLISH_PROFICIENCY_LABELS,
-  VisaPurpose,
-  StayDuration,
-  FinancialSupport,
-  Qualifications,
-  EnglishProficiency,
 } from "@/types/raio-x";
 
 export function calculateRaioXResult(data: RaioXFormData): RaioXResult {
-  const { business } = data; // Using 'business' prop for compatibility as renamed in Types
-
-  // Initialize scores for different visa categories
-  let b1b2Score = 0; // Tourism/Business
-  let f1Score = 0;   // Student
-  let h1bScore = 0;  // Work
+  // Initialize scores
+  let eb1Score = 0; // Extraordinary Ability
+  let eb2NiwScore = 0; // National Interest Waiver
+  let o1Score = 0;   // Extraordinary Ability (Non-immigrant)
+  let eb3Score = 0; // Skilled Worker
   let eb5Score = 0;  // Investor
-  let o1Score = 0;   // Extraordinary Ability
 
-  // 1. Scoring based on Purpose
-  if (business.visaPurpose === 'tourism' || business.visaPurpose === 'business') {
-    b1b2Score += 50;
-  } else if (business.visaPurpose === 'study') {
-    f1Score += 50;
-  } else if (business.visaPurpose === 'work') {
-    h1bScore += 40;
-    o1Score += 20;
-  } else if (business.visaPurpose === 'investment_immigration') {
-    eb5Score += 50;
+  // --- LOGIC ENGINE ---
+
+  // 1. LEAD SCORING (HOT/WARM/COLD)
+  let leadScoreStr: "Hot" | "Warm" | "Cold" = "Cold";
+  
+  const isPermanent = data.visaPurpose === "immigration" || data.intent === "permanent";
+  const urgentTimeline = data.timeline === "immediate" || data.timeline === "short";
+  const hasMoney = data.investmentBudget === "10k_15k" || data.investmentBudget === "over_15k";
+  
+  if (isPermanent && urgentTimeline && hasMoney) {
+    leadScoreStr = "Hot";
+  } else if (isPermanent && (urgentTimeline || hasMoney)) {
+    leadScoreStr = "Warm";
+  } else {
+    leadScoreStr = "Cold";
+  }
+
+  // 2. LEGAL RISK
+  let legalRisk: "High" | "Medium" | "Low" = "Low";
+  if (data.immigrationIssues.includes("deportation") || data.immigrationIssues.includes("entry_denied")) {
+    legalRisk = "High";
+  } else if (data.immigrationIssues.includes("overstay") || data.immigrationIssues.includes("denial")) {
+    legalRisk = "Medium";
+  }
+
+  // 3. VISA SCORING
+
+  // EB-1 & O-1 (Extraordinary Ability)
+  // Based on Achievements
+  const majorAchievements = data.achievements.filter(a => 
+    ["prizes", "media", "leadership", "impact_projects", "high_salary"].includes(a)
+  ).length;
+
+  if (majorAchievements >= 3) {
+    eb1Score += 80;
+    o1Score += 90;
+  } else if (majorAchievements >= 1) {
+    eb1Score += 40;
+    o1Score += 60;
+  }
+
+  if (data.educationLevel === "grad_school") {
+    eb2NiwScore += 30;
+    eb1Score += 10;
+  } else if (data.educationLevel === "bachelors") {
+    eb2NiwScore += 10;
+    eb3Score += 30;
+  }
+
+  if (data.experienceYears === "over_15") {
+    eb2NiwScore += 20;
     o1Score += 10;
+  } else if (data.experienceYears === "10_15") {
+    eb2NiwScore += 10;
   }
 
-  // 2. Scoring based on Duration
-  if (business.stayDuration === 'short_visit') {
-    b1b2Score += 30;
-  } else if (business.stayDuration === 'medium_stay') {
-    f1Score += 20;
-    b1b2Score += 10;
-  } else if (business.stayDuration === 'long_stay') {
-    h1bScore += 20;
-    f1Score += 10;
-    o1Score += 20;
-  } else if (business.stayDuration === 'permanent_residence') {
-    eb5Score += 30;
-    o1Score += 30;
+  // Impact Claim for NIW
+  if (data.impactClaim === "clear_impact") {
+    eb2NiwScore += 40;
+  } else if (data.impactClaim === "potential_impact") {
+    eb2NiwScore += 20;
   }
 
-  // 3. Scoring based on Support
-  if (business.financialSupport === 'self_funded' || business.financialSupport === 'family_support') {
-    b1b2Score += 20;
-    f1Score += 20;
-    eb5Score += 20; // Only if high capital, checked later
-  } else if (business.financialSupport === 'employer_sponsor') {
-    h1bScore += 40; // Critical for work visa
-  } else if (business.financialSupport === 'scholarship_sponsor') {
-    f1Score += 30;
+  // Investment
+  if (data.fundingSource === "investor" || data.investmentBudget === "over_15k") {
+    eb5Score += 40; // Still low because EB5 needs 800k+, but this is relative
   }
 
-  // 4. Scoring based on Qualifications
-  if (business.qualifications === 'bachelor_degree') {
-    h1bScore += 20;
-    f1Score += 10;
-  } else if (business.qualifications === 'advanced_degree') {
-    h1bScore += 40;
-    o1Score += 30;
-    eb5Score += 10; // Indirectly helps
-  } else if (business.qualifications === 'specialized_skills') {
-    o1Score += 60; // Critical for O1
-  } else if (business.qualifications === 'investment_capital') {
-    eb5Score += 60; // Critical for EB5
-  }
-
-  // 5. English Bonus
-  if (business.englishProficiency === 'fluent' || business.englishProficiency === 'intermediate') {
-    f1Score += 10;
-    h1bScore += 10;
-  }
-
-  // Normalize scores (cap at 100)
+  // Cap scores
   const cap = (n: number) => Math.min(100, Math.max(0, n));
-  b1b2Score = cap(b1b2Score);
-  f1Score = cap(f1Score);
-  h1bScore = cap(h1bScore);
-  eb5Score = cap(eb5Score);
+  eb1Score = cap(eb1Score);
+  eb2NiwScore = cap(eb2NiwScore);
   o1Score = cap(o1Score);
+  eb3Score = cap(eb3Score);
+  eb5Score = cap(eb5Score);
 
   const scores: BusinessScore[] = [
     {
-      category: "Visto de Turista/Negócios (B1/B2)",
-      score: b1b2Score,
-      impact: b1b2Score > 70 ? "high" : "low",
-      description: "Visto para viagens curtas a lazer ou negócios.",
-      recommendations: ["Comprovar vínculos com o Brasil", "Demonstrar capacidade financeira"],
+      category: "Habilidades Extraordinárias (EB-1A)",
+      score: eb1Score,
+      impact: eb1Score > 70 ? "high" : "low",
+      description: "Green Card para quem está no topo de sua área de atuação.",
+      recommendations: ["Coletar evidências documentais de prêmios e mídia"],
     },
     {
-      category: "Visto de Estudante (F1)",
-      score: f1Score,
-      impact: f1Score > 70 ? "high" : "low",
-      description: "Para estudos acadêmicos ou de idiomas.",
-      recommendations: ["Obter aceitação em escola (I-20)", "Comprovar fundos para o período"],
+      category: "Interesse Nacional (EB-2 NIW)",
+      score: eb2NiwScore,
+      impact: eb2NiwScore > 70 ? "high" : "low",
+      description: "Green Card para profissionais cujo trabalho beneficia os EUA.",
+      recommendations: ["Definir proposta de empreendimento ou plano profissional nos EUA"],
     },
     {
-      category: "Visto de Trabalho (H1B/L1)",
-      score: h1bScore,
-      impact: h1bScore > 70 ? "high" : "low",
-      description: "Para profissionais qualificados com oferta de emprego.",
-      recommendations: ["Buscar sponsor (empregador)", "Validar diploma nos EUA"],
-    },
-    {
-      category: "Habilidades Extraordinárias (O1)",
+      category: "Visto O-1 (Habilidades Extraordinárias)",
       score: o1Score,
       impact: o1Score > 70 ? "high" : "low",
-      description: "Para pessoas com destaque nacional/internacional em sua área.",
-      recommendations: ["Reunir portfólio de imprensa/prêmios", "Cartas de recomendação de experts"],
+      description: "Visto temporário de trabalho para talentos (similar ao EB-1).",
+      recommendations: ["Buscar um empregador ou agente nos EUA para peticionar"],
     },
     {
-      category: "Investidor (EB-5 / E2)",
-      score: eb5Score,
-      impact: eb5Score > 70 ? "high" : "low",
-      description: "Imigração via investimento financeiro.",
-      recommendations: ["Preparar comprovação de origem lícita dos fundos", "Avaliar projetos regionais"],
+      category: "Trabalhador Qualificado (EB-3)",
+      score: eb3Score,
+      impact: eb3Score > 70 ? "high" : "low",
+      description: "Green Card via oferta de emprego (Sponsor).",
+      recommendations: ["Buscar oferta de emprego (Job Offer) válida"],
     },
   ];
 
-  // Overall score is the Max score found, representing "Best Fit" probability
-  const overallScore = Math.max(b1b2Score, f1Score, h1bScore, eb5Score, o1Score);
+  const overallScore = Math.max(eb1Score, eb2NiwScore, o1Score, eb3Score, eb5Score);
 
   const profileStrengths = [];
-  if (b1b2Score > 80) profileStrengths.push("Alta chance para Turista");
-  if (h1bScore > 80) profileStrengths.push("Perfil forte para Trabalho");
-  if (eb5Score > 80) profileStrengths.push("Potencial Investidor");
-  if (o1Score > 80) profileStrengths.push("Habilidades Extraordinárias Detectadas");
-
-  const nextSteps = [
-    "Agendar consulta com especialista",
-    "Preparar documentação financeira",
-    "Verificar validade do passaporte"
-  ];
+  if (eb1Score > 60) profileStrengths.push("Perfil de Destaque / Habilidades Extraordinárias");
+  if (eb2NiwScore > 60) profileStrengths.push("Potencial de Interesse Nacional (NIW)");
+  if (legalRisk === "Low") profileStrengths.push("Histórico Imigratório Limpo");
   
-  // Custom next steps based on winner
-  if (overallScore === h1bScore && h1bScore > 60) nextSteps.unshift("Atualizar LinkedIn em Inglês");
-  if (overallScore === f1Score && f1Score > 60) nextSteps.unshift("Pesquisar escolas credenciadas (SEVP)");
+  const nextSteps = [
+    "Consulta Jurídica Especializada",
+    "Análise de Currículo Detalhada",
+  ];
+
+  if (data.wantsToUpload) nextSteps.push("Revisão de Documentos enviados");
 
   return {
     overallScore,
     businessScores: scores,
-    aiAnalysis: "",
+    aiAnalysis: "", 
     profileStrengths,
-    recommendations: ["Mantenha seus documentos organizados", "Seja honesto na entrevista consular"],
+    recommendations: ["Prepare seu CV em formato americano", "Reúna cartas de recomendação"],
     nextSteps,
+    leadClassification: leadScoreStr,
+    legalRisk: legalRisk
   };
 }
 
 export function getDefaultFormData(): RaioXFormData {
   return {
-    business: {
-      visaPurpose: "tourism",
-      stayDuration: "short_visit",
-      financialSupport: "self_funded",
-      qualifications: "no_higher_education",
-      englishProficiency: "none",
-    },
+    visaPurpose: "",
+    intent: "",
+    timeline: "",
+    consultedLawyer: "",
+    immigrationIssues: [],
+    educationLevel: "",
+    fieldOfWork: "",
+    experienceYears: "",
+    achievements: [],
+    impactClaim: "",
+    fundingSource: "",
+    investmentBudget: "",
+    wantsToUpload: false,
+    uploadedFiles: [],
+    willingToConsult: "",
+    contactPreference: "",
     contact: {
       name: "",
       email: "",
       whatsapp: "",
-      company: "",
+      linkedin: "",
     },
   };
 }
