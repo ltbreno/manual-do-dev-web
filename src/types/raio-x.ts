@@ -26,15 +26,12 @@ export type Qualifications =
   | "specialized_skills" // Arts, Science, Athletics
   | "investment_capital"; // High net worth
 
-export type EnglishProficiency =
-  | "none"
-  | "basic"
-  | "intermediate"
-  | "fluent";
+export type EnglishProficiency = "none" | "basic" | "intermediate" | "fluent";
 
 // Formulário completo
 export interface RaioXFormData {
-  business: { // Keeping 'business' key for compatibility or renaming? better rename but might break other things. Let's keep structure but change content
+  business: {
+    // Keeping 'business' key for compatibility or renaming? better rename but might break other things. Let's keep structure but change content
     visaPurpose: VisaPurpose;
     stayDuration: StayDuration;
     financialSupport: FinancialSupport;
@@ -77,7 +74,8 @@ export const QUALIFICATIONS_LABELS: Record<Qualifications, string> = {
   bachelor_degree: "Ensino Superior Completo (Bacharelado)",
   advanced_degree: "Pós-Graduação (Mestrado/Doutorado)",
   specialized_skills: "Habilidades Extraordinárias (Artes, Esportes, Ciências)",
-  investment_capital: "Capital de Investimento (Tenho recursos para investir no país)",
+  investment_capital:
+    "Capital de Investimento (Tenho recursos para investir no país)",
 };
 
 export const ENGLISH_PROFICIENCY_LABELS: Record<EnglishProficiency, string> = {
@@ -103,4 +101,14 @@ export interface RaioXResult {
   profileStrengths: string[];
   recommendations: string[];
   nextSteps: string[];
+}
+
+export interface VisaScore {
+  visaCode: string;
+  visaType: string;
+  score: number;
+  compatibility: "high" | "medium" | "low";
+  strengths: string[];
+  improvements: string[];
+  requirements: string[];
 }
