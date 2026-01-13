@@ -2,21 +2,21 @@
 
 :root {
   /* Cores da Identidade Visual - Manual do Brasileiro */
-  --brand-verde: #6DC24D;
-  --brand-verde-light: #8AD06E;
-  --brand-verde-dark: #5AAA3E;
-  --brand-bege: #F0F3C7;
-  --brand-bege-light: #F5F7D9;
-  --brand-bege-dark: #E5E9A8;
-  --brand-verde-escuro: #26473D;
-  --brand-verde-escuro-light: #345A4E;
-  --brand-verde-escuro-dark: #1A332C;
+  --brand-verde: #6dc24d;
+  --brand-verde-light: #8ad06e;
+  --brand-verde-dark: #5aaa3e;
+  --brand-bege: #f0f3c7;
+  --brand-bege-light: #f5f7d9;
+  --brand-bege-dark: #e5e9a8;
+  --brand-verde-escuro: #26473d;
+  --brand-verde-escuro-light: #345a4e;
+  --brand-verde-escuro-dark: #1a332c;
 
   /* Cores do Brasil */
-  --brasil-verde: #009C3B;
-  --brasil-amarelo: #FFDF00;
+  --brasil-verde: #009c3b;
+  --brasil-amarelo: #ffdf00;
   --brasil-azul: #002776;
-  --brasil-amarelo-dark: #E6C200;
+  --brasil-amarelo-dark: #e6c200;
 
   /* Cores neutras */
   --neutral-50: #fafafa;
@@ -36,9 +36,9 @@
   --foreground: #171717;
   --card-bg: #ffffff;
   --card-border: #e5e5e5;
-  --muted: #737373;
-  --muted-foreground: #525252;
-  
+  --muted: #525252;
+  --muted-foreground: #262626;
+
   /* Font variables */
   --font-sans: var(--font-geist-sans), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
@@ -85,7 +85,8 @@ body {
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 20px rgba(109, 194, 77, 0.3);
   }
   50% {
@@ -106,26 +107,37 @@ body {
 }
 
 /* Delay classes para animações escalonadas */
-.delay-100 { animation-delay: 100ms; }
-.delay-200 { animation-delay: 200ms; }
-.delay-300 { animation-delay: 300ms; }
-.delay-400 { animation-delay: 400ms; }
-.delay-500 { animation-delay: 500ms; }
+.delay-100 {
+  animation-delay: 100ms;
+}
+.delay-200 {
+  animation-delay: 200ms;
+}
+.delay-300 {
+  animation-delay: 300ms;
+}
+.delay-400 {
+  animation-delay: 400ms;
+}
+.delay-500 {
+  animation-delay: 500ms;
+}
 
 /* Gradientes da marca */
 .bg-brand-gradient {
-  background: linear-gradient(135deg, #6DC24D 0%, #26473D 100%);
+  background: linear-gradient(135deg, #6dc24d 0%, #26473d 100%);
 }
 
 .bg-brand-gradient-subtle {
-  background: linear-gradient(135deg, 
-    rgba(109, 194, 77, 0.1) 0%, 
+  background: linear-gradient(
+    135deg,
+    rgba(109, 194, 77, 0.1) 0%,
     rgba(38, 71, 61, 0.1) 100%
   );
 }
 
 .text-brand-gradient {
-  background: linear-gradient(135deg, #6DC24D 0%, #26473D 100%);
+  background: linear-gradient(135deg, #6dc24d 0%, #26473d 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
