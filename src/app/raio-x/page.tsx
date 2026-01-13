@@ -13,34 +13,25 @@ import FormStep, {
 } from "@/components/raio-x/FormStep";
 import {
   RaioXFormData,
-  REVENUE_PREDICTABILITY_LABELS,
-  PROFIT_MARGIN_LABELS,
-  OWNER_DEPENDENCE_LABELS,
-  SALES_CYCLE_LABELS,
-  METRICS_CLARITY_LABELS,
-  CLIENT_CONCENTRATION_LABELS,
-  TEAM_MATURITY_LABELS,
-  CASH_FLOW_LABELS,
-  RevenuePredictability,
-  ProfitMargin,
-  OwnerDependence,
-  SalesCycle,
-  MetricsClarity,
-  ClientConcentration,
-  TeamMaturity,
-  CashFlow,
+  VISA_PURPOSE_LABELS,
+  STAY_DURATION_LABELS,
+  FINANCIAL_SUPPORT_LABELS,
+  QUALIFICATIONS_LABELS,
+  ENGLISH_PROFICIENCY_LABELS,
+  VisaPurpose,
+  StayDuration,
+  FinancialSupport,
+  Qualifications,
+  EnglishProficiency,
 } from "@/types/raio-x";
 import { getDefaultFormData, calculateRaioXResult } from "@/lib/mock-score-engine";
 
 const STEP_LABELS = [
-  "Receita",
-  "Lucratividade",
-  "Operação",
-  "Vendas",
-  "Métricas",
-  "Clientes",
-  "Time",
-  "Finanças",
+  "Objetivo",
+  "Duração",
+  "Financeiro",
+  "Qualificação",
+  "Idioma",
   "Seus Dados",
 ];
 
@@ -84,10 +75,11 @@ export default function RaioXPage() {
     setIsSubmitting(true);
 
     try {
-      // 1. Calcular score base (métricas técnicas)
+      // 1. Calcular score base (regras)
       const result = calculateRaioXResult(formData);
 
-      // 2. Chamar API da Manus AI para análise real
+      // 2. Chamar API da Manus AI para análise real 
+      // (Mantendo o endpoint existente, assumindo que ele aceita o JSON genérico)
       const response = await fetch("/api/raio-x/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -115,48 +107,33 @@ export default function RaioXPage() {
       router.push("/raio-x/resultado");
     } catch (error) {
       console.error("Erro ao gerar diagnóstico:", error);
-      alert("Houve um erro ao gerar sua análise com a Manus AI. Por favor, tente novamente.");
+      alert("Houve um erro ao gerar sua análise. Por favor, tente novamente.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const revenueOptions = Object.entries(REVENUE_PREDICTABILITY_LABELS).map(([value, label]) => ({
+  const purposeOptions = Object.entries(VISA_PURPOSE_LABELS).map(([value, label]) => ({
     value,
     label,
   }));
 
-  const profitOptions = Object.entries(PROFIT_MARGIN_LABELS).map(([value, label]) => ({
+  const durationOptions = Object.entries(STAY_DURATION_LABELS).map(([value, label]) => ({
     value,
     label,
   }));
 
-  const dependenceOptions = Object.entries(OWNER_DEPENDENCE_LABELS).map(([value, label]) => ({
+  const supportOptions = Object.entries(FINANCIAL_SUPPORT_LABELS).map(([value, label]) => ({
     value,
     label,
   }));
 
-  const salesOptions = Object.entries(SALES_CYCLE_LABELS).map(([value, label]) => ({
+  const qualificationsOptions = Object.entries(QUALIFICATIONS_LABELS).map(([value, label]) => ({
     value,
     label,
   }));
 
-  const metricsOptions = Object.entries(METRICS_CLARITY_LABELS).map(([value, label]) => ({
-    value,
-    label,
-  }));
-
-  const clientOptions = Object.entries(CLIENT_CONCENTRATION_LABELS).map(([value, label]) => ({
-    value,
-    label,
-  }));
-
-  const teamOptions = Object.entries(TEAM_MATURITY_LABELS).map(([value, label]) => ({
-    value,
-    label,
-  }));
-
-  const cashOptions = Object.entries(CASH_FLOW_LABELS).map(([value, label]) => ({
+  const englishOptions = Object.entries(ENGLISH_PROFICIENCY_LABELS).map(([value, label]) => ({
     value,
     label,
   }));
@@ -170,10 +147,10 @@ export default function RaioXPage() {
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-bold text-[var(--foreground)] mb-2">
-              Raio-X de <span className="text-[var(--brand-verde-escuro)]">Negócios</span>
+              Descubra seu <span className="text-[var(--brand-verde-escuro)]">Visto Americano</span>
             </h1>
             <p className="text-[var(--muted-foreground)] text-lg">
-              Descubra o nível de maturidade e potencial da sua empresa com análise da <span className="font-bold text-[var(--foreground)]">Manus AI</span>
+              Responda algumas perguntas e nossa IA analisará suas chances para diferentes tipos de vistos.
             </p>
           </div>
 
@@ -188,139 +165,91 @@ export default function RaioXPage() {
 
           {/* Form Card */}
           <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl p-6 md:p-8 shadow-lg">
-            {/* Step 1 - Receita */}
+            {/* Step 1 - Objetivo */}
             <FormStep
-              title="Previsibilidade de Receita"
-              description="Como está a saúde do seu faturamento?"
+              title="Objetivo da Viagem"
+              description="Qual o motivo principal da sua ida aos EUA?"
               isActive={currentStep === 0}
             >
-              <FormField label="Como você descreve a previsibilidade da sua receita hoje?" required>
+              <FormField label="Selecione o objetivo que mais se adequa:" required>
                 <RadioGroup
-                  value={formData.business.revenuePredictability}
-                  onChange={(v) => updateBusiness("revenuePredictability", v as RevenuePredictability)}
-                  options={revenueOptions}
+                  value={formData.business.visaPurpose}
+                  onChange={(v) => updateBusiness("visaPurpose", v as VisaPurpose)}
+                  options={purposeOptions}
                   columns={1}
                 />
               </FormField>
             </FormStep>
 
-            {/* Step 2 - Lucratividade */}
+            {/* Step 2 - Duração */}
             <FormStep
-              title="Margem de Lucro"
-              description="O quanto sobra no final do mês?"
+              title="Tempo de Permanência"
+              description="Quanto tempo você pretende ficar?"
               isActive={currentStep === 1}
             >
-              <FormField label="Qual é a sua margem de lucro líquido média nos últimos 12 meses?" required>
+              <FormField label="Selecione a duração estimada:" required>
                 <RadioGroup
-                  value={formData.business.profitMargin}
-                  onChange={(v) => updateBusiness("profitMargin", v as ProfitMargin)}
-                  options={profitOptions}
+                  value={formData.business.stayDuration}
+                  onChange={(v) => updateBusiness("stayDuration", v as StayDuration)}
+                  options={durationOptions}
                   columns={1}
                 />
               </FormField>
             </FormStep>
 
-            {/* Step 3 - Operação */}
+            {/* Step 3 - Financeiro */}
             <FormStep
-              title="Dependência do Dono"
-              description="A empresa sobrevive sem você?"
+              title="Suporte Financeiro"
+              description="Como a viagem será custeada?"
               isActive={currentStep === 2}
             >
-              <FormField label="Seu produto/serviço principal depende de você para ser entregue?" required>
+              <FormField label="Quem pagará pelas despesas?" required>
                 <RadioGroup
-                  value={formData.business.ownerDependence}
-                  onChange={(v) => updateBusiness("ownerDependence", v as OwnerDependence)}
-                  options={dependenceOptions}
+                  value={formData.business.financialSupport}
+                  onChange={(v) => updateBusiness("financialSupport", v as FinancialSupport)}
+                  options={supportOptions}
                   columns={1}
                 />
               </FormField>
             </FormStep>
 
-            {/* Step 4 - Vendas */}
+            {/* Step 4 - Qualificação */}
             <FormStep
-              title="Ciclo de Vendas"
-              description="Quanto tempo leva para fechar um negócio?"
+              title="Qualificação"
+              description="Qual seu nível de formação ou destaque profissional?"
               isActive={currentStep === 3}
             >
-              <FormField label="Como é o seu Ciclo de Vendas (tempo entre primeiro contato e fechamento)?" required>
+              <FormField label="Selecione sua maior qualificação:" required>
                 <RadioGroup
-                  value={formData.business.salesCycle}
-                  onChange={(v) => updateBusiness("salesCycle", v as SalesCycle)}
-                  options={salesOptions}
+                  value={formData.business.qualifications}
+                  onChange={(v) => updateBusiness("qualifications", v as Qualifications)}
+                  options={qualificationsOptions}
                   columns={1}
                 />
               </FormField>
             </FormStep>
 
-            {/* Step 5 - Métricas */}
+            {/* Step 5 - Idioma */}
             <FormStep
-              title="Métricas de Crescimento"
-              description="Você domina seus números?"
+              title="Nível de Inglês"
+              description="Como é sua comunicação em inglês?"
               isActive={currentStep === 4}
             >
-              <FormField label="Você tem clareza do seu CAC (Custo de Aquisição) e LTV (Lifetime Value)?" required>
+              <FormField label="Seu nível atual:" required>
                 <RadioGroup
-                  value={formData.business.metricsClarity}
-                  onChange={(v) => updateBusiness("metricsClarity", v as MetricsClarity)}
-                  options={metricsOptions}
+                  value={formData.business.englishProficiency}
+                  onChange={(v) => updateBusiness("englishProficiency", v as EnglishProficiency)}
+                  options={englishOptions}
                   columns={1}
                 />
               </FormField>
             </FormStep>
 
-            {/* Step 6 - Clientes */}
-            <FormStep
-              title="Concentração de Clientes"
-              description="Qual o risco da sua carteira?"
-              isActive={currentStep === 5}
-            >
-              <FormField label="Como está distribuída sua receita entre os clientes?" required>
-                <RadioGroup
-                  value={formData.business.clientConcentration}
-                  onChange={(v) => updateBusiness("clientConcentration", v as ClientConcentration)}
-                  options={clientOptions}
-                  columns={1}
-                />
-              </FormField>
-            </FormStep>
-
-            {/* Step 7 - Time */}
-            <FormStep
-              title="Maturidade do Time"
-              description="Quem toca o negócio no dia a dia?"
-              isActive={currentStep === 6}
-            >
-              <FormField label="Qual o nível de autonomia da sua equipe?" required>
-                <RadioGroup
-                  value={formData.business.teamMaturity}
-                  onChange={(v) => updateBusiness("teamMaturity", v as TeamMaturity)}
-                  options={teamOptions}
-                  columns={1}
-                />
-              </FormField>
-            </FormStep>
-
-            {/* Step 8 - Finanças */}
-            <FormStep
-              title="Saúde Financeira"
-              description="Quanto tempo sua empresa sobrevive sem novas vendas?"
-              isActive={currentStep === 7}
-            >
-              <FormField label="Qual a situação do seu fluxo de caixa e reserva?" required>
-                <RadioGroup
-                  value={formData.business.cashFlow}
-                  onChange={(v) => updateBusiness("cashFlow", v as CashFlow)}
-                  options={cashOptions}
-                  columns={1}
-                />
-              </FormField>
-            </FormStep>
-
-            {/* Step 9 - Seus Dados */}
+            {/* Step 6 - Seus Dados */}
             <FormStep
               title="Receber Análise"
-              description="Para onde devemos enviar seu Raio-X detalhado?"
-              isActive={currentStep === 8}
+              description="Para onde devemos enviar o resultado detalhado?"
+              isActive={currentStep === 5}
             >
               <FormField label="Nome Completo" required>
                 <TextInput
@@ -330,7 +259,7 @@ export default function RaioXPage() {
                 />
               </FormField>
               
-              <FormField label="Email Corporativo" required>
+              <FormField label="Email" required>
                 <TextInput
                   value={formData.contact.email}
                   onChange={(v) => updateContact("email", v)}
@@ -347,11 +276,11 @@ export default function RaioXPage() {
                 />
               </FormField>
 
-              <FormField label="Nome da Empresa">
+              <FormField label="Ocupação Atual / Empresa">
                 <TextInput
                   value={formData.contact.company}
                   onChange={(v) => updateContact("company", v)}
-                  placeholder="Sua Empresa Ltda"
+                  placeholder="Ex: Engenheiro de Software"
                 />
               </FormField>
             </FormStep>
@@ -425,7 +354,7 @@ export default function RaioXPage() {
                     ) : undefined
                   }
                 >
-                  {isSubmitting ? "Analisando com Manus AI..." : "Gerar Diagnóstico da IA"}
+                  {isSubmitting ? "Analisando..." : "Verificar Vistos"}
                 </Button>
               )}
             </div>
@@ -434,7 +363,7 @@ export default function RaioXPage() {
           {/* Trust Indicators */}
           <div className="mt-8 text-center">
             <p className="text-sm text-[var(--muted)]">
-              🔒 Seus dados empresariais são confidenciais e protegidos por IA
+              🔒 Seus dados são confidenciais e usados apenas para esta análise preliminar.
             </p>
           </div>
         </div>
@@ -444,5 +373,3 @@ export default function RaioXPage() {
     </div>
   );
 }
-
-

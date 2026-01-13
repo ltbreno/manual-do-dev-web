@@ -2,244 +2,170 @@ import {
   RaioXFormData,
   RaioXResult,
   BusinessScore,
-  RevenuePredictability,
-  ProfitMargin,
-  OwnerDependence,
-  SalesCycle,
-  MetricsClarity,
-  REVENUE_PREDICTABILITY_LABELS,
-  PROFIT_MARGIN_LABELS,
-  OWNER_DEPENDENCE_LABELS,
-  SALES_CYCLE_LABELS,
-  METRICS_CLARITY_LABELS,
-  ClientConcentration,
-  TeamMaturity,
-  CashFlow,
-  CLIENT_CONCENTRATION_LABELS,
-  TEAM_MATURITY_LABELS,
-  CASH_FLOW_LABELS,
+  VISA_PURPOSE_LABELS,
+  STAY_DURATION_LABELS,
+  FINANCIAL_SUPPORT_LABELS,
+  QUALIFICATIONS_LABELS,
+  ENGLISH_PROFICIENCY_LABELS,
+  VisaPurpose,
+  StayDuration,
+  FinancialSupport,
+  Qualifications,
+  EnglishProficiency,
 } from "@/types/raio-x";
 
-// Pontuações para cada opção
-const REVENUE_SCORES: Record<RevenuePredictability, number> = {
-  unpredictable: 20,
-  some_recurrence: 40,
-  long_term_contracts: 60,
-  solid_mrr: 85,
-  growth_negative_churn: 100,
-};
-
-const PROFIT_SCORES: Record<ProfitMargin, number> = {
-  negative_zero: 10,
-  low: 30,
-  healthy: 60,
-  high: 85,
-  exceptional: 100,
-};
-
-const DEPENDENCE_SCORES: Record<OwnerDependence, number> = {
-  full_dependence: 10,
-  helpers_needed: 30,
-  team_supervision: 55,
-  strategy_only: 85,
-  independent_operation: 100,
-};
-
-const SALES_SCORES: Record<SalesCycle, number> = {
-  long_unpredictable: 20,
-  long_mapped: 45,
-  medium: 70,
-  fast: 90,
-  immediate: 100,
-};
-
-const METRICS_SCORES: Record<MetricsClarity, number> = {
-  dont_know: 0,
-  concept_only: 25,
-  unreliable_measurement: 50,
-  monthly_tracking: 80,
-  real_time_tracking: 100,
-};
-
-const CLIENT_SCORES: Record<ClientConcentration, number> = {
-  high_risk: 15,
-  moderate_risk: 40,
-  diversified: 75,
-  well_balanced: 90,
-  fully_distributed: 100,
-};
-
-const TEAM_SCORES: Record<TeamMaturity, number> = {
-  no_team: 10,
-  junior_taskers: 35,
-  middle_management: 60,
-  autonomous_leads: 85,
-  executive_board: 100,
-};
-
-const CASH_SCORES: Record<CashFlow, number> = {
-  hand_to_mouth: 10,
-  short_runway: 35,
-  comfortable: 65,
-  strong_reserve: 85,
-  investment_ready: 100,
-};
-
 export function calculateRaioXResult(data: RaioXFormData): RaioXResult {
-  const { business } = data;
+  const { business } = data; // Using 'business' prop for compatibility as renamed in Types
+
+  // Initialize scores for different visa categories
+  let b1b2Score = 0; // Tourism/Business
+  let f1Score = 0;   // Student
+  let h1bScore = 0;  // Work
+  let eb5Score = 0;  // Investor
+  let o1Score = 0;   // Extraordinary Ability
+
+  // 1. Scoring based on Purpose
+  if (business.visaPurpose === 'tourism' || business.visaPurpose === 'business') {
+    b1b2Score += 50;
+  } else if (business.visaPurpose === 'study') {
+    f1Score += 50;
+  } else if (business.visaPurpose === 'work') {
+    h1bScore += 40;
+    o1Score += 20;
+  } else if (business.visaPurpose === 'investment_immigration') {
+    eb5Score += 50;
+    o1Score += 10;
+  }
+
+  // 2. Scoring based on Duration
+  if (business.stayDuration === 'short_visit') {
+    b1b2Score += 30;
+  } else if (business.stayDuration === 'medium_stay') {
+    f1Score += 20;
+    b1b2Score += 10;
+  } else if (business.stayDuration === 'long_stay') {
+    h1bScore += 20;
+    f1Score += 10;
+    o1Score += 20;
+  } else if (business.stayDuration === 'permanent_residence') {
+    eb5Score += 30;
+    o1Score += 30;
+  }
+
+  // 3. Scoring based on Support
+  if (business.financialSupport === 'self_funded' || business.financialSupport === 'family_support') {
+    b1b2Score += 20;
+    f1Score += 20;
+    eb5Score += 20; // Only if high capital, checked later
+  } else if (business.financialSupport === 'employer_sponsor') {
+    h1bScore += 40; // Critical for work visa
+  } else if (business.financialSupport === 'scholarship_sponsor') {
+    f1Score += 30;
+  }
+
+  // 4. Scoring based on Qualifications
+  if (business.qualifications === 'bachelor_degree') {
+    h1bScore += 20;
+    f1Score += 10;
+  } else if (business.qualifications === 'advanced_degree') {
+    h1bScore += 40;
+    o1Score += 30;
+    eb5Score += 10; // Indirectly helps
+  } else if (business.qualifications === 'specialized_skills') {
+    o1Score += 60; // Critical for O1
+  } else if (business.qualifications === 'investment_capital') {
+    eb5Score += 60; // Critical for EB5
+  }
+
+  // 5. English Bonus
+  if (business.englishProficiency === 'fluent' || business.englishProficiency === 'intermediate') {
+    f1Score += 10;
+    h1bScore += 10;
+  }
+
+  // Normalize scores (cap at 100)
+  const cap = (n: number) => Math.min(100, Math.max(0, n));
+  b1b2Score = cap(b1b2Score);
+  f1Score = cap(f1Score);
+  h1bScore = cap(h1bScore);
+  eb5Score = cap(eb5Score);
+  o1Score = cap(o1Score);
 
   const scores: BusinessScore[] = [
     {
-      category: "Previsibilidade de Receita",
-      score: REVENUE_SCORES[business.revenuePredictability],
-      impact: REVENUE_SCORES[business.revenuePredictability] < 50 ? "high" : "medium",
-      description: REVENUE_PREDICTABILITY_LABELS[business.revenuePredictability],
-      recommendations: getRevenueRecommendations(business.revenuePredictability),
+      category: "Visto de Turista/Negócios (B1/B2)",
+      score: b1b2Score,
+      impact: b1b2Score > 70 ? "high" : "low",
+      description: "Visto para viagens curtas a lazer ou negócios.",
+      recommendations: ["Comprovar vínculos com o Brasil", "Demonstrar capacidade financeira"],
     },
     {
-      category: "Margem de Lucro",
-      score: PROFIT_SCORES[business.profitMargin],
-      impact: PROFIT_SCORES[business.profitMargin] < 50 ? "high" : "medium",
-      description: PROFIT_MARGIN_LABELS[business.profitMargin],
-      recommendations: getProfitRecommendations(business.profitMargin),
+      category: "Visto de Estudante (F1)",
+      score: f1Score,
+      impact: f1Score > 70 ? "high" : "low",
+      description: "Para estudos acadêmicos ou de idiomas.",
+      recommendations: ["Obter aceitação em escola (I-20)", "Comprovar fundos para o período"],
     },
     {
-      category: "Dependência do Dono",
-      score: DEPENDENCE_SCORES[business.ownerDependence],
-      impact: DEPENDENCE_SCORES[business.ownerDependence] < 50 ? "high" : "medium",
-      description: OWNER_DEPENDENCE_LABELS[business.ownerDependence],
-      recommendations: getDependenceRecommendations(business.ownerDependence),
+      category: "Visto de Trabalho (H1B/L1)",
+      score: h1bScore,
+      impact: h1bScore > 70 ? "high" : "low",
+      description: "Para profissionais qualificados com oferta de emprego.",
+      recommendations: ["Buscar sponsor (empregador)", "Validar diploma nos EUA"],
     },
     {
-      category: "Ciclo de Vendas",
-      score: SALES_SCORES[business.salesCycle],
-      impact: SALES_SCORES[business.salesCycle] < 50 ? "medium" : "low",
-      description: SALES_CYCLE_LABELS[business.salesCycle],
-      recommendations: getSalesRecommendations(business.salesCycle),
+      category: "Habilidades Extraordinárias (O1)",
+      score: o1Score,
+      impact: o1Score > 70 ? "high" : "low",
+      description: "Para pessoas com destaque nacional/internacional em sua área.",
+      recommendations: ["Reunir portfólio de imprensa/prêmios", "Cartas de recomendação de experts"],
     },
     {
-      category: "Métricas (CAC/LTV)",
-      score: METRICS_SCORES[business.metricsClarity],
-      impact: METRICS_SCORES[business.metricsClarity] < 50 ? "high" : "medium",
-      description: METRICS_CLARITY_LABELS[business.metricsClarity],
-      recommendations: getMetricsRecommendations(business.metricsClarity),
-    },
-    {
-      category: "Concentração de Clientes",
-      score: CLIENT_SCORES[business.clientConcentration],
-      impact: CLIENT_SCORES[business.clientConcentration] < 50 ? "high" : "medium",
-      description: CLIENT_CONCENTRATION_LABELS[business.clientConcentration],
-      recommendations: getClientRecommendations(business.clientConcentration),
-    },
-    {
-      category: "Maturidade do Time",
-      score: TEAM_SCORES[business.teamMaturity],
-      impact: TEAM_SCORES[business.teamMaturity] < 50 ? "high" : "medium",
-      description: TEAM_MATURITY_LABELS[business.teamMaturity],
-      recommendations: getTeamRecommendations(business.teamMaturity),
-    },
-    {
-      category: "Fluxo de Caixa",
-      score: CASH_SCORES[business.cashFlow],
-      impact: CASH_SCORES[business.cashFlow] < 50 ? "high" : "medium",
-      description: CASH_FLOW_LABELS[business.cashFlow],
-      recommendations: getCashRecommendations(business.cashFlow),
+      category: "Investidor (EB-5 / E2)",
+      score: eb5Score,
+      impact: eb5Score > 70 ? "high" : "low",
+      description: "Imigração via investimento financeiro.",
+      recommendations: ["Preparar comprovação de origem lícita dos fundos", "Avaliar projetos regionais"],
     },
   ];
 
-  const overallScore = Math.round(
-    scores.reduce((acc, s) => acc + s.score, 0) / scores.length
-  );
+  // Overall score is the Max score found, representing "Best Fit" probability
+  const overallScore = Math.max(b1b2Score, f1Score, h1bScore, eb5Score, o1Score);
 
-  const profileStrengths = generateProfileStrengths(data);
-  const recommendations = scores.flatMap(s => s.recommendations).slice(0, 5);
-  const nextSteps = generateNextSteps(overallScore);
-  const aiAnalysis = ""; // Será populado pela API real
+  const profileStrengths = [];
+  if (b1b2Score > 80) profileStrengths.push("Alta chance para Turista");
+  if (h1bScore > 80) profileStrengths.push("Perfil forte para Trabalho");
+  if (eb5Score > 80) profileStrengths.push("Potencial Investidor");
+  if (o1Score > 80) profileStrengths.push("Habilidades Extraordinárias Detectadas");
+
+  const nextSteps = [
+    "Agendar consulta com especialista",
+    "Preparar documentação financeira",
+    "Verificar validade do passaporte"
+  ];
+  
+  // Custom next steps based on winner
+  if (overallScore === h1bScore && h1bScore > 60) nextSteps.unshift("Atualizar LinkedIn em Inglês");
+  if (overallScore === f1Score && f1Score > 60) nextSteps.unshift("Pesquisar escolas credenciadas (SEVP)");
 
   return {
     overallScore,
     businessScores: scores,
-    aiAnalysis,
+    aiAnalysis: "",
     profileStrengths,
-    recommendations,
+    recommendations: ["Mantenha seus documentos organizados", "Seja honesto na entrevista consular"],
     nextSteps,
   };
-}
-
-function getRevenueRecommendations(val: RevenuePredictability): string[] {
-  if (val === "unpredictable") return ["Implementar modelo de recorrência", "Diversificar canais de aquisição"];
-  if (val === "some_recurrence") return ["Aumentar ticket médio da recorrência", "Reduzir dependência de vendas pontuais"];
-  return ["Focar em redução de churn", "Otimizar expansão na base (Upsell)"];
-}
-
-function getProfitRecommendations(val: ProfitMargin): string[] {
-  if (val === "negative_zero" || val === "low") return ["Revisar estrutura de custos fixos", "Precificação estratégica"];
-  return ["Reinvestimento em growth", "Distribuição inteligente de dividendos"];
-}
-
-function getDependenceRecommendations(val: OwnerDependence): string[] {
-  if (val === "full_dependence" || val === "helpers_needed") return ["Documentar processos (Playbooks)", "Contratar lideranças intermediárias"];
-  return ["Focar 100% em visão de longo prazo", "Conselho consultivo"];
-}
-
-function getSalesRecommendations(val: SalesCycle): string[] {
-  if (val === "long_unpredictable") return ["Implementar CRM", "Qualificação de leads mais rigorosa"];
-  return ["Automação de vendas", "Otimização de funil de conversão"];
-}
-
-function getMetricsRecommendations(val: MetricsClarity): string[] {
-  if (val === "dont_know" || val === "concept_only") return ["Instalar ferramentas de analytics", "Definir unit economics"];
-  return ["Dashboard em tempo real", "Análise de coortes (cohort Analysis)"];
-}
-
-function getClientRecommendations(val: ClientConcentration): string[] {
-  if (val === "high_risk" || val === "moderate_risk") return ["Implementar estratégia de diversificação de carteira", "Focar em aquisição de clientes menores para reduzir dependência"];
-  return ["Trabalhar em expansão de conta (upsell)", "Fortalecer contratos de exclusividade parcial"];
-}
-
-function getTeamRecommendations(val: TeamMaturity): string[] {
-  if (val === "no_team" || val === "junior_taskers") return ["Contratar primeira liderança técnica/operacional", "Mapear processos para delegação"];
-  return ["Programas de stock options ou partnership", "Conselho consultivo estratégico"];
-}
-
-function getCashRecommendations(val: CashFlow): string[] {
-  if (val === "hand_to_mouth" || val === "short_runway") return ["Redução imediata de custos não essenciais", "Antecipação de recebíveis ou busca de capital de giro"];
-  return ["Fundo de reserva para oportunidades (M&A)", "Planejamento tributário agressivo (legal)"];
-}
-
-function generateProfileStrengths(data: RaioXFormData): string[] {
-  const strengths: string[] = [];
-  const { business } = data;
-
-  if (REVENUE_SCORES[business.revenuePredictability] >= 80) strengths.push("Receita Recorrente Sólida");
-  if (PROFIT_SCORES[business.profitMargin] >= 80) strengths.push("Margens Saudáveis/Altas");
-  if (DEPENDENCE_SCORES[business.ownerDependence] >= 80) strengths.push("Operação Independente do Fundador");
-  if (METRICS_SCORES[business.metricsClarity] >= 80) strengths.push("Domínio Total das Métricas");
-  if (CLIENT_SCORES[business.clientConcentration] >= 80) strengths.push("Carteira de Clientes Pulverizada");
-  if (TEAM_SCORES[business.teamMaturity] >= 80) strengths.push("Time de Gestão Autônomo");
-
-  if (strengths.length === 0) strengths.push("Potencial de Escala");
-
-  return strengths;
-}
-
-function generateNextSteps(score: number): string[] {
-  if (score < 40) return ["Organização financeira", "Mapeamento de processos críticos", "Definição de modelo de vendas"];
-  if (score < 70) return ["Escalar time de vendas", "Otimizar CAC", "Implementar rituais de gestão"];
-  return ["Preparação para M&A ou Expansão", "Internacionalização", "Inovação de produto"];
 }
 
 export function getDefaultFormData(): RaioXFormData {
   return {
     business: {
-      revenuePredictability: "some_recurrence",
-      profitMargin: "healthy",
-      ownerDependence: "team_supervision",
-      salesCycle: "medium",
-      metricsClarity: "concept_only",
-      clientConcentration: "diversified",
-      teamMaturity: "middle_management",
-      cashFlow: "comfortable",
+      visaPurpose: "tourism",
+      stayDuration: "short_visit",
+      financialSupport: "self_funded",
+      qualifications: "no_higher_education",
+      englishProficiency: "none",
     },
     contact: {
       name: "",

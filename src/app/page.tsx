@@ -36,28 +36,28 @@ export default function Home() {
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--brand-verde)]/10 border border-[var(--brand-verde)]/20 rounded-full">
                   <span className="w-2 h-2 rounded-full bg-[var(--brand-verde)] animate-pulse" />
                   <span className="text-sm font-medium text-[var(--brand-verde)]">
-                    Diagnóstico de Negócios com Manus AI
+                    Análise de Vistos com IA
                   </span>
                 </div>
                 <Link href="/raio-x" className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--brand-bege)]/20 border border-[var(--brand-bege)]/30 rounded-full hover:bg-[var(--brand-bege)]/30 transition-colors">
-                  <span className="text-lg">🚀</span>
+                  <span className="text-lg">🇺🇸</span>
                   <span className="text-sm font-medium text-[var(--brand-bege-dark)]">
-                    Quer escalar seu negócio? Descubra sua maturidade!
+                    Quer morar ou visitar os EUA? Descubra suas chances!
                   </span>
                 </Link>
               </div>
 
               {/* Main Title */}
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 animate-slide-up">
-                <span className="text-[var(--foreground)]">O Sistema Operacional</span>
+                <span className="text-[var(--foreground)]">O Caminho Mais Seguro</span>
                 <br />
-                <span className="text-brand-gradient">do Empreendedor de Sucesso</span>
+                <span className="text-brand-gradient">Para Seu Visto Americano</span>
               </h1>
 
               {/* Subtitle */}
               <p className="max-w-2xl mx-auto text-lg sm:text-xl text-[var(--muted-foreground)] mb-10 animate-slide-up delay-100">
-                Sua jornada de escala começa aqui. Descubra o nível de maturidade da sua empresa
-                com nosso diagnóstico inteligente potencializado pela <span className="font-bold text-[var(--foreground)]">Manus AI</span>.
+                Sua jornada para os EUA começa aqui. Descubra qual visto você tem mais chances de aprovar
+                com nosso diagnóstico inteligente.
               </p>
 
               {/* CTA Buttons */}
@@ -68,7 +68,7 @@ export default function Home() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>
                   }>
-                    Fazer Diagnóstico Gratuito
+                    Fazer Análise Gratuita
                   </Button>
                 </Link>
                 <Link href="/#como-funciona">
@@ -81,15 +81,15 @@ export default function Home() {
               {/* Stats */}
               <div className="mt-16 grid grid-cols-3 gap-8 max-w-2xl mx-auto animate-slide-up delay-300">
                 <div className="text-center">
-                  <div className="text-3xl sm:text-4xl font-bold text-[var(--brand-verde-escuro)]">5</div>
-                  <div className="text-sm text-[var(--muted-foreground)] mt-1">Dimensões Críticas</div>
+                  <div className="text-3xl sm:text-4xl font-bold text-[var(--brand-verde-escuro)]">5+</div>
+                  <div className="text-sm text-[var(--muted-foreground)] mt-1">Tipos de Vistos</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl sm:text-4xl font-bold text-[var(--brand-verde)]">AI</div>
-                  <div className="text-sm text-[var(--muted-foreground)] mt-1">Análise Manus AI</div>
+                  <div className="text-3xl sm:text-4xl font-bold text-[var(--brand-verde)]">IA</div>
+                  <div className="text-sm text-[var(--muted-foreground)] mt-1">Análise Inteligente</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl sm:text-4xl font-bold text-[var(--brand-bege)]">3min</div>
+                  <div className="text-3xl sm:text-4xl font-bold text-[var(--brand-bege)]">2min</div>
                   <div className="text-sm text-[var(--muted-foreground)] mt-1">Para Resultado</div>
                 </div>
               </div>
@@ -119,11 +119,11 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--foreground)] mb-4">
-                Tudo que seu negócio precisa,{" "}
+                Tudo sobre sua imigração,{" "}
                 <span className="text-brand-gradient">em um só lugar</span>
               </h2>
               <p className="text-lg text-[var(--muted-foreground)] max-w-2xl mx-auto">
-                Um ecossistema completo para transformar sua operação em uma máquina de escala.
+                Um ecossistema completo para transformar seu sonho americano em realidade.
               </p>
             </div>
 
@@ -137,11 +137,10 @@ export default function Home() {
                     </svg>
                   </div>
                   <h3 className="text-xl font-bold text-[var(--foreground)] mb-3">
-                    Raio-X de Negócios
+                    Raio-X de Vistos
                   </h3>
                   <p className="text-[var(--muted-foreground)] mb-6">
-                    Diagnóstico inteligente que analisa sua previsibilidade, margem e processos.
-                    Relatório estratégico gerado por IA em minutos.
+                    Diagnóstico inteligente que analisa seu perfil (Turismo, Estudos, Trabalho, Investimento).
                   </p>
                   <Link
                     href="/raio-x"
@@ -167,11 +166,10 @@ export default function Home() {
                     </svg>
                   </div>
                   <h3 className="text-xl font-bold text-[var(--foreground)] mb-3">
-                    Comunidade Mastermind
+                    Comunidade USA
                   </h3>
                   <p className="text-[var(--muted-foreground)] mb-6">
-                    Conecte-se com outros empreendedores de alto nível. Mentoria
-                    e networking focado em resultados reais.
+                    Conecte-se com brasileiros que já estão lá. Networking e dicas reais.
                   </p>
                   <span className="inline-flex items-center gap-2 text-[var(--muted)] font-semibold">
                     Disponível em breve
@@ -191,11 +189,10 @@ export default function Home() {
                     </svg>
                   </div>
                   <h3 className="text-xl font-bold text-[var(--foreground)] mb-3">
-                    Ecossistema Verificado
+                    Serviços Verificados
                   </h3>
                   <p className="text-[var(--muted-foreground)] mb-6">
-                    Prestadores de serviço especializados (CFOs, Sales Experts, Devs) 
-                    com curadoria e selo de qualidade.
+                    Advogados, Contadores e Despachantes com curadoria e selo de qualidade.
                   </p>
                   <span className="inline-flex items-center gap-2 text-[var(--muted)] font-semibold">
                     Disponível em breve
@@ -211,11 +208,11 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--foreground)] mb-4">
-                Como funciona o{" "}
-                <span className="text-[var(--brand-verde-escuro)]">Diagnóstico IA</span>
+                Como funciona a{" "}
+                <span className="text-[var(--brand-verde-escuro)]">Análise IA</span>
               </h2>
               <p className="text-lg text-[var(--muted-foreground)] max-w-2xl mx-auto">
-                Em poucos minutos, você terá um relatório estratégico completo para sua empresa.
+                Em poucos minutos, você terá um relatório completo sobre sua elegibilidade.
               </p>
             </div>
 
@@ -226,11 +223,10 @@ export default function Home() {
                   1
                 </div>
                 <h3 className="text-xl font-bold text-[var(--foreground)] mb-3">
-                  Check-up Operacional
+                  Responda o Raio-X
                 </h3>
                 <p className="text-[var(--muted-foreground)]">
-                  Responda sobre 5 pilares fundamentais: Receita, Lucro, Operação, 
-                  Vendas e Métricas de Crescimento.
+                  Conte sobre seu objetivo, duração da viagem e perfil profissional/financeiro.
                 </p>
                 {/* Connector */}
                 <div className="hidden md:block absolute top-8 left-[60%] w-[80%] h-0.5 bg-gradient-to-r from-[var(--brand-verde-escuro)] to-[var(--brand-verde)]" />
@@ -242,11 +238,10 @@ export default function Home() {
                   2
                 </div>
                 <h3 className="text-xl font-bold text-[var(--foreground)] mb-3">
-                  Processamento Manus AI
+                  Processamento IA
                 </h3>
                 <p className="text-[var(--muted-foreground)]">
-                  Nossa inteligência analisa seus dados cruzando com benchmarks
-                  de mercado e modelos de escala.
+                  Nossa inteligência cruza seus dados com as regras atuais da Imigração Americana.
                 </p>
                 {/* Connector */}
                 <div className="hidden md:block absolute top-8 left-[60%] w-[80%] h-0.5 bg-gradient-to-r from-[var(--brand-verde)] to-[var(--brand-bege)]" />
@@ -258,11 +253,10 @@ export default function Home() {
                   3
                 </div>
                 <h3 className="text-xl font-bold text-[var(--foreground)] mb-3">
-                  Plano Estratégico
+                  Resultado Instantâneo
                 </h3>
                 <p className="text-[var(--muted-foreground)]">
-                  Receba seu score de maturidade e um plano de ação detalhado 
-                  para destravar seu próximo nível de faturamento.
+                  Receba seu score de aprovação e orientações passo a passo para o visto ideal.
                 </p>
               </div>
             </div>
@@ -277,55 +271,55 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Business Dimensions Section */}
+        {/* Business Dimensions Section REPLACED WITH VISA TYPES */}
         <section className="py-20 md:py-32 bg-[var(--neutral-50)] dark:bg-[var(--neutral-900)]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--foreground)] mb-4">
-                As 5 Dimensões que{" "}
+                Tipos de Vistos que{" "}
                 <span className="text-brand-gradient">Analisamos</span>
               </h2>
               <p className="text-lg text-[var(--muted-foreground)] max-w-2xl mx-auto">
-                Focamos no que realmente importa para a saúde e valor de um negócio.
-          </p>
-        </div>
+                Cobrimos as principais categorias para quem quer visitar ou morar nos EUA.
+              </p>
+            </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
               {[
                 {
-                  code: "REC",
-                  name: "Previsibilidade de Receita",
-                  description: "Análise do modelo de faturamento e estabilidade do fluxo de caixa.",
+                  code: "B1/B2",
+                  name: "Turismo e Negócios",
+                  description: "Para viagens curtas a lazer, compras ou reuniões de negócios.",
                   color: "var(--brand-verde-escuro)",
                 },
                 {
-                  code: "MAR",
-                  name: "Margem e Lucro",
-                  description: "Eficiência financeira e sobra líquida real da operação.",
+                  code: "F1",
+                  name: "Estudante",
+                  description: "Para cursos acadêmicos, inglês ou escolas profissionalizantes.",
                   color: "var(--brand-verde)",
                 },
                 {
-                  code: "IND",
-                  name: "Independência do Dono",
-                  description: "Avaliação do grau de dependência da empresa em relação ao fundador.",
+                  code: "H1B",
+                  name: "Trabalho Especializado",
+                  description: "Para profissionais com formação superior e oferta de emprego.",
                   color: "var(--brand-bege)",
                 },
                 {
-                  code: "CIC",
-                  name: "Ciclo de Vendas",
-                  description: "Velocidade de conversão e eficiência do funil comercial.",
+                  code: "EB-5",
+                  name: "Investidor",
+                  description: "Para quem deseja investir capital e gerar empregos nos EUA.",
                   color: "var(--brand-verde-escuro)",
                 },
                 {
-                  code: "MET",
-                  name: "Métricas (CAC/LTV)",
-                  description: "Clareza sobre os custos de aquisição e valor vitalício do cliente.",
+                  code: "O-1",
+                  name: "Habilidades Extraordinárias",
+                  description: "Para destaques em ciências, artes, educação ou esportes.",
                   color: "var(--brand-verde)",
                 },
                 {
-                  code: "ESC",
-                  name: "Potencial de Escala",
-                  description: "O quanto o negócio está pronto para crescer dez vezes mais.",
+                  code: "L-1",
+                  name: "Transferência",
+                  description: "Para executivos sendo transferidos de empresas multinacionais.",
                   color: "var(--brand-bege)",
                 },
               ].map((dim, index) => (
@@ -343,7 +337,7 @@ export default function Home() {
                           {dim.name}
                         </h3>
                         <p className="text-sm text-[var(--brand-verde-escuro)] font-medium mb-1">
-                          Pilar Estratégico
+                          Categoria Comum
                         </p>
                         <p className="text-sm text-[var(--muted-foreground)]">
                           {dim.description}
@@ -357,7 +351,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Exit Strategy Section */}
+        {/* Exit Strategy Section REPLACED WITH IMMIGRATION DREAM */}
         <section className="py-20 md:py-32 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-bege)]/10 via-transparent to-[var(--brand-verde)]/10" />
           
@@ -366,21 +360,20 @@ export default function Home() {
               {/* Content */}
               <div>
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--brand-verde-escuro)]/10 rounded-full mb-6">
-                  <span className="text-2xl">💰</span>
+                  <span className="text-2xl">🌎</span>
                   <span className="text-sm font-semibold text-[var(--brand-verde-escuro)]">
-                    Exit & Valuaton
+                    Planejamento Migratório
                   </span>
                 </div>
                 
                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--foreground)] mb-6">
-                  Sua empresa é um ativo ou um{" "}
-                  <span className="text-[var(--brand-verde)]">fardo</span>?
+                  Seu sonho americano, com{" "}
+                  <span className="text-[var(--brand-verde)]">segurança</span>
                 </h2>
                 
                 <p className="text-lg text-[var(--muted-foreground)] mb-6">
-                  Muitos empreendedores constroem negócios que não podem ser vendidos ou escalados. 
-                  Com o Diagnóstico Manus AI, você descobre exatamente o que está impedindo sua 
-                  empresa de valer mais no mercado.
+                  Muitos vistos são negados por falta de planejamento ou escolha da categoria errada.
+                  Nossa IA ajuda você a identificar o caminho com maior probabilidade de sucesso.
                 </p>
                 
                 <ul className="space-y-4 mb-8">
@@ -391,7 +384,7 @@ export default function Home() {
                       </svg>
                     </div>
                     <span className="text-[var(--foreground)]">
-                      <strong>Identifique gargalos</strong> que matam sua margem de lucro
+                      <strong>Evite negativas</strong> entendendo seus pontos fracos
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
@@ -401,7 +394,7 @@ export default function Home() {
                       </svg>
                     </div>
                     <span className="text-[var(--foreground)]">
-                      <strong>Prepare-se para o Exit</strong> tornando o negócio independente de você
+                      <strong>Economize tempo</strong> focando no visto certo
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
@@ -411,7 +404,7 @@ export default function Home() {
                       </svg>
                     </div>
                     <span className="text-[var(--foreground)]">
-                      <strong>Benchmarking real</strong> com empresas brasileiras de sucesso
+                      <strong>Dicas personalizadas</strong> para sua entrevista
                     </span>
                   </li>
                 </ul>
@@ -426,7 +419,7 @@ export default function Home() {
                       </svg>
                     }
                   >
-                    Avaliar Perfil Empresarial
+                    Avaliar Meu Perfil
                   </Button>
                 </Link>
               </div>
@@ -435,12 +428,12 @@ export default function Home() {
               <div className="relative">
                 <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-3xl p-8 shadow-2xl">
                   <div className="text-center mb-6">
-                    <div className="text-6xl mb-4">📈</div>
+                    <div className="text-6xl mb-4">✈️</div>
                     <h3 className="text-xl font-bold text-[var(--foreground)]">
-                      Diagnóstico de Escala (Manus AI)
+                      Análise de Vistos EUA
                     </h3>
                     <p className="text-[var(--muted-foreground)] text-sm">
-                      Gratuito • 3 minutos • Relatório Estratégico IA
+                      Gratuito • 2 minutos • Relatório IA
                     </p>
                   </div>
                   
@@ -450,8 +443,8 @@ export default function Home() {
                         1
                       </div>
                       <div>
-                        <p className="font-medium text-[var(--foreground)]">Dados Financeiros/Ops</p>
-                        <p className="text-sm text-[var(--muted)]">Informações seguras e criptografadas</p>
+                        <p className="font-medium text-[var(--foreground)]">Seus Objetivos</p>
+                        <p className="text-sm text-[var(--muted)]">Turismo, Trabalho ou Estudo</p>
                       </div>
                     </div>
                     
@@ -460,8 +453,8 @@ export default function Home() {
                         2
                       </div>
                       <div>
-                        <p className="font-medium text-[var(--foreground)]">Análise Agentic AI</p>
-                        <p className="text-sm text-[var(--muted)]">Processamento profundo pela Manus AI</p>
+                        <p className="font-medium text-[var(--foreground)]">Análise de Perfil</p>
+                        <p className="text-sm text-[var(--muted)]">Verificação de eligibilidade</p>
                       </div>
                     </div>
                     
@@ -470,8 +463,8 @@ export default function Home() {
                         3
                       </div>
                       <div>
-                        <p className="font-medium text-[var(--foreground)]">Estratégia de Escala</p>
-                        <p className="text-sm text-[var(--muted)]">Próximos passos para crescimento real</p>
+                        <p className="font-medium text-[var(--foreground)]">Resultado</p>
+                        <p className="text-sm text-[var(--muted)]">Suas melhores opções de visto</p>
                       </div>
                     </div>
                   </div>
@@ -496,11 +489,10 @@ export default function Home() {
 
           <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6">
-              Sua empresa está pronta para o próximo nível?
+              Pronto para planejar sua viagem?
             </h2>
             <p className="text-xl text-white/80 mb-10 max-w-2xl mx-auto">
-              Faça seu Raio-X de Negócios agora e descubra como a <span className="text-white font-bold">Manus AI</span> 
-              pode acelerar sua jornada rumo à escala.
+              Faça seu Raio-X de Vistos agora e aumente suas chances de aprovação com nossa inteligência artificial.
             </p>
             <Link href="/raio-x">
               <Button
@@ -512,7 +504,7 @@ export default function Home() {
                   </svg>
                 }
               >
-                Gere seu Diagnóstico Gratuito
+                Analisar Meu Perfil Grátis
               </Button>
             </Link>
         </div>
