@@ -255,7 +255,7 @@ export default function RaioXPage() {
               </FormField>
 
               {formData.immigrationIssues.includes("other") && (
-                <FormField label="Conte um pouco mais sobre o ocorrido:">
+                <FormField label="Descreva brevemente">
                   <TextInput
                     value={formData.immigrationIssueDetails || ""}
                     onChange={(v) => updateData("immigrationIssueDetails", v)}
@@ -306,6 +306,13 @@ export default function RaioXPage() {
               description="Para vistos de habilidades extraordinárias (EB-1, O-1)."
               isActive={currentStep === 4}
             >
+              <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6 rounded-r-lg">
+                <p className="text-sm text-blue-700">
+                  <span className="font-bold">Nota importante:</span> Não se preocupe se você não marcar muitos itens. 
+                  Muitos casos são construídos estrategicamente.
+                </p>
+              </div>
+
               <FormField
                 label="Você possui algum dos itens abaixo? (Marque todos)"
                 required
@@ -349,7 +356,7 @@ export default function RaioXPage() {
               </FormField>
 
               <FormField
-                label="Investimento estimado disponível para o processo:"
+                label="Orçamento estimado para honorários e taxas legais"
                 required
               >
                 <RadioGroup

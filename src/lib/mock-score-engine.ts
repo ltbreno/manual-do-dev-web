@@ -133,12 +133,52 @@ export function calculateRaioXResult(data: RaioXFormData): RaioXResult {
 
   if (data.wantsToUpload) nextSteps.push("Revisão de Documentos enviados");
 
+
+  // 4. GENERATE PERSONALIZED RECOMMENDATIONS based on scores
+  const recommendations: string[] = [];
+
+  // Determine top visa option
+  const maxScore = Math.max(eb1Score, eb2NiwScore, o1Score, eb3Score, eb5Score);
+  
+  if (o1Score === maxScore && o1Score >= 60) {
+    recommendations.push("Iniciar estruturação de caso O-1 (Visto de Talentos)");
+    recommendations.push("Mapear potenciais empregadores ou agentes nos EUA");
+  } else if (eb1Score === maxScore && eb1Score >= 60) {
+    recommendations.push("Focar na documentação de Habilidades Extraordinárias (EB-1A)");
+    recommendations.push("Coletar cartas de recomendação de especialistas da área");
+  } else if (eb2NiwScore === maxScore && eb2NiwScore >= 60) {
+    recommendations.push("Desenvolver Plano Profissional / Business Plan (EB-2 NIW)");
+    recommendations.push("Validar impacto nacional da sua proposta");
+  } else if (eb3Score === maxScore && eb3Score >= 60) {
+    recommendations.push("Iniciar busca por Sponsor (Oferta de Emprego)");
+    recommendations.push("Adequar currículo para o mercado americano");
+  } else if (eb5Score === maxScore && eb5Score >= 60) {
+    recommendations.push("Avaliar liquidez e origem dos fundos para investimento (EB-5)");
+    recommendations.push("Consultar opções de Centros Regionais");
+  } else {
+    // Fallback/General
+    recommendations.push("Realizar análise curricular aprofundada");
+    recommendations.push("Traçar plano de longo prazo para fortalecimento de perfil");
+  }
+
+  // Secondary recommendations
+  if (eb1Score > 50 && eb1Score < maxScore) {
+    recommendations.push("Manter EB-1A como plano de médio prazo (construir evidências)");
+  }
+  
+  if (data.educationLevel !== "grad_school" && eb2NiwScore > 40) {
+    recommendations.push("Considerar validação de diploma ou mestrado");
+  }
+
+  // Limit to 3-4 top recommendations
+  const finalRecommendations = recommendations.slice(0, 4);
+
   return {
     overallScore,
     businessScores: scores,
     aiAnalysis: "", 
     profileStrengths,
-    recommendations: ["Prepare seu CV em formato americano", "Reúna cartas de recomendação"],
+    recommendations: finalRecommendations, // Now personalized
     nextSteps,
     leadClassification: leadScoreStr,
     legalRisk: legalRisk
