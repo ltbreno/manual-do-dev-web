@@ -5,203 +5,141 @@ import {
 } from "@/types/raio-x";
 
 export function calculateRaioXResult(data: RaioXFormData): RaioXResult {
-  // Initialize scores
-  let eb1Score = 0; // Extraordinary Ability
-  let eb2NiwScore = 0; // National Interest Waiver
-  let o1Score = 0;   // Extraordinary Ability (Non-immigrant)
-  let eb3Score = 0; // Skilled Worker
-  let eb5Score = 0;  // Investor
-
-  // --- LOGIC ENGINE ---
+  // --- TRAVEL SCORE ENGINE ---
 
   // 1. LEAD SCORING (HOT/WARM/COLD)
   let leadScoreStr: "Hot" | "Warm" | "Cold" = "Cold";
+  let overallScore = 30; // Base score
+
+  // Factors for Hot:
+  // - Ready to buy OR Urgent
+  // - Budget established (> 3000)
+  // - Decision maker is ME or SHARED
   
-  const isPermanent = data.visaPurpose === "immigration" || data.intent === "permanent";
-  const urgentTimeline = data.timeline === "immediate" || data.timeline === "short";
-  const hasMoney = data.investmentBudget === "10k_15k" || data.investmentBudget === "over_15k";
-  
-  if (isPermanent && urgentTimeline && hasMoney) {
+  const isUrgent = data.currentStage === "urgent";
+  const isReady = data.currentStage === "ready";
+  const hasBudget = data.budgetPerPerson === "3000_5000" || data.budgetPerPerson === "over_5000";
+  const isDecider = data.decisionMaker === "me" || data.decisionMaker === "shared";
+  const isBusiness = data.travelPurpose === "corporate" || data.travelType === "professional";
+
+  if (isUrgent || (isReady && hasBudget && isDecider)) {
     leadScoreStr = "Hot";
-  } else if (isPermanent && (urgentTimeline || hasMoney)) {
+    overallScore = 90;
+  } else if (isReady || (hasBudget && isDecider) || data.currentStage === "comparing") {
     leadScoreStr = "Warm";
+    overallScore = 65;
   } else {
     leadScoreStr = "Cold";
+    overallScore = 40;
   }
 
-  // 2. LEGAL RISK
-  let legalRisk: "High" | "Medium" | "Low" = "Low";
-  if (data.immigrationIssues.includes("deportation") || data.immigrationIssues.includes("entry_denied")) {
-    legalRisk = "High";
-  } else if (data.immigrationIssues.includes("overstay") || data.immigrationIssues.includes("denial")) {
-    legalRisk = "Medium";
-  }
+  // Adjust overall score details
+  if (data.visaStatus === "valid") overallScore += 10;
+  if (data.buyingHabit === "always_agency") overallScore += 10;
 
-  // 3. VISA SCORING
+  overallScore = Math.min(100, overallScore);
 
-  // EB-1 & O-1 (Extraordinary Ability)
-  // Based on Achievements
-  const majorAchievements = data.achievements.filter(a => 
-    ["prizes", "media", "leadership", "impact_projects", "high_salary"].includes(a)
-  ).length;
-
-  if (majorAchievements >= 3) {
-    eb1Score += 80;
-    o1Score += 90;
-  } else if (majorAchievements >= 1) {
-    eb1Score += 40;
-    o1Score += 60;
-  }
-
-  if (data.educationLevel === "grad_school") {
-    eb2NiwScore += 30;
-    eb1Score += 10;
-  } else if (data.educationLevel === "bachelors") {
-    eb2NiwScore += 10;
-    eb3Score += 30;
-  }
-
-  if (data.experienceYears === "over_15") {
-    eb2NiwScore += 20;
-    o1Score += 10;
-  } else if (data.experienceYears === "10_15") {
-    eb2NiwScore += 10;
-  }
-
-  // Impact Claim for NIW
-  if (data.impactClaim === "clear_impact") {
-    eb2NiwScore += 40;
-  } else if (data.impactClaim === "potential_impact") {
-    eb2NiwScore += 20;
-  }
-
-  // Investment
-  if (data.fundingSource === "investor" || data.investmentBudget === "over_15k") {
-    eb5Score += 40; // Still low because EB5 needs 800k+, but this is relative
-  }
-
-  // Cap scores
-  const cap = (n: number) => Math.min(100, Math.max(0, n));
-  eb1Score = cap(eb1Score);
-  eb2NiwScore = cap(eb2NiwScore);
-  o1Score = cap(o1Score);
-  eb3Score = cap(eb3Score);
-  eb5Score = cap(eb5Score);
-
-  const scores: BusinessScore[] = [
-    {
-      category: "Habilidades Extraordinárias (EB-1A)",
-      score: eb1Score,
-      impact: eb1Score > 70 ? "high" : "low",
-      description: "Green Card para quem está no topo de sua área de atuação.",
-      recommendations: ["Coletar evidências documentais de prêmios e mídia"],
-    },
-    {
-      category: "Interesse Nacional (EB-2 NIW)",
-      score: eb2NiwScore,
-      impact: eb2NiwScore > 70 ? "high" : "low",
-      description: "Green Card para profissionais cujo trabalho beneficia os EUA.",
-      recommendations: ["Definir proposta de empreendimento ou plano profissional nos EUA"],
-    },
-    {
-      category: "Visto O-1 (Habilidades Extraordinárias)",
-      score: o1Score,
-      impact: o1Score > 70 ? "high" : "low",
-      description: "Visto temporário de trabalho para talentos (similar ao EB-1).",
-      recommendations: ["Buscar um empregador ou agente nos EUA para peticionar"],
-    },
-    {
-      category: "Trabalhador Qualificado (EB-3)",
-      score: eb3Score,
-      impact: eb3Score > 70 ? "high" : "low",
-      description: "Green Card via oferta de emprego (Sponsor).",
-      recommendations: ["Buscar oferta de emprego (Job Offer) válida"],
-    },
-  ];
-
-  const overallScore = Math.max(eb1Score, eb2NiwScore, o1Score, eb3Score, eb5Score);
-
-  const profileStrengths = [];
-  if (eb1Score > 60) profileStrengths.push("Perfil de Destaque / Habilidades Extraordinárias");
-  if (eb2NiwScore > 60) profileStrengths.push("Potencial de Interesse Nacional (NIW)");
-  if (legalRisk === "Low") profileStrengths.push("Histórico Imigratório Limpo");
+  // 2. PROFILE STRENGTHS & ESTIMATED BUDGET
+  const profileStrengths: string[] = [];
   
-  const nextSteps = [
-    "Consulta Jurídica Especializada",
-    "Análise de Currículo Detalhada",
-  ];
+  if (hasBudget) profileStrengths.push("Orçamento Confortável");
+  if (isDecider) profileStrengths.push("Tomador de Decisão");
+  if (data.visaStatus === "valid") profileStrengths.push("Visto Válido (Pronto para Embarcar)");
+  if (data.buyingHabit === "always_agency") profileStrengths.push("Cliente de Agência (Valoriza Serviço)");
+  if (isBusiness) profileStrengths.push("Viajante Corporativo");
 
-  if (data.wantsToUpload) nextSteps.push("Revisão de Documentos enviados");
+  // Ticket Estimation
+  // This is illustrative, a real logic would use average values from ranges
+  let ticketEstimate = "A definir";
+  if (data.budgetPerPerson === "under_1500") ticketEstimate = "Baixo (Econômico)";
+  if (data.budgetPerPerson === "1500_3000") ticketEstimate = "Médio";
+  if (data.budgetPerPerson === "3000_5000") ticketEstimate = "Alto";
+  if (data.budgetPerPerson === "over_5000") ticketEstimate = "Premium / Luxo";
 
-
-  // 4. GENERATE PERSONALIZED RECOMMENDATIONS based on scores
+  // 3. RECOMMENDATIONS & BUSINESS SCORES
   const recommendations: string[] = [];
+  const scores: BusinessScore[] = [];
 
-  // Determine top visa option
-  const maxScore = Math.max(eb1Score, eb2NiwScore, o1Score, eb3Score, eb5Score);
-  
-  if (o1Score === maxScore && o1Score >= 60) {
-    recommendations.push("Iniciar estruturação de caso O-1 (Visto de Talentos)");
-    recommendations.push("Mapear potenciais empregadores ou agentes nos EUA");
-  } else if (eb1Score === maxScore && eb1Score >= 60) {
-    recommendations.push("Focar na documentação de Habilidades Extraordinárias (EB-1A)");
-    recommendations.push("Coletar cartas de recomendação de especialistas da área");
-  } else if (eb2NiwScore === maxScore && eb2NiwScore >= 60) {
-    recommendations.push("Desenvolver Plano Profissional / Business Plan (EB-2 NIW)");
-    recommendations.push("Validar impacto nacional da sua proposta");
-  } else if (eb3Score === maxScore && eb3Score >= 60) {
-    recommendations.push("Iniciar busca por Sponsor (Oferta de Emprego)");
-    recommendations.push("Adequar currículo para o mercado americano");
-  } else if (eb5Score === maxScore && eb5Score >= 60) {
-    recommendations.push("Avaliar liquidez e origem dos fundos para investimento (EB-5)");
-    recommendations.push("Consultar opções de Centros Regionais");
-  } else {
-    // Fallback/General
-    recommendations.push("Realizar análise curricular aprofundada");
-    recommendations.push("Traçar plano de longo prazo para fortalecimento de perfil");
+  // Destination / Package Logic
+  if (data.travelPurpose === "leisure") {
+    if (data.passengerCount === "1" || data.passengerCount === "2") {
+      recommendations.push("Pacotes de Lua de Mel ou Casal em Resorts");
+      scores.push({
+        category: "Pacote Romântico / Casal",
+        score: 85,
+        impact: "high",
+        description: "Destinos paradisíacos ou cidades românticas.",
+        recommendations: ["Oferecer upgrades de quarto", "Jantares inclusos"],
+      });
+    } else {
+      recommendations.push("Pacotes Família (Disney, All-Inclusive)");
+      scores.push({
+        category: "Férias em Família",
+        score: 90,
+        impact: "high",
+        description: "Foco em entretenimento infantil e conforto.",
+        recommendations: ["Ingressos antecipados", "Seguro viagem familiar"],
+      });
+    }
+  } else if (data.travelPurpose === "shopping") {
+    recommendations.push("Roteiro de Compras (Outlets & Malls)");
+    recommendations.push("Hotéis próximos a centros comerciais");
+    scores.push({
+      category: "Tour de Compras",
+      score: 95,
+      impact: "high",
+      description: "Logística otimizada para compras.",
+      recommendations: ["Aluguel de carro (SUV)", "Malas extras"],
+    });
+  } else if (data.travelPurpose === "corporate") {
+    recommendations.push("Gestão de Viagem Corporativa eficiente");
+    scores.push({
+      category: "Business Travel",
+      score: 80,
+      impact: "medium",
+      description: "Foco em praticidade e localização.",
+      recommendations: ["Hotel próximo ao evento/reunião", "Transfer executivo"],
+    });
   }
 
-  // Secondary recommendations
-  if (eb1Score > 50 && eb1Score < maxScore) {
-    recommendations.push("Manter EB-1A como plano de médio prazo (construir evidências)");
-  }
-  
-  if (data.educationLevel !== "grad_school" && eb2NiwScore > 40) {
-    recommendations.push("Considerar validação de diploma ou mestrado");
+  // Support recommendations
+  if (data.visaStatus !== "valid" && data.visaStatus !== "process") {
+    recommendations.push("Priorizar Assessoria de Visto Americano");
   }
 
-  // Limit to 3-4 top recommendations
-  const finalRecommendations = recommendations.slice(0, 4);
+  if (data.agencyExpectations.includes("custom_itinerary")) {
+    recommendations.push("Desenvolver Roteiro Personalizado Dia-a-Dia");
+  }
+
+  const nextSteps = [
+    "Agendar Consultoria de Viagem (Videochamada)",
+    "Enviar Cotações Preliminares",
+  ];
 
   return {
     overallScore,
     businessScores: scores,
     aiAnalysis: "", 
     profileStrengths,
-    recommendations: finalRecommendations, // Now personalized
+    recommendations: recommendations.slice(0, 5),
     nextSteps,
     leadClassification: leadScoreStr,
-    legalRisk: legalRisk
+    estimatedBudget: ticketEstimate
   };
 }
 
 export function getDefaultFormData(): RaioXFormData {
   return {
-    visaPurpose: "",
-    intent: "",
-    timeline: "",
-    consultedLawyer: "",
-    immigrationIssues: [],
-    educationLevel: "",
-    fieldOfWork: "",
-    experienceYears: "",
-    achievements: [],
-    impactClaim: "",
-    fundingSource: "",
-    investmentBudget: "",
-    wantsToUpload: false,
-    uploadedFiles: [],
-    willingToConsult: "",
+    travelPurpose: "",
+    travelType: "",
+    currentStage: "",
+    decisionMaker: "",
+    visaStatus: "",
+    travelTimeline: "",
+    passengerCount: "",
+    budgetPerPerson: "",
+    buyingHabit: "",
+    agencyExpectations: [],
     contactPreference: "",
     contact: {
       name: "",
@@ -211,3 +149,4 @@ export function getDefaultFormData(): RaioXFormData {
     },
   };
 }
+

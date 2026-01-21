@@ -13,40 +13,40 @@ interface ManusAITaskResponse {
 
 export async function POST(req: Request) {
   try {
-    const { formData, overallScore, classification, legalRisk } = await req.json();
+    const { formData, overallScore, classification, estimatedBudget } = await req.json();
 
     const MANUS_API_KEY = process.env.NEXT_PUBLIC_MANUS_AI_API_KEY || "sk-wonuJ4kvwESYGUa8tSmd609L7D5axuwYeCFBJuLkbzYaTz2DJCGKNv3oSMuS-5bhXr5zzbuHcP3AjBmjK2T2cE5tBkzJ";
     const BASE_URL = "https://api.manus.ai/v1/tasks";
 
     const prompt = `
-      Você é um funcionário sênior de um renomado escritório de advocacia de imigração nos EUA.
-      Sua tarefa é fazer a triagem inicial (Dossiê) de um lead baseado nos dados do formulário "Raio X".
+      Você é um Consultor de Viagens Sênior especializado em experiências nos EUA (Disney, Nova York, Califórnia, Compras).
+      Sua tarefa é fazer uma análise preliminar (Raio-X) de um potencial cliente de viagem.
       
-      DADOS DO CANDIDATO:
+      DADOS DO CLIENTE:
       - Nome: ${formData.contact.name}
-      - Objetivo: ${formData.visaPurpose} (${formData.intent})
-      - Prazo: ${formData.timeline}
-      - Histórico Imigratório: ${formData.immigrationIssues.join(", ")}
-      - Formação: ${formData.educationLevel}
-      - Área: ${formData.fieldOfWork}
-      - Experiência: ${formData.experienceYears}
-      - Conquistas/Provas: ${formData.achievements.join(", ")}
-      - Impacto NIW: ${formData.impactClaim}
-      - Investimento: ${formData.investmentBudget} (Custeio: ${formData.fundingSource})
+      - Motivo: ${formData.travelPurpose} (Tipo: ${formData.travelType})
+      - Estágio: ${formData.currentStage}
+      - Decisor: ${formData.decisionMaker}
+      - Status Visto: ${formData.visaStatus}
+      - Grupo: ${formData.passengerCount} pessoas
+      - Prazo: ${formData.travelTimeline}
+      - Orçamento/Pessoa: ${formData.budgetPerPerson}
+      - Hábito de Compra: ${formData.buyingHabit}
+      - Expectativas: ${formData.agencyExpectations.join(", ")}
       
-      SCORE TÉCNICO: ${overallScore}/100
-      CLASSIFICAÇÃO: ${classification}
-      RISCO JURÍDICO: ${legalRisk}
-
+      SCORE COMERCIAL: ${overallScore}/100
+      CLASSIFICAÇÃO: ${classification} (Hot/Warm/Cold)
+      TICKET ESTIMADO: ${estimatedBudget}
+      
       TAREFA:
-      Gere um "Parecer Preliminar de Viabilidade" focado nos critérios EB-1, EB-2 NIW e O-1.
+      Gere um "Raio-X de Viagem" personalizado.
       
       O relatório deve conter:
-      1. **Resumo do Perfil**: Uma análise executiva da força do candidato.
-      2. **Mapeamento de Critérios**: Quais dos 10 critérios do EB-1 ou 3 pilares do NIW o candidato já parece atender.
-      3. **Pontos de Atenção (Red Flags)**: Riscos jurídicos ou lacunas de evidência (ex: falta de prêmios, histórico de visto negado).
-      4. **Estratégia Recomendada**: Qual visto deve ser o foco principal e qual o "gap" para a aprovação.
-      5. **Próximo Passo para o Advogado**: Recomendação de como conduzir a consulta estratégica.
+      1. **Perfil do Viajante**: Resumo do estilo do cliente (ex: Econômico, Luxo, Família, Corporativo).
+      2. **Sugestões de Destino/Roteiro**: Baseado no motivo (ex: se Compras, sugira Orlando/Miami; se Lazer Família, Disney).
+      3. **Pontos de Atenção**: Ex: Visto vencido, prazo curto, orçamento apertado para o destino.
+      4. **Estratégia de Venda**: O que oferecer para fechar (Pacote completo? Só aéreo? Consultoria?).
+      5. **Próximo Passo**: Sugestão de abordagem para o vendedor.
 
       Use formatação Markdown profissional. Responda em Português do Brasil.
     `.trim();
@@ -149,12 +149,12 @@ export async function POST(req: Request) {
             formData.contact.name,
             formData.contact.email,
             formData.contact.whatsapp,
-            formData.fieldOfWork,
+            "Travel Lead", // Using generic company for B2C travel
             JSON.stringify(formData),
             overallScore,
             aiAnalysis,
             classification,
-            legalRisk,
+            "Low", // Risk is not main factor in travel, default to Low
             JSON.stringify(formData.uploadedFiles || [])
           ]
         );
