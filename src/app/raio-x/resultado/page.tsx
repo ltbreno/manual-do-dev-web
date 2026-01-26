@@ -190,38 +190,54 @@ export default function ResultadoPage() {
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center">
                     <div className="text-4xl font-bold text-gray-900">{result.overallScore}</div>
-                    <div className="text-sm text-gray-600">score</div>
+                    <div className="text-sm text-gray-600">Score de<br/>Aderência</div>
                   </div>
                 </div>
               </div>
 
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
                 Potencial Internacional: {
-                  result.overallScore >= 80 ? "Alta Viabilidade" :
+                  result.overallScore >= 80 ? "Alta Aderência" :
                   result.overallScore >= 60 ? "Viável com Ajustes" :
                   result.overallScore >= 40 ? "Em Preparação" : "Inicial"
                 }
               </h2>
+              
+              <p className="text-xs text-gray-500 max-w-md mx-auto mt-2">
+                *Este score representa a aderência do seu perfil aos critérios dos vistos analisados. Não é uma garantia de aprovação e deve ser validado por um advogado.
+              </p>
 
-              {/* Lead Classification & Risk - Senior Lawyer View */}
+              {/* Lead Classification & Risk - Client View */}
               {(result.leadClassification || result.legalRisk) && (
                 <div className="flex justify-center gap-4 mt-6 flex-wrap">
                   {result.leadClassification && (
-                    <div className={`px-4 py-2 rounded-lg font-bold border ${
-                      result.leadClassification === "Hot" ? "bg-red-100 text-red-700 border-red-200" :
-                      result.leadClassification === "Warm" ? "bg-orange-100 text-orange-700 border-orange-200" :
-                      "bg-blue-100 text-blue-700 border-blue-200"
+                    <div className={`px-4 py-2 rounded-lg font-bold border flex items-center gap-2 ${
+                      result.leadClassification === "Hot" ? "bg-green-100 text-green-800 border-green-200" :
+                      result.leadClassification === "Warm" ? "bg-blue-100 text-blue-800 border-blue-200" :
+                      "bg-gray-100 text-gray-700 border-gray-200"
                     }`}>
-                      Lead {result.leadClassification === "Hot" ? "🔥" : result.leadClassification === "Warm" ? "⚡" : "❄️"} {result.leadClassification}
+                      {result.leadClassification === "Hot" ? (
+                        <><span>🔥</span> Perfil Prioritário para Análise</>
+                      ) : result.leadClassification === "Warm" ? (
+                        <><span>⚡</span> Perfil Promissor</>
+                      ) : (
+                        <><span>🌱</span> Perfil em Desenvolvimento</>
+                      )}
                     </div>
                   )}
                   {result.legalRisk && (
-                    <div className={`px-4 py-2 rounded-lg font-bold border ${
-                      result.legalRisk === "Low" ? "bg-green-100 text-green-700 border-green-200" :
-                      result.legalRisk === "Medium" ? "bg-yellow-100 text-yellow-700 border-yellow-200" :
-                      "bg-red-100 text-red-700 border-red-200"
+                    <div className={`px-4 py-2 rounded-lg font-bold border flex items-center gap-2 ${
+                      result.legalRisk === "Low" ? "bg-blue-50 text-blue-700 border-blue-200" :
+                      result.legalRisk === "Medium" ? "bg-yellow-50 text-yellow-700 border-yellow-200" :
+                      "bg-red-50 text-red-700 border-red-200"
                     }`}>
-                      Risco Jurídico: {result.legalRisk === "Low" ? "Baixo" : result.legalRisk === "Medium" ? "Médio" : "Alto ⚠️"}
+                       {result.legalRisk === "Low" ? (
+                        <><span>🛡️</span> Baixo Histórico de Risco</>
+                       ) : result.legalRisk === "Medium" ? (
+                        <><span>⚠️</span> Pontos de Atenção no Histórico</>
+                       ) : (
+                        <><span>🔴</span> Alta Complexidade Jurídica</>
+                       )}
                     </div>
                   )}
                 </div>
@@ -233,7 +249,10 @@ export default function ResultadoPage() {
 
           {/* Métricas Detalhadas */}
           <section className="mb-12">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Detalhamento das Dimensões</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">Nível de Compatibilidade</h3>
+            <p className="text-sm text-gray-600 mb-6">
+              Os percentuais indicam compatibilidade do seu histórico com os critérios de cada visto.
+            </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {result.businessScores.map((bs, i) => (
                 <div key={i} className="p-6 bg-white border border-gray-200 rounded-xl hover:shadow-md transition-shadow">
@@ -286,7 +305,7 @@ export default function ResultadoPage() {
                 <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
                   <span className="text-green-600 font-bold">🚀</span>
                 </div>
-                <h3 className="text-lg font-bold text-green-900">Próximos Passos</h3>
+                <h3 className="text-lg font-bold text-green-900">Plano Recomendado para seu Perfil</h3>
               </div>
               <ul className="space-y-3">
                 {result.nextSteps.map((step, i) => (
@@ -304,8 +323,11 @@ export default function ResultadoPage() {
           {/* Call to Action */}
           <section className="bg-gradient-to-r from-green-600 to-green-700 rounded-2xl p-8 text-center text-white shadow-lg">
             <h3 className="text-2xl font-bold mb-3">Quer acelerar seu processo de Visto?</h3>
-            <p className="text-white/90 mb-6 max-w-xl mx-auto">
-              Nossos especialistas em vistos e imigração podem ajudar você a estruturar o plano perfeito baseado neste diagnóstico.
+            <p className="text-white/90 mb-2 max-w-xl mx-auto">
+              Perfis como o seu costumam se beneficiar de uma estratégia bem estruturada desde o início.
+            </p>
+            <p className="text-white/80 text-sm mb-6 max-w-xl mx-auto">
+              Nossos especialistas podem ajudar a transformar esse diagnóstico em um plano de ação real.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button className="bg-yellow-400 text-green-900 px-6 py-3 rounded-lg hover:bg-yellow-300 transition-colors font-semibold shadow-md">
