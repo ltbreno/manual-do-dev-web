@@ -1,6 +1,7 @@
 "use client";
 
-import { VisaScore } from "@/types/raio-x";
+import { BusinessScore } from "@/types/raio-x";
+import React from "react";
 
 interface ScoreCircleProps {
   score: number;
@@ -79,36 +80,36 @@ export function ScoreCircle({ score, size = "lg", label }: ScoreCircleProps) {
   );
 }
 
-interface VisaCardProps {
-  visa: VisaScore;
+interface BusinessScoreCardProps {
+  businessScore: BusinessScore;
   rank: number;
 }
 
-export function VisaCard({ visa, rank }: VisaCardProps) {
-  const getCompatibilityBadge = (compatibility: string) => {
-    switch (compatibility) {
+export function BusinessScoreCard({ businessScore, rank }: BusinessScoreCardProps) {
+  const getImpactBadge = (impact: string) => {
+    switch (impact) {
       case "high":
         return {
-          text: "Alta",
+          text: "Alta Relevância",
           bg: "bg-[var(--brand-verde)]/10",
           color: "text-[var(--brand-verde)]",
         };
       case "medium":
         return {
-          text: "Média",
+          text: "Média Relevância",
           bg: "bg-[var(--brand-bege)]/10",
           color: "text-[var(--brand-bege-dark)]",
         };
       default:
         return {
-          text: "Baixa",
+          text: "Baixa Relevância",
           bg: "bg-red-100 dark:bg-red-900/20",
           color: "text-red-600 dark:text-red-400",
         };
     }
   };
 
-  const badge = getCompatibilityBadge(visa.compatibility);
+  const badge = getImpactBadge(businessScore.impact);
   const isTop = rank === 1;
 
   return (
@@ -129,71 +130,31 @@ export function VisaCard({ visa, rank }: VisaCardProps) {
         <div className="flex-grow">
           <div className="flex items-center gap-3 mb-2">
             <span className="text-2xl font-bold text-[var(--brand-verde-escuro)]">
-              {visa.visaCode}
+              {businessScore.category}
             </span>
             <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${badge.bg} ${badge.color}`}>
-              Compatibilidade {badge.text}
+              {badge.text}
             </span>
           </div>
-          <p className="text-[var(--muted-foreground)] text-sm">{visa.visaType}</p>
+          <p className="text-[var(--muted-foreground)] text-sm">{businessScore.description}</p>
         </div>
-        <ScoreCircle score={visa.score} size="sm" />
+        <ScoreCircle score={businessScore.score} size="sm" />
       </div>
 
-      {/* Strengths */}
-      {visa.strengths.length > 0 && (
-        <div className="mt-4">
-          <h4 className="text-sm font-semibold text-[var(--brand-verde)] mb-2 flex items-center gap-1">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-            Pontos Fortes
-          </h4>
-          <ul className="space-y-1">
-            {visa.strengths.slice(0, 3).map((strength, i) => (
-              <li key={i} className="text-sm text-[var(--foreground)] flex items-start gap-2">
-                <span className="text-[var(--brand-verde)]">•</span>
-                {strength}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {/* Improvements */}
-      {visa.improvements.length > 0 && (
-        <div className="mt-4">
-          <h4 className="text-sm font-semibold text-[var(--brand-bege-dark)] mb-2 flex items-center gap-1">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-            </svg>
-            Oportunidades de Melhoria
-          </h4>
-          <ul className="space-y-1">
-            {visa.improvements.slice(0, 2).map((improvement, i) => (
-              <li key={i} className="text-sm text-[var(--foreground)] flex items-start gap-2">
-                <span className="text-[var(--brand-bege)]">•</span>
-                {improvement}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {/* Requirements */}
-      {isTop && visa.requirements.length > 0 && (
+      {/* Recommendations */}
+      {businessScore.recommendations.length > 0 && (
         <div className="mt-4 pt-4 border-t border-[var(--card-border)]">
           <h4 className="text-sm font-semibold text-[var(--brand-verde-escuro)] mb-2 flex items-center gap-1">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
-            Requisitos Principais
+            Recomendações Específicas
           </h4>
           <ul className="space-y-1">
-            {visa.requirements.map((req, i) => (
+            {businessScore.recommendations.map((rec, i) => (
               <li key={i} className="text-sm text-[var(--muted-foreground)] flex items-start gap-2">
-                <span className="text-[var(--brand-verde-escuro)]">→</span>
-                {req}
+                <span className="text-[var(--brand-verde)]">•</span>
+                {rec}
               </li>
             ))}
           </ul>
@@ -230,4 +191,3 @@ export function RecommendationsList({ items, title, icon, iconColor }: Recommend
     </div>
   );
 }
-

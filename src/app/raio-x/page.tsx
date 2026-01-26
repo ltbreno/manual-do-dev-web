@@ -35,8 +35,7 @@ import {
   BuyingHabit,
   AgencyExpectation,
   ContactPreference,
-  WillingToConsult,
-} from "@/types/raio-x";
+  } from "@/types/raio-x";
 import {
   getDefaultFormData,
   calculateRaioXResult,
