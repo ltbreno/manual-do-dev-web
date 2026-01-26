@@ -202,6 +202,7 @@ export interface BusinessScore {
 }
 
 export interface RaioXResult {
+  legalRisk: string;
   overallScore: number; // Readiness to buy
   businessScores: BusinessScore[];
   aiAnalysis: string;

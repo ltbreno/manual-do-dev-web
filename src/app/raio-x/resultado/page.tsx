@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { RaioXResult } from "@/types/raio-x";
+import { BusinessScoreCard } from "@/components/raio-x/ScoreResult";
 
 // Componente Header simplificado
 function SimpleHeader() {
@@ -208,7 +209,7 @@ export default function ResultadoPage() {
               </p>
 
               {/* Lead Classification & Risk - Client View */}
-              {(result.leadClassification || result.legalRisk) && (
+              {(result.leadClassification) && (
                 <div className="flex justify-center gap-4 mt-6 flex-wrap">
                   {result.leadClassification && (
                     <div className={`px-4 py-2 rounded-lg font-bold border flex items-center gap-2 ${
@@ -225,7 +226,7 @@ export default function ResultadoPage() {
                       )}
                     </div>
                   )}
-                  {result.legalRisk && (
+                    {result.legalRisk && (
                     <div className={`px-4 py-2 rounded-lg font-bold border flex items-center gap-2 ${
                       result.legalRisk === "Low" ? "bg-blue-50 text-blue-700 border-blue-200" :
                       result.legalRisk === "Medium" ? "bg-yellow-50 text-yellow-700 border-yellow-200" :
@@ -255,26 +256,7 @@ export default function ResultadoPage() {
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {result.businessScores.map((bs, i) => (
-                <div key={i} className="p-6 bg-white border border-gray-200 rounded-xl hover:shadow-md transition-shadow">
-                  <div className="flex justify-between items-start mb-4">
-                    <h4 className="font-bold text-gray-900">{bs.category}</h4>
-                    <span className={`text-xs px-2 py-1 rounded-full font-bold ${
-                      bs.score >= 70 ? 'bg-green-100 text-green-700' :
-                      bs.score >= 40 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'
-                    }`}>
-                      {bs.score}%
-                    </span>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-4 leading-relaxed">{bs.description}</p>
-                  <div className="space-y-2">
-                    {bs.recommendations.map((rec, j) => (
-                      <div key={j} className="flex items-center gap-2 text-xs text-gray-500">
-                        <span className="text-green-500">•</span>
-                        {rec}
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                <BusinessScoreCard key={i} businessScore={bs} rank={i + 1} />
               ))}
             </div>
           </section>

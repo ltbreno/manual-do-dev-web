@@ -117,6 +117,7 @@ export function calculateRaioXResult(data: RaioXFormData): RaioXResult {
   ];
 
   return {
+    legalRisk: "N/A",
     overallScore,
     businessScores: scores,
     aiAnalysis: "", 
