@@ -40,7 +40,7 @@ export function calculateImmigrationScore(data: ImmigrationFormData): Immigratio
             professionalScore += 30;
             profileStrengths.push("Alta Qualificação Acadêmica (Mestrado/Doutorado)");
             recommendedVisas.push("EB-2 NIW");
-        } else if (data.education === "bachelors" && data.experience === "over_5") {
+        } else if (data.education === "bachelors" && data.experience && data.experience !== "under_5") {
             professionalScore += 20;
             profileStrengths.push("Bacharelado + 5 anos de exp. (Advanced Degree equiv.)");
             recommendedVisas.push("EB-2 NIW");

@@ -125,7 +125,7 @@ export interface ImmigrationFormData {
   workedLastYear?: boolean; // L-1 req
   currentRole?: CompanyRole;
   usEntityStatus?: "exists" | "will_open" | "no";
-  relationType?: BusinessRelation;
+  businessRelation?: BusinessRelation;
 
   // Layer 3 - Investor
   hasCapital?: boolean;
