@@ -40,7 +40,16 @@ export default function RaioXPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // --- STEPS CONFIGURATION ---
+  // --- STEPS CONFIGURATION ---
   const getSteps = () => {
+    // 0. Gatekeeper Check
+    if (formData.goal && formData.goal !== "permanent" && formData.goal !== "work_temp") {
+      return [
+        { id: "intention", label: "Intenção" },
+        { id: "contact_exit", label: "Contato" }
+      ];
+    }
+
     const steps = [
       { id: "intention", label: "Intenção" },
       { id: "history", label: "Histórico" },
@@ -50,14 +59,17 @@ export default function RaioXPage() {
     if (formData.profile === "professional") {
       steps.push({ id: "professional_details", label: "Qualificação" });
       steps.push({ id: "professional_achievements", label: "Conquistas" });
+      steps.push({ id: "professional_niw", label: "Impacto" });
     } else if (formData.profile === "business") {
       steps.push({ id: "business_details", label: "Empresa" });
       steps.push({ id: "business_role", label: "Atuação" });
     } else if (formData.profile === "investor") {
       steps.push({ id: "investor_details", label: "Investimento" });
+      steps.push({ id: "investor_source", label: "Origem" });
     }
 
     steps.push({ id: "finance", label: "Financeiro" });
+    steps.push({ id: "upload", label: "Anexos" });
     steps.push({ id: "contact", label: "Finalizar" });
 
     return steps;
@@ -75,6 +87,13 @@ export default function RaioXPage() {
   const updateData = (field: keyof ImmigrationFormData, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
+
+  const updateDeepData = (parent: keyof ImmigrationFormData, child: string, value: any) => {
+    setFormData((prev) => ({
+      ...prev,
+      [parent]: { ...prev[parent] as any, [child]: value }
+    }));
+  }
 
   const updateContact = (field: string, value: string) => {
     setFormData((prev) => ({
@@ -137,6 +156,40 @@ export default function RaioXPage() {
                 ]}
               />
             </FormField>
+          </FormStep>
+        );
+
+      case "contact_exit":
+        return (
+          <FormStep
+            title="Consulta Especializada"
+            description="Este Raio-X é focado em processos de Green Card, mas podemos ajudar você consultivamente."
+            isActive={true}
+          >
+            <div className="bg-blue-50 p-4 rounded-md mb-6 border border-blue-100">
+              <p className="text-blue-800 text-sm">
+                Para vistos de Turismo, Estudante ou Negócios rápidos, a análise automática não se aplica.
+                Deixe seus dados para que nossa equipe entre em contato.
+              </p>
+            </div>
+            <div className="space-y-4">
+              <TextInput
+                value={formData.contact.name}
+                onChange={(v) => updateContact("name", v)}
+                placeholder="Nome Completo"
+              />
+              <TextInput
+                value={formData.contact.email}
+                onChange={(v) => updateContact("email", v)}
+                placeholder="E-mail"
+                type="email"
+              />
+              <TextInput
+                value={formData.contact.whatsapp}
+                onChange={(v) => updateContact("whatsapp", v)}
+                placeholder="WhatsApp"
+              />
+            </div>
           </FormStep>
         );
 
@@ -250,10 +303,28 @@ export default function RaioXPage() {
                   { value: "leadership", label: "Cargo de Liderança em empresa distinta" },
                   { value: "original_contribution", label: "Contribuição original relevante na área" },
                   { value: "scholarly_articles", label: "Artigos acadêmicos ou livros publicados" },
-                  { value: "judging", label: "Julgamento do trabalho de outros (Bancas, Jurado)" },
+                  { value: "judging", label: "Julgamento do trabalho de outros" },
                   { value: "high_salary", label: "Remuneração significativamente alta" },
+                  { value: "none", label: "Nenhum dos itens acima" },
                 ]}
                 columns={1}
+              />
+            </FormField>
+          </FormStep>
+        );
+
+      case "professional_niw":
+        return (
+          <FormStep title="Impacto Nacional (NIW)" description="Para vistos EB-2 NIW." isActive={true}>
+            <FormField label="Seu trabalho gera impacto que pode beneficiar os EUA?" required>
+              <RadioGroup
+                value={formData.niwLogic?.impact === true ? "yes" : formData.niwLogic?.impact === "unsure" ? "unsure" : ""}
+                onChange={(v) => updateDeepData("niwLogic", "impact", v === "yes" ? true : "unsure")}
+                options={[
+                  { value: "yes", label: "Sim, de forma clara e comprovável" },
+                  { value: "unsure", label: "Acho que sim, mas não sei comprovar" },
+                  { value: "no", label: "Não tenho certeza" }
+                ]}
               />
             </FormField>
           </FormStep>
@@ -275,8 +346,8 @@ export default function RaioXPage() {
             </FormField>
             <FormField label="Você trabalhou nela por pelo menos 1 ano contínuo nos últimos 3 anos?" required>
               <RadioGroup
-                value={formData.workedLastYear ? "yes" : "no"}
-                onChange={(v) => updateData("workedLastYear", v === "yes")}
+                value={formData.workedOneYearInLastThree ? "yes" : "no"}
+                onChange={(v) => updateData("workedOneYearInLastThree", v === "yes")}
                 options={[
                   { value: "yes", label: "Sim" },
                   { value: "no", label: "Não" },
@@ -300,14 +371,26 @@ export default function RaioXPage() {
                 ]}
               />
             </FormField>
-            <FormField label="Relação com empresa nos EUA:" required>
+            <FormField label="Empresa relacionada nos EUA:" required>
               <RadioGroup
+                value={formData.usEntityStatus || ""}
+                onChange={(v) => updateData("usEntityStatus", v)}
+                options={[
+                  { value: "exists", label: "Já existe" },
+                  { value: "will_open", label: "Será aberta (New Office)" },
+                  { value: "no", label: "Não existe" }
+                ]}
+              />
+            </FormField>
+            <FormField label="Relação entre as empresas:" required>
+              <SelectInput
                 value={formData.businessRelation || ""}
                 onChange={(v) => updateData("businessRelation", v)}
                 options={[
-                  { value: "parent_subsidiary", label: "Matriz / Filial" },
-                  { value: "new_office", label: "Pretendo abrir filial (New Office)" },
-                  { value: "none", label: "Nenhuma relação anterior" },
+                  { value: "matrix_subsidiary", label: "Matriz / Filial" },
+                  { value: "controller_subsidiary", label: "Controladora / Subsidiária" },
+                  { value: "affiliate", label: "Afiliadas (Mesmos sócios)" },
+                  { value: "undefined", label: "Ainda não definida" },
                 ]}
               />
             </FormField>
@@ -336,6 +419,22 @@ export default function RaioXPage() {
                 options={[
                   { value: "active", label: "Ativa (Quero gerir o negócio dia-a-dia)" },
                   { value: "passive", label: "Passiva (Apenas investir capital)" },
+                ]}
+              />
+            </FormField>
+          </FormStep>
+        );
+
+      case "investor_source":
+        return (
+          <FormStep title="Origem dos Recursos" description="Requisito fundamental para qualquer visto de investidor." isActive={true}>
+            <FormField label="O capital tem origem lícita e comprovável?" required>
+              <RadioGroup
+                value={formData.lawfulSource || ""}
+                onChange={(v) => updateData("lawfulSource", v)}
+                options={[
+                  { value: "yes", label: "Sim, origem 100% declarada" },
+                  { value: "unsure", label: "Não tenho certeza / Parcialmente" }
                 ]}
               />
             </FormField>
@@ -371,6 +470,23 @@ export default function RaioXPage() {
           </FormStep>
         );
 
+      case "upload":
+        return (
+          <FormStep title="Documentação (Opcional)" description="Anexe seu CV ou LinkedIn para uma análise mais precisa. (Simulação)" isActive={true}>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-10 text-center hover:bg-gray-50 transition-colors cursor-pointer">
+              <p className="text-gray-500 font-medium">Clique para fazer upload do seu CV ou Portfolio</p>
+              <p className="text-xs text-gray-400 mt-2">(PDF, DOCX ou JPG)</p>
+            </div>
+            <div className="mt-4">
+              <TextInput
+                value={formData.contact?.linkedin || ""}
+                onChange={(v) => updateContact("linkedin", v)}
+                placeholder="URL do LinkedIn (Opcional)"
+              />
+            </div>
+          </FormStep>
+        );
+
       case "contact":
         return (
           <FormStep title="Seus Dados" description="Para receber o resultado da análise." isActive={true}>
@@ -391,6 +507,17 @@ export default function RaioXPage() {
                 onChange={(v) => updateContact("whatsapp", v)}
                 placeholder="WhatsApp com DDD"
               />
+              <FormField label="Interesse em Consulta com Advogado:" required>
+                <SelectInput
+                  value={formData.consultationInterest || ""}
+                  onChange={(v) => updateData("consultationInterest", v)}
+                  options={[
+                    { value: "yes_urgent", label: "Sim, com urgência" },
+                    { value: "yes_normal", label: "Sim, sem urgência" },
+                    { value: "not_yet", label: "Ainda não" },
+                  ]}
+                />
+              </FormField>
             </div>
 
             <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">

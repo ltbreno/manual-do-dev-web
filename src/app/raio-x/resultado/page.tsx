@@ -205,24 +205,45 @@ export default function ResultadoPage() {
           {/* Visas Recomendados */}
           <section className="mb-12">
             <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-              <span className="text-green-600">🏛️</span> Vistos Recomendados
+              <span className="text-green-600">🏛️</span> Estratégia Jurídica
             </h3>
 
             {result.recommendedVisas.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {result.recommendedVisas.map((visa, i) => (
-                  <div key={i} className="p-6 rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-2xl font-bold text-gray-900">{visa}</span>
-                      <span className="w-8 h-8 flex items-center justify-center bg-green-100 text-green-700 rounded-full text-sm font-bold">
-                        {i + 1}
-                      </span>
-                    </div>
-                    <p className="text-gray-500 text-sm">
-                      Categoria indicada para o seu perfil profissional e objetivos.
-                    </p>
+              <div className="space-y-6">
+                {/* Primary Recommendation */}
+                <div className="bg-white border-2 border-green-500 rounded-2xl p-8 shadow-lg relative overflow-hidden">
+                  <div className="absolute top-0 right-0 bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg uppercase tracking-wider">
+                    Recomendação Principal
                   </div>
-                ))}
+                  <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-3xl">🇺🇸</span>
+                    </div>
+                    <div>
+                      <h4 className="text-3xl font-bold text-gray-900 mb-2">{result.recommendedVisas[0]}</h4>
+                      <p className="text-gray-600 text-lg">
+                        Esta categoria é a que apresenta maior compatibilidade técnica com o seu perfil atual.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Alternatives */}
+                {result.recommendedVisas.length > 1 && (
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-700 mb-4 ml-1">Caminhos Alternativos:</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {result.recommendedVisas.slice(1).map((visa, i) => (
+                        <div key={i} className="p-5 rounded-xl border border-gray-200 bg-gray-50 flex items-center gap-4">
+                          <span className="w-8 h-8 flex items-center justify-center bg-gray-200 text-gray-700 rounded-full text-sm font-bold">
+                            {i + 2}
+                          </span>
+                          <span className="font-bold text-gray-800">{visa}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="p-8 bg-gray-50 rounded-xl border border-gray-200 text-center">

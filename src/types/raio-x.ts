@@ -63,10 +63,15 @@ export type CompanyRole =
   | "technical";
 
 export type BusinessRelation =
-  | "parent_subsidiary" // Matriz/Filial
+  | "matrix_subsidiary" // Matriz/Filial
+  | "controller_subsidiary" // Controladora/Subsidiária
   | "affiliate"        // Afiliada
-  | "new_office"       // Abrir filial
-  | "none";            // Nenhuma relação anterior
+  | "undefined";       // Ainda não definida
+
+export type USCompanyStatus =
+  | "exists"
+  | "will_open"
+  | "no";
 
 // PERFIL C: INVESTIDOR (E-2 / EB-5)
 export type InvestmentCapital =
@@ -78,6 +83,10 @@ export type InvestmentCapital =
 export type ManagementRole =
   | "active"  // E-2 (gerir o negócio)
   | "passive"; // EB-5 (apenas investir)
+
+export type LawfulFunds =
+  | "yes"
+  | "unsure";
 
 // --- CAMADA 4: FINANCEIRO ---
 
@@ -94,6 +103,11 @@ export type LegalBudgetParams =
   | "over_20k";
 
 // --- CAMADA FINAL: CONTATO ---
+
+export type ConsultationInterest =
+  | "yes_urgent"
+  | "yes_normal"
+  | "not_yet";
 
 export interface ContactData {
   name: string;
@@ -117,21 +131,23 @@ export interface ImmigrationFormData {
   education?: EducationLevel;
   experience?: ExperienceYears;
   achievements?: ProfessionalAchievement[];
-  niwInterest?: boolean; // Impacto nacional?
+  niwLogic?: {
+    impact: boolean | "unsure";
+  };
 
   // Layer 3 - Business
   isBusinessOwner?: boolean;
   companyYears?: string; // <1, 1-3, 3+
-  workedLastYear?: boolean; // L-1 req
+  workedOneYearInLastThree?: boolean; // L-1 req
   currentRole?: CompanyRole;
-  usEntityStatus?: "exists" | "will_open" | "no";
+  usEntityStatus?: USCompanyStatus;
   businessRelation?: BusinessRelation;
 
   // Layer 3 - Investor
   hasCapital?: boolean;
   capitalAmount?: InvestmentCapital;
   managementIntent?: ManagementRole;
-  capitalOriginCheck?: boolean; // Origem lícita
+  lawfulSource?: LawfulFunds;
 
   // Layer 4
   fundingSource: FundingSource | "";
@@ -140,7 +156,7 @@ export interface ImmigrationFormData {
   // Layer 5 - Conversão / Arquivos
   wantsAssessment: boolean;
   files?: File[]; // (Simulação, não persistido igual string)
-  wantsCall?: "urgent" | "normal" | "not_now";
+  consultationInterest?: ConsultationInterest;
 
   contact: ContactData;
 }
