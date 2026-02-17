@@ -48,6 +48,16 @@ export function calculateImmigrationScore(data: ImmigrationFormData): Immigratio
         let isNiwCandidate = false;
         let isEb1Candidate = false;
 
+        // Análise de Área (STEM vs Business vs Arts)
+        if (data.fieldOfWork === "stem") {
+            professionalScore += 10;
+            profileStrengths.push("Área STEM (Prioridade Nacional)");
+        } else if (data.fieldOfWork === "arts") {
+            if (data.achievements && data.achievements.length >= 3) {
+                profileStrengths.push("Alta Relevância Artística");
+            }
+        }
+
         // Educação
         if (data.education === "masters_doctorate") {
             professionalScore += 25;
@@ -81,17 +91,18 @@ export function calculateImmigrationScore(data: ImmigrationFormData): Immigratio
 
         // Recomendações Profissionais
         if (isEb1Candidate) {
-            recommendedVisas.push("EB-1A");
-            recommendedVisas.push("O-1");
+            recommendedVisas.push("EB-1A (Green Card)");
+            recommendedVisas.push("O-1A/B (Visto de Talento)");
         }
         if (isNiwCandidate) {
-            recommendedVisas.push("EB-2 NIW");
+            recommendedVisas.push("EB-2 NIW (Dispensável de Oferta de Trabalho)");
         }
 
         // Caso tenha pouca qualificação
         if (!isNiwCandidate && !isEb1Candidate) {
             recommendedVisas.push("EB-3 (Carece de oferta de trabalho)");
             riskAnalysis = "Médio Risco (Dependência de Sponsor)";
+            overallScore -= 10;
         }
 
         overallScore += professionalScore;
@@ -112,36 +123,56 @@ export function calculateImmigrationScore(data: ImmigrationFormData): Immigratio
             overallScore -= 20;
         }
 
-        // Cargo Executivo/Gerencial
-        if (data.currentRole === "executive" || data.currentRole === "manager") {
-            businessScore += 15;
-            profileStrengths.push("Atuação Executiva/Gerencial");
+        // Cargo Executivo/Gerencial & Estrutura da Empresa
+        // AQUI ESTÁ A LÓGICA REFINADA
+        const isManagerOrExec = data.currentRole === "executive" || data.currentRole === "manager";
+        const hasTeam = data.employeeCount !== "under_5"; // Menos de 5 é arriscado para L-1
+
+        if (isManagerOrExec) {
+            if (hasTeam) {
+                businessScore += 15;
+                profileStrengths.push("Atuação Executiva em Estrutura Robusta");
+            } else {
+                // Gerente sem time ou time pequeno = Risco
+                businessScore += 5; // Pontua pouco
+                riskAnalysis += " | Estrutura Organizacional Pequena para L-1 (Risco de 'Function Manager')";
+                // Não tira a elegibilidade, mas avisa
+            }
         } else {
             isL1Candidate = false; // L-1A exige gestão
+            riskAnalysis += " | Cargo atual não parece Executivo/Gerencial";
+        }
+
+        // Faturamento (Bônus para EB-1C)
+        if (data.annualRevenue === "over_5m" || data.annualRevenue === "1m_5m") {
+            businessScore += 10;
+            profileStrengths.push("Empresa com Faturamento Sólido para Sustentação");
         }
 
         // Relação entre empresas
         const validRelations = ["matrix_subsidiary", "controller_subsidiary", "affiliate"];
         if (data.businessRelation && validRelations.includes(data.businessRelation)) {
             businessScore += 15;
+            profileStrengths.push("Relação Societária Válida");
+        } else if (data.businessRelation === "undefined") {
+            riskAnalysis += " | Necessário definir relação societária (Matriz-Filial)";
         }
 
         // Recomendações Empresariais
         if (isL1Candidate) {
             if (data.usEntityStatus === "exists") {
-                recommendedVisas.push("L-1A (Renovação/Extensão)");
+                recommendedVisas.push("L-1A (Transferência de Executivo)");
                 if (data.companyYears === "3+ years") {
-                    recommendedVisas.push("EB-1C (Green Card Direto)");
+                    recommendedVisas.push("EB-1C (Green Card para Multinacionais)");
                     profileStrengths.push("Empresa Madura para EB-1C");
                     businessScore += 20;
                 }
-            } else if (data.usEntityStatus === "will_open") {
+            } else {
                 recommendedVisas.push("L-1A (New Office)");
                 profileStrengths.push("Projeto de Expansão (New Office)");
             }
         } else {
-            // Se falhou no L-1, talvez E-2 se tiver capital? (Fluxo cruzado complexo, mantendo simples por enquanto)
-            recommendedVisas.push("Análise de Business Plan Necessária");
+            recommendedVisas.push("Análise de Business Plan Necessária (Talvez E-2?)");
         }
 
         overallScore += businessScore;
@@ -156,24 +187,40 @@ export function calculateImmigrationScore(data: ImmigrationFormData): Immigratio
             investorScore += 20;
         } else if (data.lawfulSource === "unsure") {
             riskAnalysis = "Alto Risco (Origem de Fundos não Comprovada)";
-            overallScore -= 20;
+            overallScore -= 30; // Penalidade alta, sem origem não tem visto
+        }
+
+        // Liquidez (Novo Fator)
+        if (data.liquidityStatus === "illiquid_hard") {
+            riskAnalysis += " | Baixa Liquidez (Dificuldade de Aporte Imediato)";
+            investorScore -= 10;
+        } else {
+            investorScore += 5;
         }
 
         // EB-5
         if (data.capitalAmount === "over_800k") {
             investorScore += 40;
             profileStrengths.push("Capital Compatível com EB-5");
-            recommendedVisas.push("EB-5");
+            recommendedVisas.push("EB-5 (Investidor Imigrante)");
         }
 
         // E-2 (Tratado)
-        // Nota: Assumimos cidadania de país tratado (Brasil não tem, mas muitos têm dupla cidadania. O form não pergunta isso ainda, assumindo foco geral)
         if (data.capitalAmount === "100k_300k" || data.capitalAmount === "300k_800k") {
             if (data.managementIntent === "active") {
                 investorScore += 30;
-                profileStrengths.push("Perfil Operacional para E-2 (Req. Cidadania de Tratado)");
-                recommendedVisas.push("E-2");
+                profileStrengths.push("Perfil Operacional para E-2");
+                recommendedVisas.push("E-2 (Investidor de Tratado - Req. Cidadania)");
+            } else {
+                // Tem capital de E-2 mas quer ser passivo -> Problema
+                riskAnalysis += " | Capital insuficiente para passividade total (EB-5 custa $800k+)";
+                investorScore -= 10;
             }
+        }
+
+        if (data.capitalAmount === "under_100k") {
+            riskAnalysis += " | Capital baixo para imigração de investimento direto";
+            overallScore -= 10;
         }
 
         overallScore += investorScore;

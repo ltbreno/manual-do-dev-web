@@ -56,11 +56,30 @@ export type ProfessionalAchievement =
   | "high_salary"     // Salário alto
   | "none";
 
+export type FieldOfWork =
+  | "stem" // Science, Tech, Engineering, Math
+  | "business"
+  | "arts"
+  | "athletics"
+  | "other";
+
 // PERFIL B: EMPRESÁRIO (L-1 / EB-1C)
 export type CompanyRole =
   | "executive"
   | "manager"
   | "technical";
+
+export type EmployeeCount =
+  | "under_5"
+  | "5_20"
+  | "20_50"
+  | "over_50";
+
+export type AnnualRevenue =
+  | "under_500k"
+  | "500k_1m"
+  | "1m_5m"
+  | "over_5m";
 
 export type BusinessRelation =
   | "matrix_subsidiary" // Matriz/Filial
@@ -79,6 +98,11 @@ export type InvestmentCapital =
   | "100k_300k"
   | "300k_800k"
   | "over_800k";
+
+export type LiquidityStatus =
+  | "liquid" // Cash / Stocks check
+  | "illiquid_easy" // Imóveis urbanos / fácil venda
+  | "illiquid_hard"; // Imóveis rurais / empresas fechadas / difícil venda
 
 export type ManagementRole =
   | "active"  // E-2 (gerir o negócio)
@@ -131,6 +155,7 @@ export interface ImmigrationFormData {
   education?: EducationLevel;
   experience?: ExperienceYears;
   achievements?: ProfessionalAchievement[];
+  fieldOfWork?: FieldOfWork; // [NEW]
   niwLogic?: {
     impact: boolean | "unsure";
   };
@@ -140,12 +165,15 @@ export interface ImmigrationFormData {
   companyYears?: string; // <1, 1-3, 3+
   workedOneYearInLastThree?: boolean; // L-1 req
   currentRole?: CompanyRole;
+  employeeCount?: EmployeeCount; // [NEW]
+  annualRevenue?: AnnualRevenue; // [NEW]
   usEntityStatus?: USCompanyStatus;
   businessRelation?: BusinessRelation;
 
   // Layer 3 - Investor
   hasCapital?: boolean;
   capitalAmount?: InvestmentCapital;
+  liquidityStatus?: LiquidityStatus; // [NEW]
   managementIntent?: ManagementRole;
   lawfulSource?: LawfulFunds;
 

@@ -259,6 +259,20 @@ export default function RaioXPage() {
             description="Detalhes sobre sua formação e experiência."
             isActive={true}
           >
+            <FormField label="Qual sua área de atuação principal?" required>
+              <SelectInput
+                value={formData.fieldOfWork || ""}
+                onChange={(v) => updateData("fieldOfWork", v)}
+                options={[
+                  { value: "stem", label: "Ciências / Tecnologia / Engenharia (STEM)" },
+                  { value: "business", label: "Administração / Negócios / Finanças" },
+                  { value: "arts", label: "Artes / Cultura / Design" },
+                  { value: "athletics", label: "Esportes" },
+                  { value: "other", label: "Outra" },
+                ]}
+              />
+            </FormField>
+
             <FormField label="Qual sua formação mais alta?" required>
               <RadioGroup
                 value={formData.education || ""}
@@ -330,32 +344,58 @@ export default function RaioXPage() {
           </FormStep>
         );
 
-      case "business_details":
-        return (
-          <FormStep title="Dados da Empresa" description="Para vistos L-1 ou EB-1C." isActive={true}>
-            <FormField label="Há quanto tempo sua empresa existe?" required>
+        <FormStep title="Dados da Empresa" description="Para vistos L-1 ou EB-1C." isActive={true}>
+          <FormField label="Há quanto tempo sua empresa existe?" required>
+            <SelectInput
+              value={formData.companyYears || ""}
+              onChange={(v) => updateData("companyYears", v)}
+              options={[
+                { value: "< 1 year", label: "Menos de 1 ano" },
+                { value: "1-3 years", label: "1 a 3 anos" },
+                { value: "3+ years", label: "Mais de 3 anos" },
+              ]}
+            />
+          </FormField>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField label="Número de funcionários diretos:" required>
               <SelectInput
-                value={formData.companyYears || ""}
-                onChange={(v) => updateData("companyYears", v)}
+                value={formData.employeeCount || ""}
+                onChange={(v) => updateData("employeeCount", v)}
                 options={[
-                  { value: "< 1 year", label: "Menos de 1 ano" },
-                  { value: "1-3 years", label: "1 a 3 anos" },
-                  { value: "3+ years", label: "Mais de 3 anos" },
+                  { value: "under_5", label: "Menos de 5" },
+                  { value: "5_20", label: "5 a 20" },
+                  { value: "20_50", label: "20 a 50" },
+                  { value: "over_50", label: "Mais de 50" },
                 ]}
               />
             </FormField>
-            <FormField label="Você trabalhou nela por pelo menos 1 ano contínuo nos últimos 3 anos?" required>
-              <RadioGroup
-                value={formData.workedOneYearInLastThree ? "yes" : "no"}
-                onChange={(v) => updateData("workedOneYearInLastThree", v === "yes")}
+
+            <FormField label="Faturamento anual aproximado (USD):" required>
+              <SelectInput
+                value={formData.annualRevenue || ""}
+                onChange={(v) => updateData("annualRevenue", v)}
                 options={[
-                  { value: "yes", label: "Sim" },
-                  { value: "no", label: "Não" },
+                  { value: "under_500k", label: "Até $500k" },
+                  { value: "500k_1m", label: "$500k a $1M" },
+                  { value: "1m_5m", label: "$1M a $5M" },
+                  { value: "over_5m", label: "Acima de $5M" },
                 ]}
               />
             </FormField>
-          </FormStep>
-        );
+          </div>
+
+          <FormField label="Você trabalhou nela por pelo menos 1 ano contínuo nos últimos 3 anos?" required>
+            <RadioGroup
+              value={formData.workedOneYearInLastThree ? "yes" : "no"}
+              onChange={(v) => updateData("workedOneYearInLastThree", v === "yes")}
+              options={[
+                { value: "yes", label: "Sim" },
+                { value: "no", label: "Não" },
+              ]}
+            />
+          </FormField>
+        </FormStep>
 
       case "business_role":
         return (
@@ -412,6 +452,19 @@ export default function RaioXPage() {
                 ]}
               />
             </FormField>
+
+            <FormField label="Liquidez dos recursos:" required>
+              <SelectInput
+                value={formData.liquidityStatus || ""}
+                onChange={(v) => updateData("liquidityStatus", v)}
+                options={[
+                  { value: "liquid", label: "Líquido (Dinheiro / Ações)" },
+                  { value: "illiquid_easy", label: "Imóveis (Fácil venda)" },
+                  { value: "illiquid_hard", label: "Imóveis Rurais / Empresas Fechadas" },
+                ]}
+              />
+            </FormField>
+
             <FormField label="Intenção de Gestão:" required>
               <RadioGroup
                 value={formData.managementIntent || ""}
