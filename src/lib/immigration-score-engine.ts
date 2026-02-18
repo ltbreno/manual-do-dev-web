@@ -1,7 +1,6 @@
 import {
     ImmigrationFormData,
     ImmigrationResult,
-    UserProfile,
 } from "@/types/raio-x";
 
 export function calculateImmigrationScore(data: ImmigrationFormData): ImmigrationResult {
@@ -42,204 +41,195 @@ export function calculateImmigrationScore(data: ImmigrationFormData): Immigratio
 
     // 3. ANÁLISE POR PERFIL (Camada 2 & 3)
 
-    // --- PROFISSIONAL (EB-1A / EB-2 NIW / O-1) ---
+    // --- PERFIL A: PROFISSIONAL (EB-1A / O-1 / EB-2 NIW) ---
     if (data.profile === "professional") {
         let professionalScore = 0;
         let isNiwCandidate = false;
         let isEb1Candidate = false;
 
-        // Análise de Área (STEM vs Business vs Arts)
-        if (data.fieldOfWork === "stem") {
-            professionalScore += 10;
-            profileStrengths.push("Área STEM (Prioridade Nacional)");
-        } else if (data.fieldOfWork === "arts") {
-            if (data.achievements && data.achievements.length >= 3) {
-                profileStrengths.push("Alta Relevância Artística");
+        // Educação (Q5)
+        if (data.education === "masters_doctorate") {
+            professionalScore += 30;
+            profileStrengths.push("Alta Qualificação Acadêmica (Mestrado/Doutorado)");
+            isNiwCandidate = true;
+        } else if (data.education === "bachelors") {
+            professionalScore += 15;
+            if (data.experience === "over_15" || data.experience === "10_15") {
+                profileStrengths.push("Bacharelado + Experiência Relevante (Advanced Degree Equiv)");
+                isNiwCandidate = true;
             }
         }
 
-        // Educação
-        if (data.education === "masters_doctorate") {
-            professionalScore += 25;
-            profileStrengths.push("Alta Qualificação Acadêmica (Advanced Degree)");
-            isNiwCandidate = true;
-        } else if (data.education === "bachelors" && data.experience && data.experience !== "under_5") {
-            professionalScore += 15;
-            profileStrengths.push("Bacharelado + 5 anos de exp. (Advanced Degree equiv.)");
-            isNiwCandidate = true;
-        }
+        // Experiência (Q6)
+        if (data.experience === "over_15") professionalScore += 20;
+        else if (data.experience === "10_15") professionalScore += 15;
+        else if (data.experience === "5_10") professionalScore += 10;
 
-        // NIW Impact
-        if (data.niwLogic?.impact === true) {
-            professionalScore += 25;
-            profileStrengths.push("Trabalho de Importância Nacional e Mérito Substancial");
-            isNiwCandidate = true;
-        }
-
-        // Habilidades Extraordinárias (EB-1A / O-1)
+        // Critérios EB-1A / O-1 (Q7)
         const achievements = data.achievements || [];
         const achievementCount = achievements.filter(a => a !== "none").length;
 
         if (achievementCount >= 3) {
-            professionalScore += 40;
-            profileStrengths.push("Habilidades Extraordinárias (3+ critérios atendidos)");
+            professionalScore += 45;
+            profileStrengths.push("Perfil de Habilidades Extraordinárias (3+ critérios)");
             isEb1Candidate = true;
         } else if (achievementCount >= 1) {
-            professionalScore += 10;
-            profileStrengths.push("Destaque Profissional Evidenciado");
+            professionalScore += 15;
+            profileStrengths.push("Destaque Profissional (Critérios USCIS)");
         }
 
-        // Recomendações Profissionais
+        // Impacto NIW (Q8)
+        if (data.niwLogic?.impact === true) {
+            professionalScore += 25;
+            profileStrengths.push("Impacto e Interesse Nacional Comprovável");
+            isNiwCandidate = true;
+        } else if (data.niwLogic?.impact === "unsure") {
+            professionalScore += 10;
+        }
+
+        // Área de Atuação (Q6.1) [NEW]
+        if (data.fieldOfWork === "stem") {
+            professionalScore += 15;
+            profileStrengths.push("Área STEM Prioritária");
+        } else if (data.fieldOfWork === "business") {
+            professionalScore += 5;
+        }
+
+        // Recomendações
         if (isEb1Candidate) {
-            recommendedVisas.push("EB-1A (Green Card)");
-            recommendedVisas.push("O-1A/B (Visto de Talento)");
+            recommendedVisas.push("EB-1A (Residência Permanente por Habilidades Extraordinárias)");
+            recommendedVisas.push("O-1 (Visto de Não-Imigrante de Talento)");
         }
         if (isNiwCandidate) {
-            recommendedVisas.push("EB-2 NIW (Dispensável de Oferta de Trabalho)");
+            recommendedVisas.push("EB-2 NIW (National Interest Waiver)");
         }
 
-        // Caso tenha pouca qualificação
-        if (!isNiwCandidate && !isEb1Candidate) {
-            recommendedVisas.push("EB-3 (Carece de oferta de trabalho)");
-            riskAnalysis = "Médio Risco (Dependência de Sponsor)";
-            overallScore -= 10;
+        if (!isEb1Candidate && !isNiwCandidate && data.education === "high_school") {
+            recommendedVisas.push("EB-3 (Carece de Job Offer / Sponsor)");
+            riskAnalysis = "Risco Moderado por dependência de oferta de trabalho";
         }
 
-        overallScore += professionalScore;
+        if (professionalScore > 0) {
+            overallScore += professionalScore;
+        }
     }
 
-    // --- EMPRESÁRIO (L-1 / EB-1C) ---
+    // --- PERFIL B: EMPRESÁRIO / EXECUTIVO (L-1A -> EB-1C) ---
     if (data.profile === "business") {
         let businessScore = 0;
         let isL1Candidate = false;
 
-        // Regra de Ouro: 1 ano de trabalho nos últimos 3
+        // Empresa Ativa (Q10)
+        if (data.companyYears === "3+ years") businessScore += 20;
+        else if (data.companyYears === "1-3 years") businessScore += 10;
+
+        // Regra de 1 ano (Q11)
         if (data.workedOneYearInLastThree) {
-            businessScore += 20;
-            profileStrengths.push("Elegibilidade Temporal (1 ano nos últimos 3)");
+            businessScore += 25;
             isL1Candidate = true;
+            profileStrengths.push("Elegibilidade para Transferência Multinacional");
         } else {
-            riskAnalysis += " | Inelegível L-1/EB-1C (Regra de 1 ano)";
-            overallScore -= 20;
+            riskAnalysis += " | Falta requisito de 1 ano em 3 na matriz/afiliada";
         }
 
-        // Cargo Executivo/Gerencial & Estrutura da Empresa
-        // AQUI ESTÁ A LÓGICA REFINADA
-        const isManagerOrExec = data.currentRole === "executive" || data.currentRole === "manager";
-        const hasTeam = data.employeeCount !== "under_5"; // Menos de 5 é arriscado para L-1
-
-        if (isManagerOrExec) {
-            if (hasTeam) {
-                businessScore += 15;
-                profileStrengths.push("Atuação Executiva em Estrutura Robusta");
-            } else {
-                // Gerente sem time ou time pequeno = Risco
-                businessScore += 5; // Pontua pouco
-                riskAnalysis += " | Estrutura Organizacional Pequena para L-1 (Risco de 'Function Manager')";
-                // Não tira a elegibilidade, mas avisa
-            }
+        // Função (Q12)
+        if (data.currentRole === "executive" || data.currentRole === "manager") {
+            businessScore += 20;
+            profileStrengths.push("Papel de Liderança Estratégica");
         } else {
-            isL1Candidate = false; // L-1A exige gestão
-            riskAnalysis += " | Cargo atual não parece Executivo/Gerencial";
+            isL1Candidate = false;
+            riskAnalysis += " | Cargo não classificado como Executivo/Gerente para L-1A";
         }
 
-        // Faturamento (Bônus para EB-1C)
-        if (data.annualRevenue === "over_5m" || data.annualRevenue === "1m_5m") {
-            businessScore += 10;
-            profileStrengths.push("Empresa com Faturamento Sólido para Sustentação");
-        }
-
-        // Relação entre empresas
-        const validRelations = ["matrix_subsidiary", "controller_subsidiary", "affiliate"];
-        if (data.businessRelation && validRelations.includes(data.businessRelation)) {
+        // Entidade EUA & Relação (Q13, Q14)
+        if (data.usEntityStatus === "exists") {
             businessScore += 15;
-            profileStrengths.push("Relação Societária Válida");
-        } else if (data.businessRelation === "undefined") {
-            riskAnalysis += " | Necessário definir relação societária (Matriz-Filial)";
+            if (data.businessRelation && data.businessRelation !== "undefined") {
+                profileStrengths.push("Estrutura Corporativa Estabelecida");
+            }
         }
 
-        // Recomendações Empresariais
+        // Dados Operacionais (Q14.1, Q14.2) [NEW]
+        if (data.employeeCount === "over_50" || data.employeeCount === "20_50") {
+            businessScore += 15;
+            profileStrengths.push("Empresa com Robustez de Equipe");
+        }
+
+        if (data.annualRevenue === "over_5m" || data.annualRevenue === "1m_5m") {
+            businessScore += 15;
+            profileStrengths.push("Faturamento Relevante");
+        }
+
+        // Recomendações
         if (isL1Candidate) {
             if (data.usEntityStatus === "exists") {
-                recommendedVisas.push("L-1A (Transferência de Executivo)");
+                recommendedVisas.push("L-1A (Visto de Transferência)");
                 if (data.companyYears === "3+ years") {
-                    recommendedVisas.push("EB-1C (Green Card para Multinacionais)");
-                    profileStrengths.push("Empresa Madura para EB-1C");
-                    businessScore += 20;
+                    recommendedVisas.push("EB-1C (Green Card para Executivos Multinacionais)");
                 }
             } else {
-                recommendedVisas.push("L-1A (New Office)");
-                profileStrengths.push("Projeto de Expansão (New Office)");
+                recommendedVisas.push("L-1A New Office");
             }
-        } else {
-            recommendedVisas.push("Análise de Business Plan Necessária (Talvez E-2?)");
         }
 
         overallScore += businessScore;
     }
 
-    // --- INVESTIDOR (E-2 / EB-5) ---
+    // --- PERFIL C: INVESTIDOR (E-2 / EB-5) ---
     if (data.profile === "investor") {
         let investorScore = 0;
 
-        // Origem dos fundos
-        if (data.lawfulSource === "yes") {
-            investorScore += 20;
-        } else if (data.lawfulSource === "unsure") {
-            riskAnalysis = "Alto Risco (Origem de Fundos não Comprovada)";
-            overallScore -= 30; // Penalidade alta, sem origem não tem visto
+        // Valor (Q16)
+        if (data.capitalAmount === "over_800k") {
+            investorScore += 50;
+            profileStrengths.push("Capital compatível com EB-5 (Residência Direta)");
+            recommendedVisas.push("EB-5");
+        } else if (data.capitalAmount === "300k_800k" || data.capitalAmount === "100k_300k") {
+            investorScore += 30;
+            profileStrengths.push("Capital compatível com E-2 (Visto de Investidor)");
+            recommendedVisas.push("E-2 (Requer Cidadania de País com Tratado)");
         }
 
-        // Liquidez (Novo Fator)
-        if (data.liquidityStatus === "illiquid_hard") {
-            riskAnalysis += " | Baixa Liquidez (Dificuldade de Aporte Imediato)";
-            investorScore -= 10;
-        } else {
+        // Gestão (Q17)
+        if (data.managementIntent === "active") {
+            investorScore += 15;
+            profileStrengths.push("Intenção de Gestão Ativa (Favorável E-2)");
+        } else if (data.capitalAmount !== "over_800k") {
+            riskAnalysis += " | Gestão passiva requer capital de EB-5 ($800k+)";
+        }
+
+        // Liquidez (Q18.1) [NEW]
+        if (data.liquidityStatus === "liquid") {
+            investorScore += 15;
+            profileStrengths.push("Alta Liquidez para Investimento");
+        } else if (data.liquidityStatus === "illiquid_easy") {
             investorScore += 5;
         }
 
-        // EB-5
-        if (data.capitalAmount === "over_800k") {
-            investorScore += 40;
-            profileStrengths.push("Capital Compatível com EB-5");
-            recommendedVisas.push("EB-5 (Investidor Imigrante)");
-        }
-
-        // E-2 (Tratado)
-        if (data.capitalAmount === "100k_300k" || data.capitalAmount === "300k_800k") {
-            if (data.managementIntent === "active") {
-                investorScore += 30;
-                profileStrengths.push("Perfil Operacional para E-2");
-                recommendedVisas.push("E-2 (Investidor de Tratado - Req. Cidadania)");
-            } else {
-                // Tem capital de E-2 mas quer ser passivo -> Problema
-                riskAnalysis += " | Capital insuficiente para passividade total (EB-5 custa $800k+)";
-                investorScore -= 10;
-            }
-        }
-
-        if (data.capitalAmount === "under_100k") {
-            riskAnalysis += " | Capital baixo para imigração de investimento direto";
-            overallScore -= 10;
+        // Origem (Q18)
+        if (data.lawfulSource === "yes") {
+            investorScore += 20;
+            profileStrengths.push("Recursos com Origem Declarada");
+        } else {
+            riskAnalysis = "ALTO RISCO: Origem de fundos é impeditivo se não comprovável";
+            overallScore -= 40;
         }
 
         overallScore += investorScore;
     }
 
-    // 4. CAPACIDADE FINANCEIRA (Camada 4)
-    if (data.legalBudget === "over_20k") {
-        overallScore += 20;
-        leadClassification = overallScore > 65 ? "Hot" : "Warm";
-    } else if (data.legalBudget === "10k_20k") {
-        overallScore += 10;
-        leadClassification = overallScore > 55 ? "Warm" : "Warm";
-    } else if (data.legalBudget === "under_5k" || data.legalBudget === "5k_10k") {
-        overallScore -= 10; // Orçamento pode ser impeditivo
-        leadClassification = "Cold";
-        riskAnalysis += " | Orçamento Limitado";
-    }
+    // 4. CAPACIDADE FINANCEIRA E CONVERSÃO (Camada 4)
+    if (data.legalBudget === "over_20k") overallScore += 20;
+    else if (data.legalBudget === "10k_20k") overallScore += 10;
+    else if (data.legalBudget === "under_5k") overallScore -= 10;
 
-    // Ajuste Final
+    if (data.consultationInterest === "yes_urgent") overallScore += 10;
+
+    // Ajuste Final de Classificação
+    if (overallScore >= 75) leadClassification = "Hot";
+    else if (overallScore >= 50) leadClassification = "Warm";
+    else leadClassification = "Cold";
+
     overallScore = Math.min(100, Math.max(0, overallScore));
 
     return {
