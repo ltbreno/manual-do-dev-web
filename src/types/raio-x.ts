@@ -156,6 +156,7 @@ export interface ImmigrationFormData {
   experience?: ExperienceYears;
   achievements?: ProfessionalAchievement[];
   fieldOfWork?: FieldOfWork; // [NEW]
+  professionalPath?: "eb1a_o1" | "eb2_niw" | "both"; // [NEW] Branching for Profile A
   niwLogic?: {
     impact: boolean | "unsure";
   };
@@ -169,6 +170,8 @@ export interface ImmigrationFormData {
   annualRevenue?: AnnualRevenue; // [NEW]
   usEntityStatus?: USCompanyStatus;
   businessRelation?: BusinessRelation;
+  businessExpansionPlan?: boolean; // [NEW] Extra layer for Profile B
+  multinationalLink?: boolean;    // [NEW] Extra layer for Profile B
 
   // Layer 3 - Investor
   hasCapital?: boolean;
@@ -176,6 +179,8 @@ export interface ImmigrationFormData {
   liquidityStatus?: LiquidityStatus; // [NEW]
   managementIntent?: ManagementRole;
   lawfulSource?: LawfulFunds;
+  jobCreationIntent?: boolean;     // [NEW] Extra layer for Profile C
+  citizenshipTreatyCountry?: boolean; // [NEW] Extra layer for Profile C (E-2)
 
   // Layer 4
   fundingSource: FundingSource | "";

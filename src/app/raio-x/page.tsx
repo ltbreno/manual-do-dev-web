@@ -62,17 +62,26 @@ export default function RaioXPage() {
 
     if (formData.profile === "professional") {
       steps.push({ id: "professional_details", label: "Qualificação" }); // Q5, Q6
-      steps.push({ id: "professional_field", label: "Área" }); // [NEW] Q6.1
-      steps.push({ id: "professional_achievements", label: "Conquistas" }); // Q7
-      steps.push({ id: "professional_niw", label: "Impacto" }); // Q8
+      steps.push({ id: "professional_branch", label: "Foco" }); // [NEW] Q6.2
+
+      if (formData.professionalPath === "eb1a_o1" || formData.professionalPath === "both") {
+        steps.push({ id: "professional_achievements", label: "Conquistas" }); // Q7
+      }
+
+      if (formData.professionalPath === "eb2_niw" || formData.professionalPath === "both") {
+        steps.push({ id: "professional_field", label: "Área" }); // Q6.1
+        steps.push({ id: "professional_niw", label: "Impacto" }); // Q8
+      }
     } else if (formData.profile === "business") {
       steps.push({ id: "business_details", label: "Empresa" }); // Q9, Q10, Q11
       steps.push({ id: "business_role", label: "Atuação" }); // Q12, Q13, Q14
-      steps.push({ id: "business_operational", label: "Operação" }); // [NEW] Q14.1, Q14.2
+      steps.push({ id: "business_operational", label: "Operação" }); // Q14.1, Q14.2
+      steps.push({ id: "business_visa_specific", label: "Expansão" }); // [NEW] Extra layer Profile B
     } else if (formData.profile === "investor") {
       steps.push({ id: "investor_details", label: "Investimento" }); // Q15, Q16, Q17
       steps.push({ id: "investor_source", label: "Origem" }); // Q18
-      steps.push({ id: "investor_liquidity", label: "Liquidez" }); // [NEW] Q18.1
+      steps.push({ id: "investor_liquidity", label: "Liquidez" }); // Q18.1
+      steps.push({ id: "investor_visa_specific", label: "Elegibilidade" }); // [NEW] Extra layer Profile C
     }
 
     steps.push({ id: "finance", label: "Financeiro" }); // Q19, Q20
@@ -319,6 +328,39 @@ export default function RaioXPage() {
           </FormStep>
         );
 
+      case "professional_branch":
+        return (
+          <FormStep
+            title="Escolha seu Caminho"
+            description="Isso define quais critérios técnicos vamos validar."
+            isActive={true}
+          >
+            <FormField label="6.2. Em qual categoria você acredita se encaixar melhor?" required>
+              <RadioGroup
+                value={formData.professionalPath || ""}
+                onChange={(v) => updateData("professionalPath", v)}
+                options={[
+                  {
+                    value: "eb1a_o1",
+                    label: "Habilidades Extraordinárias (EB-1A / O-1)",
+                    description: "Prêmios, mídia, liderança, alto salário."
+                  },
+                  {
+                    value: "eb2_niw",
+                    label: "Interesse Nacional (EB-2 NIW)",
+                    description: "Mestrado/Doutorado ou 10+ anos de experiência com projeto de impacto."
+                  },
+                  {
+                    value: "both",
+                    label: "Não tenho certeza / Ambos",
+                    description: "Avaliar todas as possibilidades."
+                  },
+                ]}
+              />
+            </FormField>
+          </FormStep>
+        );
+
       case "professional_field":
         return (
           <FormStep
@@ -531,6 +573,33 @@ export default function RaioXPage() {
           </FormStep>
         );
 
+      case "business_visa_specific":
+        return (
+          <FormStep title="Expansão e Vínculo" description="Critérios para L-1 e EB-1C." isActive={true}>
+            <FormField label="14.3. Existe a intenção de expandir e manter a operação nos EUA de forma contínua?" required>
+              <RadioGroup
+                value={formData.businessExpansionPlan ? "yes" : "no"}
+                onChange={(v) => updateData("businessExpansionPlan", v === "yes")}
+                options={[
+                  { value: "yes", label: "Sim, há um plano de negócios/expansão" },
+                  { value: "no", label: "Ainda não defini" },
+                ]}
+              />
+            </FormField>
+
+            <FormField label="14.4. A empresa no exterior continuará operando após sua transferência?" required>
+              <RadioGroup
+                value={formData.multinationalLink ? "yes" : "no"}
+                onChange={(v) => updateData("multinationalLink", v === "yes")}
+                options={[
+                  { value: "yes", label: "Sim, as duas empresas coexistirão (Vínculo Multinacional)" },
+                  { value: "no", label: "Não, pretendo fechar a original" },
+                ]}
+              />
+            </FormField>
+          </FormStep>
+        );
+
       // --- BRANCH C: INVESTOR ---
 
       case "investor_details":
@@ -609,6 +678,34 @@ export default function RaioXPage() {
                   { value: "liquid", label: "Dinheiro em conta / Ações líquidas" },
                   { value: "illiquid_easy", label: "Imóveis urbanos / Fácil liquidação" },
                   { value: "illiquid_hard", label: "Fazendas / Empresas fechadas" },
+                ]}
+              />
+            </FormField>
+          </FormStep>
+        );
+
+      case "investor_visa_specific":
+        return (
+          <FormStep title="Elegibilidade e Impacto" description="Detalhes cruciais para o investidor." isActive={true}>
+            <FormField label="18.2. Você possui cidadania de algum país com tratado de comércio com os EUA?" required>
+              <RadioGroup
+                value={formData.citizenshipTreatyCountry ? "yes" : "no"}
+                onChange={(v) => updateData("citizenshipTreatyCountry", v === "yes")}
+                options={[
+                  { value: "yes", label: "Sim (Ex: Itália, Espanha, Japão, etc.)" },
+                  { value: "no", label: "Não / Apenas Brasileira" },
+                ]}
+              />
+              <p className="mt-2 text-xs text-gray-500 italic">Precedente importante para o visto E-2.</p>
+            </FormField>
+
+            <FormField label="18.3. O investimento tem potencial para gerar pelo menos 10 empregos diretos?" required>
+              <RadioGroup
+                value={formData.jobCreationIntent ? "yes" : "no"}
+                onChange={(v) => updateData("jobCreationIntent", v === "yes")}
+                options={[
+                  { value: "yes", label: "Sim (Perfil EB-5)" },
+                  { value: "no", label: "Não ou incerto" },
                 ]}
               />
             </FormField>

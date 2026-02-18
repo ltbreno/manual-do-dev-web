@@ -160,6 +160,18 @@ export function calculateImmigrationScore(data: ImmigrationFormData): Immigratio
             profileStrengths.push("Faturamento Relevante");
         }
 
+        // Novos Critérios Extra [NEW]
+        if (data.businessExpansionPlan) {
+            businessScore += 10;
+            profileStrengths.push("Plano de Expansão Definido");
+        }
+        if (data.multinationalLink) {
+            businessScore += 15;
+            profileStrengths.push("Vínculo Multinacional Ativo");
+        } else {
+            riskAnalysis += " | Risco de perda de vínculo multinacional (L-1/EB-1C)";
+        }
+
         // Recomendações
         if (isL1Candidate) {
             if (data.usEntityStatus === "exists") {
@@ -213,6 +225,16 @@ export function calculateImmigrationScore(data: ImmigrationFormData): Immigratio
         } else {
             riskAnalysis = "ALTO RISCO: Origem de fundos é impeditivo se não comprovável";
             overallScore -= 40;
+        }
+
+        // Novos Critérios Extra [NEW]
+        if (data.citizenshipTreatyCountry) {
+            investorScore += 15;
+            profileStrengths.push("Cidadania com Tratado (E-2 eligible)");
+        }
+        if (data.jobCreationIntent) {
+            investorScore += 20;
+            profileStrengths.push("Potencial de Geração de Empregos (EB-5)");
         }
 
         overallScore += investorScore;
