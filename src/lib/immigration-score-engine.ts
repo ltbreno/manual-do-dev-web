@@ -14,12 +14,18 @@ export function calculateImmigrationScore(data: ImmigrationFormData): Immigratio
     // 0. GATEKEEPER (Camada 0)
     // Se o objetivo não for permanente/trabalho longo, o score é irrelevante, mas calculamos compatibilidade
     if (data.goal !== "permanent" && data.goal !== "work_temp") {
+        const strengths = [];
+        if (data.tempVisaDetails?.hasHomeTies) strengths.push("Vínculos Fortes no País de Origem");
+        if (data.tempVisaDetails?.financialSupport) strengths.push("Capacidade Financeira Comprovada");
+
         return {
             overallScore: 0,
             leadClassification: "Cold",
             recommendedVisas: [],
-            profileStrengths: [],
-            riskAnalysis: "Perfil não imigratório (Turismo/Estudos/Negócios)",
+            profileStrengths: strengths,
+            riskAnalysis: data.tempVisaDetails?.hasHomeTies
+                ? "Perfil de Não-Imigrante com baixos riscos de negativa por falta de vínculos."
+                : "Atenção: Vistos temporários exigem prova de intenção de retorno (vínculos).",
             nextSteps: ["Consultoria para Vistos de Não-Imigrante"]
         };
     }

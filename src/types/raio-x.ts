@@ -148,6 +148,15 @@ export interface ImmigrationFormData {
   timeframe: Timeframe | "";
   history: ImmigrationHistory | "";
 
+  // Layer - Temporary Visas (B1/B2, F1)
+  tempVisaDetails?: {
+    durationOfStay?: string;
+    hasHomeTies?: boolean;
+    studyLevel?: string;
+    businessNature?: string;
+    financialSupport?: boolean;
+  };
+
   // Layer 2
   profile: UserProfile | "";
 

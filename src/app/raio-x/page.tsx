@@ -51,6 +51,7 @@ export default function RaioXPage() {
     if (isExitGoal) {
       return [
         { id: "intention", label: "Intenção" },
+        { id: "temp_visa_details", label: "Detalhes" },
         { id: "contact_exit", label: "Contato" },
       ];
     }
@@ -217,6 +218,75 @@ export default function RaioXPage() {
                 </FormField>
               </>
             )}
+          </FormStep>
+        );
+
+      case "temp_visa_details":
+        return (
+          <FormStep
+            title="Detalhes da Viagem / Estudo"
+            description="Informações básicas para análise de vistos temporários."
+            isActive={true}
+          >
+            {formData.goal === "tourism" && (
+              <FormField label="Quanto tempo você pretende ficar nos EUA?" required>
+                <RadioGroup
+                  value={formData.tempVisaDetails?.durationOfStay || ""}
+                  onChange={(v) => updateDeepData("tempVisaDetails", "durationOfStay", v)}
+                  options={[
+                    { value: "days", label: "Alguns dias" },
+                    { value: "weeks", label: "Semanas" },
+                    { value: "months", label: "Meses (até 6)" },
+                  ]}
+                />
+              </FormField>
+            )}
+
+            {formData.goal === "business_temp" && (
+              <FormField label="Qual o propósito da sua viagem de negócios?" required>
+                <TextInput
+                  value={formData.tempVisaDetails?.businessNature || ""}
+                  onChange={(v) => updateDeepData("tempVisaDetails", "businessNature", v)}
+                  placeholder="Ex: Reunião, Feira, Treinamento"
+                />
+              </FormField>
+            )}
+
+            {formData.goal === "study" && (
+              <FormField label="Qual nível de estudo você pretende cursar?" required>
+                <SelectInput
+                  value={formData.tempVisaDetails?.studyLevel || ""}
+                  onChange={(v) => updateDeepData("tempVisaDetails", "studyLevel", v)}
+                  options={[
+                    { value: "language", label: "Curso de Inglês" },
+                    { value: "undergrad", label: "Graduação" },
+                    { value: "grad", label: "Pós-graduação" },
+                  ]}
+                />
+              </FormField>
+            )}
+
+            <FormField label="Você possui vínculos fortes no Brasil (Emprego, Imóveis, Família)?" required>
+              <RadioGroup
+                value={formData.tempVisaDetails?.hasHomeTies ? "yes" : "no"}
+                onChange={(v) => updateDeepData("tempVisaDetails", "hasHomeTies", v === "yes")}
+                options={[
+                  { value: "yes", label: "Sim, fortes vínculos" },
+                  { value: "no", label: "Vínculos limitados" },
+                ]}
+              />
+            </FormField>
+
+            <FormField label="Você possui recursos financeiros para custear sua estadia?" required>
+              <RadioGroup
+                value={formData.tempVisaDetails?.financialSupport ? "yes" : "no"}
+                onChange={(v) => updateDeepData("tempVisaDetails", "financialSupport", v === "yes")}
+                options={[
+                  { value: "yes", label: "Sim, possuo recursos" },
+                  { value: "no", label: "Preciso de ajuda financeira" },
+                ]}
+              />
+            </FormField>
           </FormStep>
         );
 
