@@ -100,18 +100,18 @@ export default function RaioXPage() {
 
   // --- HANDLERS ---
 
-  const updateData = (field: keyof ImmigrationFormData, value: any) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+  const updateData = <K extends keyof ImmigrationFormData>(field: K, value: unknown) => {
+    setFormData((prev) => ({ ...prev, [field]: value as ImmigrationFormData[K] }));
   };
 
   const updateDeepData = (
     parent: keyof ImmigrationFormData,
     child: string,
-    value: any
+    value: unknown
   ) => {
     setFormData((prev) => ({
       ...prev,
-      [parent]: { ...(prev[parent] as any), [child]: value },
+      [parent]: { ...(prev[parent] as Record<string, unknown>), [child]: value },
     }));
   };
 
@@ -139,7 +139,13 @@ export default function RaioXPage() {
     try {
       const result = calculateImmigrationScore(formData);
 
-      // Save to Session Storage
+      try {
+        await fetch("/api/leads", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ formData, result }),
+        });
+      } catch {}
       sessionStorage.setItem("immigrationResult", JSON.stringify(result));
       sessionStorage.setItem("immigrationFormData", JSON.stringify(formData));
 

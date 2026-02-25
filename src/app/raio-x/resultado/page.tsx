@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, startTransition } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ImmigrationResult } from "@/types/raio-x";
@@ -124,7 +124,9 @@ export default function ResultadoPage() {
       const savedResult = sessionStorage.getItem("immigrationResult");
       if (savedResult) {
         try {
-          setResult(JSON.parse(savedResult));
+          startTransition(() => {
+            setResult(JSON.parse(savedResult));
+          });
         } catch {
           router.push("/raio-x");
         }
