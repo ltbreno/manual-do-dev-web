@@ -1,17 +1,20 @@
 "use client";
 
 interface ProgressBarProps {
-  currentStep: number;
+  currentStep?: number;
+  current?: number;
   totalSteps: number;
   stepLabels: string[];
 }
 
 export default function ProgressBar({
   currentStep,
+  current,
   totalSteps,
   stepLabels,
 }: ProgressBarProps) {
-  const progress = ((currentStep + 1) / totalSteps) * 100;
+  const activeStep = currentStep ?? current ?? 0;
+  const progress = ((activeStep + 1) / totalSteps) * 100;
 
   return (
     <div className="w-full">
@@ -28,20 +31,18 @@ export default function ProgressBar({
         {stepLabels.map((label, index) => (
           <div
             key={index}
-            className={`flex flex-col items-center ${
-              index <= currentStep ? "text-[var(--brand-verde-escuro)]" : "text-[var(--muted)]"
-            }`}
+            className={`flex flex-col items-center ${index <= activeStep ? "text-[var(--brand-verde-escuro)]" : "text-[var(--muted)]"
+              }`}
           >
             <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold mb-2 transition-all duration-300 ${
-                index < currentStep
-                  ? "bg-[var(--brand-verde)] text-white"
-                  : index === currentStep
+              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold mb-2 transition-all duration-300 ${index < activeStep
+                ? "bg-[var(--brand-verde)] text-white"
+                : index === activeStep
                   ? "bg-[var(--brand-verde-escuro)] text-white ring-4 ring-[var(--brand-verde-escuro)]/20"
                   : "bg-[var(--neutral-200)] dark:bg-[var(--neutral-700)] text-[var(--muted)]"
-              }`}
+                }`}
             >
-              {index < currentStep ? (
+              {index < activeStep ? (
                 <svg
                   className="w-4 h-4"
                   fill="none"
@@ -67,9 +68,9 @@ export default function ProgressBar({
       {/* Mobile Step Counter */}
       <div className="md:hidden text-center">
         <span className="text-sm font-medium text-[var(--muted-foreground)]">
-          Etapa {currentStep + 1} de {totalSteps}:{" "}
+          Etapa {activeStep + 1} de {totalSteps}:{" "}
           <span className="text-[var(--brand-verde-escuro)] font-semibold">
-            {stepLabels[currentStep]}
+            {stepLabels[activeStep]}
           </span>
         </span>
       </div>
