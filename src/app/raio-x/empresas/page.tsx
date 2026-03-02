@@ -277,9 +277,9 @@ export default function EmpresasRaioXPage() {
             <main className="flex-grow pt-24 pb-16 px-4">
                 <div className="max-w-3xl mx-auto">
                     <ProgressBar
-                        current={currentStepIndex + 1}
-                        total={steps.length}
-                        label={currentStep.label}
+                        currentStep={currentStepIndex}
+                        totalSteps={steps.length}
+                        stepLabels={steps.map(s => s.label)}
                     />
 
                     <div className="mt-8 bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-slate-200">
