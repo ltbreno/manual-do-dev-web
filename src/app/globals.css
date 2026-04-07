@@ -39,6 +39,17 @@
   --muted: #525252;
   --muted-foreground: #262626;
 
+  /* Dashboard Dark Theme Tokens */
+  --dash-bg: #0f1115;
+  --dash-card: #1a1d23;
+  --dash-card-hover: #22262e;
+  --dash-border: rgba(255, 255, 255, 0.08);
+  --dash-muted: #8a8f98;
+  --dash-accent-pink: #ff4b91;
+  --dash-accent-blue: #00d2ff;
+  --dash-accent-orange: #ff9a3e;
+  --dash-accent-green: #00f2ad;
+
   /* Font variables */
   --font-sans: var(--font-geist-sans), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
@@ -146,10 +157,17 @@ body {
 
 /* Glass effect */
 .glass {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 /* Score ring animation */
