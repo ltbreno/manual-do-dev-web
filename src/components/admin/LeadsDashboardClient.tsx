@@ -21,6 +21,7 @@ import {
   XCircle,
   HelpCircle
 } from "lucide-react";
+import { businessAssessmentModules } from "@/data/business-assessment";
 
 interface Lead {
   id: string;
@@ -41,6 +42,9 @@ interface Lead {
     contact?: {
       linkedin?: string;
     };
+    type?: string;
+    answers?: Record<string, string>;
+    scores?: Record<string, number>;
     [key: string]: unknown;
   };
 }
@@ -62,7 +66,8 @@ export default function LeadsDashboardClient({ initialLeads }: LeadsDashboardCli
         lead.email?.toLowerCase().includes(filterName.toLowerCase()) ||
         lead.company?.toLowerCase().includes(filterName.toLowerCase());
       
-      const matchesStatus = filterStatus ? lead.status === filterStatus : true;
+      const leadStatus = lead.status || "new";
+      const matchesStatus = filterStatus ? leadStatus === filterStatus : true;
       return matchesName && matchesStatus;
     });
   }, [leads, filterName, filterStatus]);
@@ -205,6 +210,35 @@ export default function LeadsDashboardClient({ initialLeads }: LeadsDashboardCli
                    Export
                 </button>
               </div>
+            </div>
+
+            {/* CRM Status Tabs */}
+            <div className="px-6 pt-4 border-b border-white/5 flex items-center gap-6 overflow-x-auto custom-scrollbar">
+              {[
+                { value: "", label: "Todos", count: leads.length },
+                { value: "new", label: "Novos", count: leads.filter(l => l.status === "new" || !l.status).length },
+                { value: "contacted", label: "Em Contato", count: leads.filter(l => l.status === "contacted").length },
+                { value: "meeting", label: "Reagendado / Reunião", count: leads.filter(l => l.status === "meeting").length },
+                { value: "hired", label: "Contratados", count: leads.filter(l => l.status === "hired").length },
+                { value: "lost", label: "Perdidos", count: leads.filter(l => l.status === "lost").length }
+              ].map(tab => (
+                <button
+                  key={tab.value}
+                  onClick={() => setFilterStatus(tab.value)}
+                  className={`flex items-center gap-2 pb-4 border-b-2 font-bold text-sm transition-all whitespace-nowrap ${
+                    filterStatus === tab.value 
+                      ? "border-[var(--dash-accent-pink)] text-white" 
+                      : "border-transparent text-[var(--dash-muted)] hover:text-gray-300"
+                  }`}
+                >
+                  {tab.label}
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] ${
+                    filterStatus === tab.value ? "bg-[var(--dash-accent-pink)] text-white" : "bg-white/5 text-[var(--dash-muted)]"
+                  }`}>
+                    {tab.count}
+                  </span>
+                </button>
+              ))}
             </div>
 
             <div className="overflow-x-auto">
@@ -359,6 +393,43 @@ function LeadModal({ lead, onClose }: { lead: Lead, onClose: () => void }) {
                  <p className="text-lg font-bold text-[var(--dash-accent-green)]">{lead.whatsapp || "Nenhum"}</p>
               </div>
            </div>
+
+           {/* Section: Business Assessment Custom Data */}
+           {lead.business_data?.type === "business_expansion_assessment" && lead.business_data.answers && (
+             <div className="space-y-6" style={{ marginTop: '2rem' }}>
+                <h5 className="text-[var(--dash-muted)] text-xs font-black uppercase tracking-widest">Respostas do Raio-X de Expansão</h5>
+                <div className="space-y-6">
+                  {businessAssessmentModules.map((module) => {
+                    const moduleScore = lead.business_data?.scores?.[module.id];
+                    return (
+                      <div key={module.id} className="bg-white/[0.02] border border-white/5 rounded-[24px] p-6 space-y-4">
+                        <div className="flex justify-between items-center border-b border-white/10 pb-4">
+                          <h6 className="font-bold text-white text-sm">{module.title}</h6>
+                          {moduleScore !== undefined && (
+                            <span className="text-[var(--dash-accent-pink)] font-black px-3 py-1 bg-[var(--dash-accent-pink)]/10 rounded-xl text-xs">{Math.round(moduleScore)}% de aderência</span>
+                          )}
+                        </div>
+                        <div className="space-y-4 mt-4">
+                          {module.questions.map((q) => {
+                            const answerId = lead.business_data?.answers?.[q.id];
+                            if (!answerId) return null;
+                            const option = q.options.find(o => o.value === answerId);
+                            return (
+                              <div key={q.id} className="space-y-1.5">
+                                <p className="text-xs text-[var(--dash-muted)] font-medium leading-relaxed">{q.label}</p>
+                                <div className="text-sm text-white font-medium pl-3 border-l-2 border-[var(--dash-accent-blue)] py-0.5">
+                                  {option ? option.label : answerId}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+             </div>
+           )}
         </div>
 
         <div className="p-8 border-t border-[var(--dash-border)] bg-black/20 flex justify-end gap-4">

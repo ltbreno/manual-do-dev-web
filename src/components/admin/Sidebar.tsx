@@ -24,22 +24,22 @@ const menuItems = [
     title: "Leads",
     items: [
       { icon: Target, label: "Triage", href: "/admin/leads" },
-      { icon: FileText, label: "Dossiês", href: "#" },
-      { icon: Mail, label: "Contatos", href: "#" },
+      { icon: FileText, label: "Dossiês", href: "/admin/dossies" },
+      { icon: Mail, label: "Contatos", href: "/admin/contatos" },
     ]
   },
   { 
     title: "Análise",
     items: [
-      { icon: BarChart3, label: "Estatísticas", href: "#" },
-      { icon: Zap, label: "Performance AI", href: "#" },
+      { icon: BarChart3, label: "Estatísticas", href: "/admin/estatisticas" },
+      { icon: Zap, label: "Performance AI", href: "/admin/performance-ai" },
     ]
   },
   { 
     title: "Sistema",
     items: [
-      { icon: Users, label: "Usuários", href: "#" },
-      { icon: Settings, label: "Configurações", href: "#" },
+      { icon: Users, label: "Usuários", href: "/admin/usuarios" },
+      { icon: Settings, label: "Configurações", href: "/admin/configuracoes" },
     ]
   }
 ];
