@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(rm -rf out)",
+      "Bash(mkdir -p out/.next)",
+      "Bash(cp -r .next/standalone/manual-do-dev-web/. out/)",
+      "Bash(cp -r .next/static out/.next/static)"
+    ]
+  }
+}
