@@ -23,7 +23,7 @@ export default function FormStep({
         <h2 className="text-2xl md:text-3xl font-bold text-[var(--foreground)] mb-2">
           {title}
         </h2>
-        <p className="text-gray-600">{description}</p>
+        <p className="text-gray-700">{description}</p>
       </div>
       <div className="space-y-6">{children}</div>
     </div>
@@ -48,12 +48,12 @@ export function FormField({
 }: FormFieldProps) {
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-medium text-[var(--foreground)]">
+      <label className="block text-sm font-medium text-gray-900">
         {label}
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>
       {children}
-      {hint && !error && <p className="text-xs text-gray-500">{hint}</p>}
+      {hint && !error && <p className="text-xs text-gray-600">{hint}</p>}
       {error && <p className="text-xs text-red-500">{error}</p>}
     </div>
   );
@@ -177,11 +177,9 @@ export function RadioGroup({
             className="mt-1 w-4 h-4 text-[var(--brand-verde-escuro)] border-[var(--card-border)] focus:ring-[var(--brand-verde-escuro)]"
           />
           <div>
-            <span className="font-medium text-[var(--foreground)]">
-              {option.label}
-            </span>
+            <span className="font-medium text-gray-900">{option.label}</span>
             {option.description && (
-              <p className="text-sm text-gray-500 mt-1">{option.description}</p>
+              <p className="text-sm text-gray-600 mt-1">{option.description}</p>
             )}
           </div>
         </label>
@@ -213,9 +211,9 @@ export function Checkbox({
         className="mt-1 w-5 h-5 rounded text-[var(--brand-verde-escuro)] border-[var(--card-border)] focus:ring-[var(--brand-verde-escuro)]"
       />
       <div>
-        <span className="font-medium text-[var(--foreground)]">{label}</span>
+        <span className="font-medium text-gray-900">{label}</span>
         {description && (
-          <p className="text-sm text-gray-500 mt-1">{description}</p>
+          <p className="text-sm text-gray-600 mt-1">{description}</p>
         )}
       </div>
     </label>
@@ -273,9 +271,7 @@ export function CheckboxGroup({
             className="mt-1 w-4 h-4 text-[var(--brand-verde-escuro)] border-[var(--card-border)] focus:ring-[var(--brand-verde-escuro)]"
           />
           <div>
-            <span className="font-medium text-[var(--foreground)]">
-              {option.label}
-            </span>
+            <span className="font-medium text-gray-900">{option.label}</span>
             {option.description && (
               <p className="text-sm text-gray-500 mt-1">{option.description}</p>
             )}
@@ -324,7 +320,7 @@ export function NumberStepper({
         <span className="text-2xl font-bold text-[var(--foreground)]">
           {value}
         </span>
-        {label && <p className="text-xs text-[var(--muted)]">{label}</p>}
+        {label && <p className="text-xs text-gray-600">{label}</p>}
       </div>
       <button
         type="button"
