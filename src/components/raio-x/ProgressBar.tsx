@@ -31,16 +31,20 @@ export default function ProgressBar({
         {stepLabels.map((label, index) => (
           <div
             key={index}
-            className={`flex flex-col items-center ${index <= activeStep ? "text-[var(--brand-verde-escuro)]" : "text-[var(--muted)]"
-              }`}
+            className={`flex flex-col items-center ${
+              index <= activeStep
+                ? "text-[var(--brand-verde-escuro)]"
+                : "text-[var(--muted)]"
+            }`}
           >
             <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold mb-2 transition-all duration-300 ${index < activeStep
-                ? "bg-[var(--brand-verde)] text-white"
-                : index === activeStep
-                  ? "bg-[var(--brand-verde-escuro)] text-white ring-4 ring-[var(--brand-verde-escuro)]/20"
-                  : "bg-[var(--neutral-200)] dark:bg-[var(--neutral-700)] text-[var(--muted)]"
-                }`}
+              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold mb-2 transition-all duration-300 ${
+                index < activeStep
+                  ? "bg-[var(--brand-verde)] text-white"
+                  : index === activeStep
+                    ? "bg-[var(--brand-verde-escuro)] text-white ring-4 ring-[var(--brand-verde-escuro)]/20"
+                    : "bg-[var(--neutral-200)] dark:bg-[var(--neutral-700)] text-[var(--muted)]"
+              }`}
             >
               {index < activeStep ? (
                 <svg
@@ -67,7 +71,7 @@ export default function ProgressBar({
 
       {/* Mobile Step Counter */}
       <div className="md:hidden text-center">
-        <span className="text-sm font-medium text-[var(--muted-foreground)]">
+        <span className="text-sm font-medium text-gray-700">
           Etapa {activeStep + 1} de {totalSteps}:{" "}
           <span className="text-[var(--brand-verde-escuro)] font-semibold">
             {stepLabels[activeStep]}
@@ -77,4 +81,3 @@ export default function ProgressBar({
     </div>
   );
 }
-
