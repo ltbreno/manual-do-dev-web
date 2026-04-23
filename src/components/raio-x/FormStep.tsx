@@ -23,7 +23,7 @@ export default function FormStep({
         <h2 className="text-2xl md:text-3xl font-bold text-[var(--foreground)] mb-2">
           {title}
         </h2>
-        <p className="text-[var(--muted-foreground)]">{description}</p>
+        <p className="text-gray-600">{description}</p>
       </div>
       <div className="space-y-6">{children}</div>
     </div>
@@ -53,9 +53,7 @@ export function FormField({
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>
       {children}
-      {hint && !error && (
-        <p className="text-xs text-[var(--muted)]">{hint}</p>
-      )}
+      {hint && !error && <p className="text-xs text-gray-500">{hint}</p>}
       {error && <p className="text-xs text-red-500">{error}</p>}
     </div>
   );
@@ -183,9 +181,7 @@ export function RadioGroup({
               {option.label}
             </span>
             {option.description && (
-              <p className="text-sm text-[var(--muted)] mt-1">
-                {option.description}
-              </p>
+              <p className="text-sm text-gray-500 mt-1">{option.description}</p>
             )}
           </div>
         </label>
@@ -219,7 +215,7 @@ export function Checkbox({
       <div>
         <span className="font-medium text-[var(--foreground)]">{label}</span>
         {description && (
-          <p className="text-sm text-[var(--muted)] mt-1">{description}</p>
+          <p className="text-sm text-gray-500 mt-1">{description}</p>
         )}
       </div>
     </label>
@@ -281,9 +277,7 @@ export function CheckboxGroup({
               {option.label}
             </span>
             {option.description && (
-              <p className="text-sm text-[var(--muted)] mt-1">
-                {option.description}
-              </p>
+              <p className="text-sm text-gray-500 mt-1">{option.description}</p>
             )}
           </div>
         </label>
@@ -330,9 +324,7 @@ export function NumberStepper({
         <span className="text-2xl font-bold text-[var(--foreground)]">
           {value}
         </span>
-        {label && (
-          <p className="text-xs text-[var(--muted)]">{label}</p>
-        )}
+        {label && <p className="text-xs text-[var(--muted)]">{label}</p>}
       </div>
       <button
         type="button"
@@ -345,4 +337,3 @@ export function NumberStepper({
     </div>
   );
 }
-
