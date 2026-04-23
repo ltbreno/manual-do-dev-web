@@ -23,6 +23,8 @@ export default function EmpresasRaioXPage() {
   const [contact, setContact] = useState({ name: "", email: "", whatsapp: "" });
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [finalScore, setFinalScore] = useState(0);
 
   // Dynamic steps based on the modules
   const modulesSteps = businessAssessmentModules.map((module) => ({
@@ -107,10 +109,8 @@ export default function EmpresasRaioXPage() {
         }),
       });
 
-      alert(
-        `Diagnóstico calculado com sucesso! Seu score final é ${scoreData.finalScore}. Nossa equipe entrará em contato.`,
-      );
-      router.push("/raio-x");
+      setFinalScore(scoreData.finalScore);
+      setShowSuccessModal(true);
     } catch (error) {
       console.error(error);
       alert("Erro ao processar. Tente novamente.");
@@ -173,6 +173,16 @@ export default function EmpresasRaioXPage() {
     );
   };
 
+  useEffect(() => {
+    if (showSuccessModal) {
+      const timer = setTimeout(() => {
+        setShowSuccessModal(false);
+        router.push("/raio-x");
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showSuccessModal, router]);
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
       <Header />
@@ -219,6 +229,37 @@ export default function EmpresasRaioXPage() {
           </div>
         </div>
       </main>
+
+      {showSuccessModal && (
+        <>
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-2xl p-6 md:p-8 max-w-md w-full mx-4 shadow-2xl">
+              <div className="text-center">
+                <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">
+                  Diagnóstico Enviado!
+                </h3>
+                <p className="text-gray-700 mb-4 text-sm md:text-base">
+                  Obrigado! Você receberá um e-mail com a análise detalhada em
+                  instantes. Seu score final é{" "}
+                  <span className="font-semibold text-[var(--brand-verde-escuro)]">
+                    {finalScore}
+                  </span>
+                  .
+                </p>
+                <Button
+                  onClick={() => {
+                    setShowSuccessModal(false);
+                    router.push("/raio-x");
+                  }}
+                  className="w-full md:w-auto"
+                >
+                  OK
+                </Button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
       <Footer />
     </div>
