@@ -1,5 +1,5 @@
-import ComingSoon from "@/components/admin/ComingSoon";
+import DashboardClient from "@/components/admin/DashboardClient";
 
 export default function AdminDashboardPage() {
-  return <ComingSoon title="Dashboard Central" description="O panorama geral das suas métricas será consolidado aqui em breve." />;
+  return <DashboardClient />;
 }

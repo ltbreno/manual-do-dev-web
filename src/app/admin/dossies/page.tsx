@@ -1,5 +1,5 @@
-import ComingSoon from "@/components/admin/ComingSoon";
+import DossiesClient from "@/components/admin/DossiesClient";
 
 export default function DossiesPage() {
-  return <ComingSoon title="Dossiês de Clientes" description="O gerenciador completo de documentos e arquivos PDF organizados por lead está em desenvolvimento." />;
+  return <DossiesClient />;
 }

@@ -4,7 +4,15 @@
       "Bash(rm -rf out)",
       "Bash(mkdir -p out/.next)",
       "Bash(cp -r .next/standalone/manual-do-dev-web/. out/)",
-      "Bash(cp -r .next/static out/.next/static)"
+      "Bash(cp -r .next/static out/.next/static)",
+      "Bash(node -e \"const p = require\\('./package.json'\\); console.log\\('next:', p.dependencies.next\\)\")",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(npm install *)",
+      "Bash(node -e \"require\\('resend'\\); console.log\\('ok'\\)\")",
+      "Bash(node -e \"require\\('@react-email/components'\\); console.log\\('ok'\\)\")",
+      "Bash(sed -i '' 's/import resend, { FROM_EMAIL, ADMIN_EMAIL } from \"@\\\\/lib\\\\/resend\"/import { getResend, FROM_EMAIL, ADMIN_EMAIL } from \"@\\\\/lib\\\\/resend\"/g' /Users/breno/Documents/manual-do-dev-web/src/app/api/leads/route.ts /Users/breno/Documents/manual-do-dev-web/src/app/api/email/report/route.ts)",
+      "Bash(sed -i '' 's/import resend, { FROM_EMAIL } from \"@\\\\/lib\\\\/resend\"/import { getResend, FROM_EMAIL } from \"@\\\\/lib\\\\/resend\"/g' /Users/breno/Documents/manual-do-dev-web/src/app/api/leads/\\\\[id\\\\]/route.ts /Users/breno/Documents/manual-do-dev-web/src/app/api/email/send/route.ts)"
     ]
   }
 }

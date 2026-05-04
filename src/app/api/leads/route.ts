@@ -1,5 +1,27 @@
 import { NextResponse } from "next/server";
+import { render } from "@react-email/components";
 import pool, { ensureLeadsTableExists } from "@/lib/db";
+import { getResend, FROM_EMAIL, ADMIN_EMAIL } from "@/lib/resend";
+import LeadRoadmapEmail from "@/emails/LeadRoadmapEmail";
+import AdminNewLeadEmail from "@/emails/AdminNewLeadEmail";
+
+export const dynamic = "force-dynamic";
+
+export async function GET() {
+  try {
+    await ensureLeadsTableExists();
+    const client = await pool.connect();
+    try {
+      const result = await client.query("SELECT * FROM leads ORDER BY created_at DESC");
+      return NextResponse.json(result.rows);
+    } finally {
+      client.release();
+    }
+  } catch (e: unknown) {
+    const message = e instanceof Error ? e.message : "Erro interno";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}
 
 export async function POST(req: Request) {
   try {
@@ -48,6 +70,37 @@ export async function POST(req: Request) {
         filesField,
       ];
       const res = await client.query(query, values);
+
+      // Fire emails without blocking the response
+      const leadEmail = formData.contact.email;
+      const leadName = formData.contact.name || "Empresário";
+      const score = result.overallScore || 0;
+      const classification = result.leadClassification || "Cold";
+      const riskLevel = result.riskAnalysis || "Low";
+      const scores = (formData as Record<string, unknown>).scores as Record<string, number> ?? {};
+
+      if (leadEmail) {
+        const [roadmapHtml, adminHtml] = await Promise.all([
+          render(LeadRoadmapEmail({ name: leadName, score, classification, riskLevel, scores })),
+          render(AdminNewLeadEmail({ name: leadName, email: leadEmail, whatsapp: formData.contact.whatsapp || "", score, classification, riskLevel, scores })),
+        ]);
+
+        await Promise.allSettled([
+          getResend().emails.send({
+            from: FROM_EMAIL,
+            to: leadEmail,
+            subject: `Seu Roadmap de Expansão para os EUA — Score ${score}`,
+            html: roadmapHtml,
+          }),
+          getResend().emails.send({
+            from: FROM_EMAIL,
+            to: ADMIN_EMAIL,
+            subject: `🔥 Novo Lead: ${leadName} — Score ${score} (${classification})`,
+            html: adminHtml,
+          }),
+        ]);
+      }
+
       return NextResponse.json({ id: res.rows[0].id }, { status: 201 });
     } finally {
       client.release();
