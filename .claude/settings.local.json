@@ -12,7 +12,8 @@
       "Bash(node -e \"require\\('resend'\\); console.log\\('ok'\\)\")",
       "Bash(node -e \"require\\('@react-email/components'\\); console.log\\('ok'\\)\")",
       "Bash(sed -i '' 's/import resend, { FROM_EMAIL, ADMIN_EMAIL } from \"@\\\\/lib\\\\/resend\"/import { getResend, FROM_EMAIL, ADMIN_EMAIL } from \"@\\\\/lib\\\\/resend\"/g' /Users/breno/Documents/manual-do-dev-web/src/app/api/leads/route.ts /Users/breno/Documents/manual-do-dev-web/src/app/api/email/report/route.ts)",
-      "Bash(sed -i '' 's/import resend, { FROM_EMAIL } from \"@\\\\/lib\\\\/resend\"/import { getResend, FROM_EMAIL } from \"@\\\\/lib\\\\/resend\"/g' /Users/breno/Documents/manual-do-dev-web/src/app/api/leads/\\\\[id\\\\]/route.ts /Users/breno/Documents/manual-do-dev-web/src/app/api/email/send/route.ts)"
+      "Bash(sed -i '' 's/import resend, { FROM_EMAIL } from \"@\\\\/lib\\\\/resend\"/import { getResend, FROM_EMAIL } from \"@\\\\/lib\\\\/resend\"/g' /Users/breno/Documents/manual-do-dev-web/src/app/api/leads/\\\\[id\\\\]/route.ts /Users/breno/Documents/manual-do-dev-web/src/app/api/email/send/route.ts)",
+      "Bash(pnpm run *)"
     ]
   }
 }

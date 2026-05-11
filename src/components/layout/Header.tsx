@@ -50,6 +50,12 @@ export default function Header() {
             >
               Diagnóstico IA
             </Link>
+            <Link
+              href="/blog"
+              className="text-[var(--muted-foreground)] hover:text-[var(--brand-verde-escuro)] transition-colors font-medium"
+            >
+              Blog
+            </Link>
           </nav>
 
           {/* CTA Button */}
@@ -116,6 +122,13 @@ export default function Header() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Raio-X
+              </Link>
+              <Link
+                href="/blog"
+                className="text-[var(--muted-foreground)] hover:text-[var(--brasil-azul)] transition-colors font-medium py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Blog
               </Link>
               <Link href="/raio-x" onClick={() => setIsMenuOpen(false)}>
                 <Button size="sm" className="w-full mt-2">
