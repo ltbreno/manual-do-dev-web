@@ -56,7 +56,21 @@ export default function ArticleCard({ article, variant = "default" }: ArticleCar
 
           {/* Meta */}
           <div className="mt-4 pt-4 border-t border-[var(--card-border)] flex items-center justify-between text-xs text-[var(--muted-foreground)]">
-            <span>{formatDate(article.date)}</span>
+            {/* Author */}
+            <div className="flex items-center gap-1.5">
+              {article.authorAvatar ? (
+                <img
+                  src={article.authorAvatar}
+                  alt={article.author}
+                  className="w-5 h-5 rounded-full object-cover ring-1 ring-[var(--brand-verde)]/30"
+                />
+              ) : (
+                <div className="w-5 h-5 rounded-full bg-[var(--brand-verde)] flex items-center justify-center text-white text-[9px] font-bold">
+                  {article.author.charAt(0)}
+                </div>
+              )}
+              <span className="font-medium text-[var(--foreground)]">{article.author}</span>
+            </div>
             <div className="flex items-center gap-3">
               <span className="flex items-center gap-1">
                 <Clock className="w-3 h-3" />

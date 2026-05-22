@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Clock, Eye, Calendar, User } from "lucide-react";
+import { ArrowLeft, Clock, Eye, Calendar } from "lucide-react";
 import { getArticleBySlug, articles, formatDate } from "@/lib/blog";
 import CategoryBadge from "@/components/blog/CategoryBadge";
 import ArticleCard from "@/components/blog/ArticleCard";
@@ -77,25 +77,48 @@ export default async function ArticlePage({ params }: Props) {
       {/* Article body */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Meta row */}
-        <div className="flex flex-wrap items-center gap-4 pb-8 border-b border-[var(--card-border)] text-sm text-[var(--muted-foreground)]">
-          <span className="flex items-center gap-1.5">
-            <User className="w-4 h-4" />
-            {article.author}
-          </span>
-          <span className="flex items-center gap-1.5">
-            <Calendar className="w-4 h-4" />
-            {formatDate(article.date)}
-          </span>
-          <span className="flex items-center gap-1.5">
-            <Clock className="w-4 h-4" />
-            {article.readTime} min de leitura
-          </span>
-          {article.views && (
+        <div className="flex flex-wrap items-center gap-5 pb-8 border-b border-[var(--card-border)]">
+          {/* Author */}
+          <div className="flex items-center gap-2.5">
+            {article.authorAvatar ? (
+              <img
+                src={article.authorAvatar}
+                alt={article.author}
+                className="w-10 h-10 rounded-full object-cover ring-2 ring-[var(--brand-verde)]/40"
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-[var(--brand-verde)] flex items-center justify-center text-white font-bold text-sm">
+                {article.author.charAt(0)}
+              </div>
+            )}
+            <div className="flex flex-col leading-tight">
+              <span className="text-sm font-semibold text-[var(--foreground)]">{article.author}</span>
+              {article.authorRole && (
+                <span className="text-xs text-[var(--brand-verde)] font-medium">{article.authorRole}</span>
+              )}
+            </div>
+          </div>
+
+          {/* Divider */}
+          <span className="hidden sm:block w-px h-8 bg-[var(--card-border)]" />
+
+          {/* Date, time, views */}
+          <div className="flex flex-wrap items-center gap-4 text-sm text-[var(--muted-foreground)]">
             <span className="flex items-center gap-1.5">
-              <Eye className="w-4 h-4" />
-              {article.views.toLocaleString("pt-BR")} visualizações
+              <Calendar className="w-4 h-4" />
+              {formatDate(article.date)}
             </span>
-          )}
+            <span className="flex items-center gap-1.5">
+              <Clock className="w-4 h-4" />
+              {article.readTime} min de leitura
+            </span>
+            {article.views && (
+              <span className="flex items-center gap-1.5">
+                <Eye className="w-4 h-4" />
+                {article.views.toLocaleString("pt-BR")} visualizações
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Excerpt */}
