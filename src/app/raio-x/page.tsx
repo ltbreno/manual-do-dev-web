@@ -5,6 +5,8 @@ import Footer from "@/components/layout/Footer";
 import Link from "next/link";
 import { MoveRight, Shield, Building2, Plane } from "lucide-react";
 
+const ONBRIDGE_URL = process.env.NEXT_PUBLIC_ONBRIDGE_URL || "http://localhost:3001";
+
 export default function RaioXGatewayPage() {
   const options = [
     {
@@ -20,7 +22,7 @@ export default function RaioXGatewayPage() {
       title: "Expansão de Empresas",
       description: "Leve seu negócio para o mercado americano. Avalie vistos L-1, EB-1C e estruturação corporativa.",
       icon: <Building2 className="w-8 h-8 text-emerald-600" />,
-      href: "/raio-x/empresas",
+      href: ONBRIDGE_URL,
       color: "emerald",
     },
     {
