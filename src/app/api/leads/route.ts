@@ -5,6 +5,8 @@ import { getResend, FROM_EMAIL, ADMIN_EMAIL } from "@/lib/resend";
 import LeadRoadmapEmail from "@/emails/LeadRoadmapEmail";
 import AdminNewLeadEmail from "@/emails/AdminNewLeadEmail";
 
+import { leadWebhookService } from "@/lib/webhook/webhook-service";
+
 export const dynamic = "force-dynamic";
 
 export async function GET() {
@@ -70,8 +72,9 @@ export async function POST(req: Request) {
         filesField,
       ];
       const res = await client.query(query, values);
+      const createdLeadId = res.rows[0].id;
 
-      // Fire emails without blocking the response
+      // Asynchronous background tasks (Emails + Webhook)
       const leadEmail = formData.contact.email;
       const leadName = formData.contact.name || "Empresário";
       const score = result.overallScore || 0;
@@ -79,29 +82,40 @@ export async function POST(req: Request) {
       const riskLevel = result.riskAnalysis || "Low";
       const scores = (formData as Record<string, unknown>).scores as Record<string, number> ?? {};
 
-      if (leadEmail) {
-        const [roadmapHtml, adminHtml] = await Promise.all([
-          render(LeadRoadmapEmail({ name: leadName, score, classification, riskLevel, scores })),
-          render(AdminNewLeadEmail({ name: leadName, email: leadEmail, whatsapp: formData.contact.whatsapp || "", score, classification, riskLevel, scores })),
-        ]);
+      Promise.allSettled([
+        (async () => {
+          if (leadEmail) {
+            const [roadmapHtml, adminHtml] = await Promise.all([
+              render(LeadRoadmapEmail({ name: leadName, score, classification, riskLevel, scores })),
+              render(AdminNewLeadEmail({ name: leadName, email: leadEmail, whatsapp: formData.contact.whatsapp || "", score, classification, riskLevel, scores })),
+            ]);
 
-        await Promise.allSettled([
-          getResend().emails.send({
-            from: FROM_EMAIL,
-            to: leadEmail,
-            subject: `Seu Roadmap de Expansão para os EUA — Score ${score}`,
-            html: roadmapHtml,
-          }),
-          getResend().emails.send({
-            from: FROM_EMAIL,
-            to: ADMIN_EMAIL,
-            subject: `🔥 Novo Lead: ${leadName} — Score ${score} (${classification})`,
-            html: adminHtml,
-          }),
-        ]);
-      }
+            await Promise.allSettled([
+              getResend().emails.send({
+                from: FROM_EMAIL,
+                to: leadEmail,
+                subject: `Seu Roadmap de Expansão para os EUA — Score ${score}`,
+                html: roadmapHtml,
+              }),
+              getResend().emails.send({
+                from: FROM_EMAIL,
+                to: ADMIN_EMAIL,
+                subject: `🔥 Novo Lead: ${leadName} — Score ${score} (${classification})`,
+                html: adminHtml,
+              }),
+            ]);
+          }
+        })(),
+        leadWebhookService.dispatchLead(
+          createdLeadId,
+          formData as unknown as Record<string, unknown>,
+          result as unknown as Record<string, unknown>
+        ),
+      ]).catch((err) => {
+        console.error("[POST /api/leads] Erro em segundo plano:", err);
+      });
 
-      return NextResponse.json({ id: res.rows[0].id }, { status: 201 });
+      return NextResponse.json({ id: createdLeadId }, { status: 201 });
     } finally {
       client.release();
     }
