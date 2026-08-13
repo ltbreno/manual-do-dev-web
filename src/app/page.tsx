@@ -146,7 +146,7 @@ export default function Home() {
                     href="/raio-x"
                     className="inline-flex items-center gap-2 text-[var(--brand-verde-escuro)] font-semibold group-hover:gap-3 transition-all"
                   >
-                    Começar diagnóstico
+                    Faça seu Cadastro
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
@@ -264,7 +264,7 @@ export default function Home() {
             <div className="text-center mt-12">
               <Link href="/raio-x">
                 <Button size="lg">
-                  Começar Diagnóstico Agora
+                  Faça seu Cadastro
                 </Button>
               </Link>
             </div>

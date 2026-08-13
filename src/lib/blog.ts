@@ -29,6 +29,70 @@ export const ALL_CATEGORIES = Object.keys(CATEGORY_COLORS);
 
 export const articles: Article[] = [
   {
+    slug: "suspensao-vistos-imigracao-eua-2026",
+    title: "Suspensão de Vistos de Imigração nos EUA em 2026: o Que Muda para Brasileiros",
+    excerpt: "Desde janeiro de 2026, o Departamento de Estado dos EUA pausou o processamento de vistos de imigração permanente para brasileiros. Entenda quem é afetado, quais vistos continuam liberados e o que fazer enquanto a revisão dura.",
+    category: "Imigração",
+    author: "Orlando",
+    authorRole: "Fundador",
+    authorAvatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&q=80",
+    date: "2026-08-10",
+    readTime: 7,
+    imageUrl: "https://images.unsplash.com/photo-1555861496-0666c8981751?w=800&q=80",
+    views: 1240,
+    content: `
+      <h2>O que aconteceu</h2>
+      <p>Em 21 de janeiro de 2026, o Departamento de Estado dos Estados Unidos suspendeu o processamento de vistos de imigração permanente para cidadãos de 75 países, incluindo o Brasil. A medida faz parte de uma revisão completa dos critérios de triagem, com o objetivo declarado de avaliar o risco de novos residentes dependerem de benefícios públicos americanos (o chamado "public charge").</p>
+
+      <h2>Quem é afetado</h2>
+      <p>A pausa recai sobre os caminhos de residência permanente: reunião familiar, vistos de noivo(a), loteria de diversidade (DV) e as categorias baseadas em emprego, do EB-1 ao EB-5. Quem já estava no meio do processo para se mudar definitivamente para os EUA deve enfrentar uma espera indefinida até a conclusão da revisão.</p>
+
+      <h2>O que continua liberado</h2>
+      <ul>
+        <li><strong>Turismo e negócios (B1/B2)</strong></li>
+        <li><strong>Estudantes (F, M) e intercâmbio (J)</strong></li>
+        <li><strong>Trabalho temporário (H-1B, L-1)</strong></li>
+      </ul>
+      <p>Ou seja, a suspensão não afeta quem vai aos EUA a trabalho, estudo ou turismo — o impacto está concentrado em quem busca o green card.</p>
+
+      <h2>O que fazer enquanto isso</h2>
+      <p>Para brasileiros com processo de green card em andamento, a recomendação é manter a documentação atualizada e acompanhar comunicados oficiais do USCIS e da Embaixada dos EUA no Brasil. Para quem ainda está planejando a mudança, vale considerar rotas que não dependem de residência permanente imediata, como vistos de trabalho temporário.</p>
+
+      <h2>Fontes</h2>
+      <p><a href="https://br.usembassy.gov/immigrant-visa-processing-updates-for-nationalities-at-high-risk-of-public-benefits-usage/" target="_blank" rel="noopener noreferrer">Embaixada dos EUA no Brasil</a> e <a href="https://www.migrationpolicy.org/article/brazilian-immigrants-united-states-2026" target="_blank" rel="noopener noreferrer">Migration Policy Institute</a>.</p>
+    `,
+  },
+  {
+    slug: "novo-limite-visto-f1-cursos-ingles-2026",
+    title: "Vistos de Estudante F-1: Novo Limite de 24 Meses para Cursos de Inglês em 2026",
+    excerpt: "Desde julho de 2026, o tempo total em programas de inglês com visto F-1 passou a ter um teto de 24 meses. Veja o que muda para brasileiros que planejam estudar nos EUA.",
+    category: "Vistos",
+    author: "Orlando",
+    authorRole: "Fundador",
+    authorAvatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&q=80",
+    date: "2026-08-05",
+    readTime: 5,
+    imageUrl: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&q=80",
+    views: 860,
+    content: `
+      <h2>A nova regra</h2>
+      <p>Em 16 de julho de 2026, o governo americano anunciou mudanças nas regras de imigração legal para estudantes. A principal delas: quem está nos EUA com visto F-1 para cursar programas de inglês (ESL) passou a ter um limite total de 24 meses, somando todo o período de estudo — não é mais possível renovar indefinidamente esse tipo de curso para permanecer no país.</p>
+
+      <h2>Por que isso importa para brasileiros</h2>
+      <p>O visto F-1 para cursos de inglês é uma das portas de entrada mais usadas por brasileiros que querem morar temporariamente nos EUA antes de migrar para uma graduação, um MBA ou outro programa acadêmico. Com o novo teto, o planejamento precisa ser mais realista: os 24 meses contam a partir do início do primeiro curso, mesmo que você troque de escola no meio do caminho.</p>
+
+      <h2>O que fazer se você já está nos EUA com F-1 de inglês</h2>
+      <ul>
+        <li>Calcule quanto tempo já usou desde o primeiro I-20 de curso de inglês</li>
+        <li>Planeje a transição para um curso de graduação, técnico ou pós-graduação antes de atingir o limite</li>
+        <li>Fale com a secretaria internacional da sua escola sobre mudança de status antes do prazo acabar</li>
+      </ul>
+
+      <h2>Fontes</h2>
+      <p><a href="https://soulbrasil.com/novas-regras-imigracao-eua-2026-vistos-estudantes/" target="_blank" rel="noopener noreferrer">Soul Brasil Magazine</a> e <a href="https://br.usembassy.gov/visas/" target="_blank" rel="noopener noreferrer">Embaixada dos EUA no Brasil</a>.</p>
+    `,
+  },
+  {
     slug: "como-abrir-empresa-nos-eua",
     title: "Como Abrir uma Empresa nos EUA: Guia Completo para Brasileiros",
     excerpt: "Passo a passo detalhado para brasileiros que querem constituir uma LLC ou C-Corp nos Estados Unidos, com tudo sobre impostos, banking e compliance.",

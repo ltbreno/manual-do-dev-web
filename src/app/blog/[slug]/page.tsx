@@ -142,7 +142,7 @@ export default async function ArticlePage({ params }: Props) {
             href="/raio-x"
             className="inline-flex items-center gap-2 bg-[var(--brand-verde)] hover:bg-[var(--brand-verde-dark)] text-white font-semibold px-6 py-3 rounded-xl transition-colors"
           >
-            Fazer Diagnóstico Grátis
+            Faça seu Cadastro
             <ArrowLeft className="w-4 h-4 rotate-180" />
           </Link>
         </div>

@@ -1,11 +1,36 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Button from "../ui/Button";
+
+function readDisplayUser(): { name: string } | null {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie.match(/(?:^|; )session_user=([^;]*)/);
+  if (!match) return null;
+  try {
+    return JSON.parse(decodeURIComponent(match[1]));
+  } catch {
+    return null;
+  }
+}
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [user, setUser] = useState<{ name: string } | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    setUser(readDisplayUser());
+  }, []);
+
+  const handleLogout = async () => {
+    await fetch("/api/auth/signout", { method: "POST" });
+    setUser(null);
+    router.push("/");
+    router.refresh();
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-[var(--neutral-950)]/80 backdrop-blur-lg border-b border-[var(--card-border)]">
@@ -48,7 +73,7 @@ export default function Header() {
               href="/raio-x"
               className="text-[var(--muted-foreground)] hover:text-[var(--brand-verde-escuro)] transition-colors font-medium"
             >
-              Diagnóstico IA
+              Faça seu Cadastro
             </Link>
             <Link
               href="/blog"
@@ -58,8 +83,35 @@ export default function Header() {
             </Link>
           </nav>
 
-          {/* CTA Button */}
-          <div className="hidden md:block">
+          {/* Account + CTA */}
+          <div className="hidden md:flex items-center gap-4">
+            {user ? (
+              <>
+                <Link
+                  href="/conta"
+                  className="text-[var(--muted-foreground)] hover:text-[var(--brand-verde-escuro)] transition-colors font-medium"
+                >
+                  Olá, {user.name.split(" ")[0]}
+                </Link>
+                <Button size="sm" variant="ghost" onClick={handleLogout}>
+                  Sair
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/entrar"
+                  className="text-[var(--muted-foreground)] hover:text-[var(--brand-verde-escuro)] transition-colors font-medium"
+                >
+                  Entrar
+                </Link>
+                <Link href="/cadastro">
+                  <Button size="sm" variant="outline">
+                    Cadastrar
+                  </Button>
+                </Link>
+              </>
+            )}
             <Link href="/raio-x">
               <Button size="sm">
                 Gerar Relatório IA
@@ -130,9 +182,45 @@ export default function Header() {
               >
                 Blog
               </Link>
+              {user ? (
+                <div className="flex items-center justify-between py-2">
+                  <Link
+                    href="/conta"
+                    className="text-[var(--muted-foreground)] font-medium"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Olá, {user.name.split(" ")[0]}
+                  </Link>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      handleLogout();
+                    }}
+                  >
+                    Sair
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-3 py-2">
+                  <Link
+                    href="/entrar"
+                    className="text-[var(--muted-foreground)] font-medium"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Entrar
+                  </Link>
+                  <Link href="/cadastro" onClick={() => setIsMenuOpen(false)}>
+                    <Button size="sm" variant="outline">
+                      Cadastrar
+                    </Button>
+                  </Link>
+                </div>
+              )}
               <Link href="/raio-x" onClick={() => setIsMenuOpen(false)}>
                 <Button size="sm" className="w-full mt-2">
-                  Começar Diagnóstico
+                  Faça seu Cadastro
                 </Button>
               </Link>
             </nav>
