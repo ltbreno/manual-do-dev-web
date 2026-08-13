@@ -34,6 +34,45 @@ export async function ensureAdminUsersTableExists() {
   }
 }
 
+export async function ensureUsersTableExists() {
+  const client = await pool.connect();
+  try {
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE,
+        password_hash TEXT NOT NULL,
+        token_version INTEGER NOT NULL DEFAULT 0
+      );
+    `);
+  } catch (error) {
+    console.error("Error creating users table:", error);
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
+export async function ensureNewsletterSubscribersTableExists() {
+  const client = await pool.connect();
+  try {
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS newsletter_subscribers (
+        id SERIAL PRIMARY KEY,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        email TEXT NOT NULL UNIQUE
+      );
+    `);
+  } catch (error) {
+    console.error("Error creating newsletter_subscribers table:", error);
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
 export async function ensureLeadsTableExists() {
   const client = await pool.connect();
   try {
