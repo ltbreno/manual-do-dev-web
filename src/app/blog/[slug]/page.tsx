@@ -54,7 +54,7 @@ export default async function ArticlePage({ params }: Props) {
         <div className="absolute top-0 left-0 right-0 pt-24 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <Link
-              href="/blog"
+              href="/blog/conteudos"
               className="inline-flex items-center gap-2 text-white/80 hover:text-white text-sm font-medium transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
